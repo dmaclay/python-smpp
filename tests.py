@@ -13,6 +13,7 @@ pack_pdu('generic_nack','ESME_ROK',1,'00112233445566778899')
 pack_pdu()
 unpack_pdu(pack_pdu())
 
+
 j = {'status': 'ESME_ROK', 'body': {'optional_parameters':[{'tag':'payload_type', 'value':0}]}, 'length': 16, 'sequence': 0, 'command': 'bind_transmitter'}
 
 json_to_pdu(j)
