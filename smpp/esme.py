@@ -6,3 +6,6 @@ class ESME():
     def connect_SMSC():
         pass
 
+    def bind_SMSC():
+        pass
+
