@@ -1,11 +1,14 @@
+import socket
+
 from pdu import *
 
-class ESME():
+
+class ESME:
     conn = None
 
-    def connect_SMSC():
+    def connect_SMSC(self):
         pass
 
-    def bind_SMSC():
+    def bind_SMSC(self):
         pass
 
