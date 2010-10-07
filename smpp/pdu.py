@@ -2,6 +2,7 @@ import binascii
 import re
 
 
+
 def octpop(ref):
     octet = None
     if len(ref[0]) > 1:
