@@ -3,23 +3,6 @@ import re
 
 
 
-def octpop(ref):
-    octet = None
-    if len(ref[0]) > 1:
-        (octet, ref[0]) = (ref[0][0:2], ref[0][2: ])
-    return octet
-
-
-def decode_hex_type(data, hex_type):
-    if hex_type == 'string':
-        return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',data)))
-    if hex_type == 'integer':
-        return int(data, 16)
-    if hex_type == 'bits':
-        return data
-    return data
-
-
 # SMPP Error Codes (ESME) - SMPP v3.4, section 5.1.3, table 5-2, page 112-114
 
 command_status_by_hex = {
@@ -72,7 +55,6 @@ command_status_by_hex = {
     '000000fe':{'hex':'000000fe', 'name':'ESME_RDELIVERYFAILURE', 'description':'Delivery Failure (used for data_sm_resp)'},
     '000000ff':{'hex':'000000ff', 'name':'ESME_RUNKNOWNERR',      'description':'Unknown error'}
 }
-
 def command_status_name_by_hex(x):
     return command_status_by_hex.get(x,{}).get('name')
 
@@ -126,7 +108,6 @@ command_status_by_name = {
     'ESME_RDELIVERYFAILURE':{'hex':'000000fe', 'name':'ESME_RDELIVERYFAILURE', 'description':'Delivery Failure (used for data_sm_resp)'},
     'ESME_RUNKNOWNERR'     :{'hex':'000000ff', 'name':'ESME_RUNKNOWNERR',      'description':'Unknown error'}
 }
-
 def command_status_hex_by_name(n):
     return command_status_by_name.get(n,{}).get('hex')
 
@@ -152,6 +133,7 @@ addr_ton_by_hex = {
     '05':'alphanumeric',
     '06':'abbreviated'
 }
+
 
 # Numberic Plan Indicator (NPI) - SMPP v3.4, section 5.2.6, table 5-4, page 118
 
@@ -260,7 +242,6 @@ message_state_by_name = {
 }
 
 
-
 # Facility Code bits for SMPP v4
 
 facility_code_bits = {
@@ -367,9 +348,9 @@ optional_parameter_tag_by_hex = {
     '1105':{'hex':'1105', 'name':'PDC_MultiPartMessage',         'technology':'? (J-Phone)'}, # v4 page 77
     '1106':{'hex':'1106', 'name':'PDC_PredefinedMsg',            'technology':'? (J-Phone)'} # v4 page 78
 }
-
 def optional_parameter_tag_name_by_hex(x):
     return optional_parameter_tag_by_hex.get(x,{}).get('name')
+
 
 optional_parameter_tag_by_name = {
     'dest_addr_subunit'           :{'hex':'0005', 'name':'dest_addr_subunit',            'technology':'GSM'},
@@ -463,242 +444,356 @@ optional_parameter_tag_by_name = {
     'PDC_MultiPartMessage'        :{'hex':'1105', 'name':'PDC_MultiPartMessage',         'technology':'? (J-Phone)'}, # v4 page 77
     'PDC_PredefinedMsg'           :{'hex':'1106', 'name':'PDC_PredefinedMsg',            'technology':'? (J-Phone)'} # v4 page 78
 }
-
 def optional_parameter_tag_hex_by_name(n):
     return optional_parameter_tag_by_name.get(n,{}).get('hex')
 
 
-def decode_optional_parameters(optional_parameters_hex):
-    optional_parameters = []
-    data = optional_parameters_hex
-    while len(data) > 0:
-        (tag_hex, length_hex, rest) = (data[0:4], data[4:8], data[8: ])
-        tag = optional_parameter_tag_name_by_hex(tag_hex)
-        length = int(length_hex, 16)
-        (value_hex, tail) = (rest[0:length*2], rest[length*2: ])
-        if len(value_hex) == 0:
-            value = 0 #TODO remove after testing
-        else:
-            value = int(value_hex, 16) #TODO need decoding mapping
-        data = tail
-        optional_parameters.append({'tag':tag, 'length':length, 'value':value})
-    return optional_parameters
-
-
-mandatory_parameter_lists = {
-    'submit_sm':[ # SMPP v3.4, section 4.4.1, table 4-10, page 59-61
-        {'name':'service_type',            'min':1, 'max':6,  'var':True,  'type':'string',  'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,  'var':False, 'type':None,      'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,  'var':False, 'type':None,      'hex_map':addr_npi_by_hex},
-        {'name':'source_addr',             'min':1, 'max':21, 'var':True,  'type':'string',  'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,  'var':False, 'type':None,      'hex_map':addr_ton_by_hex},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,  'var':False, 'type':None,      'hex_map':addr_npi_by_hex},
-        {'name':'destination_addr',        'min':1, 'max':21, 'var':True,  'type':'string',  'hex_map':None},
-        {'name':'esm_class',               'min':1, 'max':1,  'var':False, 'type':'integer', 'hex_map':None},
-        {'name':'protocol_id',             'min':1, 'max':1,  'var':False, 'type':'integer', 'hex_map':None},
-        {'name':'priority_flag',           'min':1, 'max':1,  'var':False, 'type':'integer', 'hex_map':None},
-        {'name':'schedule_delivery_time',  'min':1, 'max':17, 'var':False, 'type':'string',  'hex_map':None},
-        {'name':'validity_period',         'min':1, 'max':17, 'var':False, 'type':'string',  'hex_map':None},
-        {'name':'registered_delivery',     'min':1, 'max':1,  'var':False, 'type':'integer', 'hex_map':None},
-        {'name':'replace_if_present_flag', 'min':1, 'max':1,  'var':False, 'type':'integer', 'hex_map':None},
-        {'name':'data_coding',             'min':1, 'max':1,  'var':False, 'type':'integer', 'hex_map':None},
-        {'name':'sm_default_msg_id',       'min':1, 'max':1,  'var':False, 'type':'integer', 'hex_map':None},
-        {'name':'sm_length',               'min':1, 'max':1,  'var':False, 'type':'integer', 'hex_map':None}
-    ]
-}
-
-
 # Command IDs - SMPP v3.4, section 5.1.2.1, table 5-1, page 110-111
 
-def decode_empty(body_hex): print 'empty'; return (None, body_hex)
-def decode_bind(body_hex): print 'bind'; return (None, body_hex)
-def decode_bind_resp_v34(body_hex): print 'bind_resp_v34'; return (None, body_hex)
-def decode_query_v34(body_hex): print 'query_v34'; return (None, body_hex)
-def decode_query_resp_v34(body_hex): print 'query_resp_v34'; return (None, body_hex)
-
-def decode_submit_v34(body_hex):
-    print 'submit_v34'
-    source = [body_hex]
-    fields = mandatory_parameter_lists['submit_sm']
-    return decode_mandatory_parameters(fields, source)
-
-def decode_submit_resp_v34(body_hex): print 'submit_resp_v34'; return (None, body_hex)
-def decode_replace_sm_v34(body_hex): print 'replace_sm_v34'; return (None, body_hex)
-def decode_cancel(body_hex): print 'cancel'; return (None, body_hex)
-def decode_outbind_v34(body_hex): print 'outbind_v34'; return (None, body_hex)
-def decode_submit_multi(body_hex): print 'submit_multi'; return (None, body_hex)
-def decode_submit_multi_resp(body_hex): print 'submit_multi_resp'; return (None, body_hex)
-def decode_alert_notification(body_hex): print 'alert_notification'; return (None, body_hex)
-def decode_data_sm(body_hex): print 'data_sm'; return (None, body_hex)
-def decode_bind_resp_v4(body_hex): print 'bind_resp_v4'; return (None, body_hex)
-def decode_query_v4(body_hex): print 'query_v4'; return (None, body_hex)
-def decode_query_resp_v4(body_hex): print 'query_resp_v4'; return (None, body_hex)
-def decode_submit_v4(body_hex): print 'submit_v4'; return (None, body_hex)
-def decode_submit_sm_resp_v4(body_hex): print 'submit_sm_resp_v4'; return (None, body_hex)
-def decode_deliver_sm_v4(body_hex): print 'deliver_sm_v4'; return (None, body_hex)
-def decode_replace_sm_v4(body_hex): print 'replace_sm_v4'; return (None, body_hex)
-def decode_delivery_receipt(body_hex): print 'delivery_receipt'; return (None, body_hex)
-def decode_outbind_v4(body_hex): print 'outbind_v4'; return (None, body_hex)
-
-def encode_empty(body_json): print 'empty'; return body_hex
-def encode_bind(body_json): print 'bind'; return body_hex
-def encode_bind_resp_v34(body_json): print 'bind_resp_v34'; return body_hex
-def encode_query_v34(body_json): print 'query_v34'; return body_hex
-def encode_query_resp_v34(body_json): print 'query_resp_v34'; return body_hex
-def encode_submit_v34(body_json): print 'submit_v34'; return body_hex
-def encode_submit_resp_v34(body_json): print 'submit_resp_v34'; return body_hex
-def encode_replace_sm_v34(body_json): print 'replace_sm_v34'; return body_hex
-def encode_cancel(body_json): print 'cancel'; return body_hex
-def encode_outbind_v34(body_json): print 'outbind_v34'; return body_hex
-def encode_submit_multi(body_json): print 'submit_multi'; return body_hex
-def encode_submit_multi_resp(body_json): print 'submit_multi_resp'; return body_hex
-def encode_alert_notification(body_json): print 'alert_notification'; return body_hex
-def encode_data_sm(body_json): print 'data_sm'; return body_hex
-def encode_bind_resp_v4(body_json): print 'bind_resp_v4'; return body_hex
-def encode_query_v4(body_json): print 'query_v4'; return body_hex
-def encode_query_resp_v4(body_json): print 'query_resp_v4'; return body_hex
-def encode_submit_v4(body_json): print 'submit_v4'; return body_hex
-def encode_submit_sm_resp_v4(body_json): print 'submit_sm_resp_v4'; return body_hex
-def encode_deliver_sm_v4(body_json): print 'deliver_sm_v4'; return body_hex
-def encode_replace_sm_v4(body_json): print 'replace_sm_v4'; return body_hex
-def encode_delivery_receipt(body_json): print 'delivery_receipt'; return body_hex
-def encode_outbind_v4(body_json): print 'outbind_v4'; return body_hex
-
 command_id_by_hex = {
-    '80000000':{'hex':'80000000', 'name':'generic_nack',             'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00000001':{'hex':'00000001', 'name':'bind_receiver',            'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    '80000001':{'hex':'80000001', 'name':'bind_receiver_resp',       'encode_fn':encode_bind_resp_v34,      'decode_fn':decode_bind_resp_v34},
-    '00000002':{'hex':'00000002', 'name':'bind_transmitter',         'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    '80000002':{'hex':'80000002', 'name':'bind_transmitter_resp',    'encode_fn':encode_bind_resp_v34,      'decode_fn':decode_bind_resp_v34},
-    '00000003':{'hex':'00000003', 'name':'query_sm',                 'encode_fn':encode_query_v34,          'decode_fn':decode_query_v34},
-    '80000003':{'hex':'80000003', 'name':'query_sm_resp',            'encode_fn':encode_query_resp_v34,     'decode_fn':decode_query_resp_v34},
-    '00000004':{'hex':'00000004', 'name':'submit_sm',                'encode_fn':encode_submit_v34,         'decode_fn':decode_submit_v34},
-    '80000004':{'hex':'80000004', 'name':'submit_sm_resp',           'encode_fn':encode_submit_resp_v34,    'decode_fn':decode_submit_resp_v34},
-    '00000005':{'hex':'00000005', 'name':'deliver_sm',               'encode_fn':encode_submit_v34,         'decode_fn':decode_submit_v34},
-    '80000005':{'hex':'80000005', 'name':'deliver_sm_resp',          'encode_fn':encode_submit_resp_v34,    'decode_fn':decode_submit_resp_v34},
-    '00000006':{'hex':'00000006', 'name':'unbind',                   'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '80000006':{'hex':'80000006', 'name':'unbind_resp',              'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00000007':{'hex':'00000007', 'name':'replace_sm',               'encode_fn':encode_replace_sm_v34,     'decode_fn':decode_replace_sm_v34},
-    '80000007':{'hex':'80000007', 'name':'replace_sm_resp',          'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00000008':{'hex':'00000008', 'name':'cancel_sm',                'encode_fn':encode_cancel,             'decode_fn':decode_cancel},
-    '80000008':{'hex':'80000008', 'name':'cancel_sm_resp',           'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00000009':{'hex':'00000009', 'name':'bind_transceiver',         'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    '80000009':{'hex':'80000009', 'name':'bind_transceiver_resp',    'encode_fn':encode_bind_resp_v34,      'decode_fn':decode_bind_resp_v34},
-    '0000000b':{'hex':'0000000b', 'name':'outbind',                  'encode_fn':encode_outbind_v34,        'decode_fn':decode_outbind_v34},
-    '00000015':{'hex':'00000015', 'name':'enquire_link',             'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '80000015':{'hex':'80000015', 'name':'enquire_link_resp',        'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00000021':{'hex':'00000021', 'name':'submit_multi',             'encode_fn':encode_submit_multi,       'decode_fn':decode_submit_multi},
-    '80000021':{'hex':'80000021', 'name':'submit_multi_resp',        'encode_fn':encode_submit_multi_resp,  'decode_fn':decode_submit_multi_resp},
-    '00000102':{'hex':'00000102', 'name':'alert_notification',       'encode_fn':encode_alert_notification, 'decode_fn':decode_alert_notification},
-    '00000103':{'hex':'00000103', 'name':'data_sm',                  'encode_fn':encode_data_sm,            'decode_fn':decode_data_sm},
-    '80000103':{'hex':'80000103', 'name':'data_sm_resp',             'encode_fn':encode_submit_resp_v34,    'decode_fn':decode_submit_resp_v34},
+    '80000000':{'hex':'80000000', 'name':'generic_nack'},
+    '00000001':{'hex':'00000001', 'name':'bind_receiver'},
+    '80000001':{'hex':'80000001', 'name':'bind_receiver_resp'},
+    '00000002':{'hex':'00000002', 'name':'bind_transmitter'},
+    '80000002':{'hex':'80000002', 'name':'bind_transmitter_resp'},
+    '00000003':{'hex':'00000003', 'name':'query_sm'},
+    '80000003':{'hex':'80000003', 'name':'query_sm_resp'},
+    '00000004':{'hex':'00000004', 'name':'submit_sm'},
+    '80000004':{'hex':'80000004', 'name':'submit_sm_resp'},
+    '00000005':{'hex':'00000005', 'name':'deliver_sm'},
+    '80000005':{'hex':'80000005', 'name':'deliver_sm_resp'},
+    '00000006':{'hex':'00000006', 'name':'unbind'},
+    '80000006':{'hex':'80000006', 'name':'unbind_resp'},
+    '00000007':{'hex':'00000007', 'name':'replace_sm'},
+    '80000007':{'hex':'80000007', 'name':'replace_sm_resp'},
+    '00000008':{'hex':'00000008', 'name':'cancel_sm'},
+    '80000008':{'hex':'80000008', 'name':'cancel_sm_resp'},
+    '00000009':{'hex':'00000009', 'name':'bind_transceiver'},
+    '80000009':{'hex':'80000009', 'name':'bind_transceiver_resp'},
+    '0000000b':{'hex':'0000000b', 'name':'outbind'},
+    '00000015':{'hex':'00000015', 'name':'enquire_link'},
+    '80000015':{'hex':'80000015', 'name':'enquire_link_resp'},
+    '00000021':{'hex':'00000021', 'name':'submit_multi'},
+    '80000021':{'hex':'80000021', 'name':'submit_multi_resp'},
+    '00000102':{'hex':'00000102', 'name':'alert_notification'},
+    '00000103':{'hex':'00000103', 'name':'data_sm'},
+    '80000103':{'hex':'80000103', 'name':'data_sm_resp'},
 
                # v4 codes
 
-    '80010000':{'hex':'80010000', 'name':'generic_nack_v4',          'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00010001':{'hex':'00010001', 'name':'bind_receiver_v4',         'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    '80010001':{'hex':'80010001', 'name':'bind_receiver_resp_v4',    'encode_fn':encode_bind_resp_v4,       'decode_fn':decode_bind_resp_v4},
-    '00010002':{'hex':'00010002', 'name':'bind_transmitter_v4',      'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    '80010002':{'hex':'80010002', 'name':'bind_transmitter_resp_v4', 'encode_fn':encode_bind_resp_v4,       'decode_fn':decode_bind_resp_v4},
-    '00010003':{'hex':'00010003', 'name':'query_sm_v4',              'encode_fn':encode_query_v4,           'decode_fn':decode_query_v4},
-    '80010003':{'hex':'80010003', 'name':'query_sm_resp_v4',         'encode_fn':encode_query_resp_v4,      'decode_fn':decode_query_resp_v4},
-    '00010004':{'hex':'00010004', 'name':'submit_sm_v4',             'encode_fn':encode_submit_v4,          'decode_fn':decode_submit_v4},
-    '80010004':{'hex':'80010004', 'name':'submit_sm_resp_v4',        'encode_fn':encode_submit_sm_resp_v4,  'decode_fn':decode_submit_sm_resp_v4},
-    '00010005':{'hex':'00010005', 'name':'deliver_sm_v4',            'encode_fn':encode_deliver_sm_v4,      'decode_fn':decode_deliver_sm_v4},
-    '80010005':{'hex':'80010005', 'name':'deliver_sm_resp_v4',       'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00010006':{'hex':'00010006', 'name':'unbind_v4',                'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '80010006':{'hex':'80010006', 'name':'unbind_resp_v4',           'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00010007':{'hex':'00010007', 'name':'replace_sm_v4',            'encode_fn':encode_replace_sm_v4,      'decode_fn':decode_replace_sm_v4},
-    '80010007':{'hex':'80010007', 'name':'replace_sm_resp_v4',       'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00010008':{'hex':'00010008', 'name':'cancel_sm_v4',             'encode_fn':encode_cancel,             'decode_fn':decode_cancel},
-    '80010008':{'hex':'80010008', 'name':'cancel_sm_resp_v4',        'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '00010009':{'hex':'00010009', 'name':'delivery_receipt_v4',      'encode_fn':encode_delivery_receipt,   'decode_fn':decode_delivery_receipt},
-    '80010009':{'hex':'80010009', 'name':'delivery_receipt_resp_v4', 'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '0001000a':{'hex':'0001000a', 'name':'enquire_link_v4',          'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '8001000a':{'hex':'8001000a', 'name':'enquire_link_resp_v4',     'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    '0001000b':{'hex':'0001000b', 'name':'outbind_v4',               'encode_fn':encode_outbind_v4,         'decode_fn':decode_outbind_v4}
+    '80010000':{'hex':'80010000', 'name':'generic_nack_v4'},
+    '00010001':{'hex':'00010001', 'name':'bind_receiver_v4'},
+    '80010001':{'hex':'80010001', 'name':'bind_receiver_resp_v4'},
+    '00010002':{'hex':'00010002', 'name':'bind_transmitter_v4'},
+    '80010002':{'hex':'80010002', 'name':'bind_transmitter_resp_v4'},
+    '00010003':{'hex':'00010003', 'name':'query_sm_v4'},
+    '80010003':{'hex':'80010003', 'name':'query_sm_resp_v4'},
+    '00010004':{'hex':'00010004', 'name':'submit_sm_v4'},
+    '80010004':{'hex':'80010004', 'name':'submit_sm_resp_v4'},
+    '00010005':{'hex':'00010005', 'name':'deliver_sm_v4'},
+    '80010005':{'hex':'80010005', 'name':'deliver_sm_resp_v4'},
+    '00010006':{'hex':'00010006', 'name':'unbind_v4'},
+    '80010006':{'hex':'80010006', 'name':'unbind_resp_v4'},
+    '00010007':{'hex':'00010007', 'name':'replace_sm_v4'},
+    '80010007':{'hex':'80010007', 'name':'replace_sm_resp_v4'},
+    '00010008':{'hex':'00010008', 'name':'cancel_sm_v4'},
+    '80010008':{'hex':'80010008', 'name':'cancel_sm_resp_v4'},
+    '00010009':{'hex':'00010009', 'name':'delivery_receipt_v4'},
+    '80010009':{'hex':'80010009', 'name':'delivery_receipt_resp_v4'},
+    '0001000a':{'hex':'0001000a', 'name':'enquire_link_v4'},
+    '8001000a':{'hex':'8001000a', 'name':'enquire_link_resp_v4'},
+    '0001000b':{'hex':'0001000b', 'name':'outbind_v4'},
 }
-
 def command_id_name_by_hex(x):
     return command_id_by_hex.get(x,{}).get('name')
 
-def command_id_decode_fn_by_hex(x):
-    return command_id_by_hex.get(x,{}).get('decode_fn')
-
-def command_id_encode_fn_by_hex(x):
-    return command_id_by_hex.get(x,{}).get('encode_fn')
 
 command_id_by_name = {
-    'generic_nack'            :{'hex':'80000000', 'name':'generic_nack',             'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'bind_receiver'           :{'hex':'00000001', 'name':'bind_receiver',            'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    'bind_receiver_resp'      :{'hex':'80000001', 'name':'bind_receiver_resp',       'encode_fn':encode_bind_resp_v34,      'decode_fn':decode_bind_resp_v34},
-    'bind_transmitter'        :{'hex':'00000002', 'name':'bind_transmitter',         'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    'bind_transmitter_resp'   :{'hex':'80000002', 'name':'bind_transmitter_resp',    'encode_fn':encode_bind_resp_v34,      'decode_fn':decode_bind_resp_v34},
-    'query_sm'                :{'hex':'00000003', 'name':'query_sm',                 'encode_fn':encode_query_v34,          'decode_fn':decode_query_v34},
-    'query_sm_resp'           :{'hex':'80000003', 'name':'query_sm_resp',            'encode_fn':encode_query_resp_v34,     'decode_fn':decode_query_resp_v34},
-    'submit_sm'               :{'hex':'00000004', 'name':'submit_sm',                'encode_fn':encode_submit_v34,         'decode_fn':decode_submit_v34},
-    'submit_sm_resp'          :{'hex':'80000004', 'name':'submit_sm_resp',           'encode_fn':encode_submit_resp_v34,    'decode_fn':decode_submit_resp_v34},
-    'deliver_sm'              :{'hex':'00000005', 'name':'deliver_sm',               'encode_fn':encode_submit_v34,         'decode_fn':decode_submit_v34},
-    'deliver_sm_resp'         :{'hex':'80000005', 'name':'deliver_sm_resp',          'encode_fn':encode_submit_resp_v34,    'decode_fn':decode_submit_resp_v34},
-    'unbind'                  :{'hex':'00000006', 'name':'unbind',                   'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'unbind_resp'             :{'hex':'80000006', 'name':'unbind_resp',              'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'replace_sm'              :{'hex':'00000007', 'name':'replace_sm',               'encode_fn':encode_replace_sm_v34,     'decode_fn':decode_replace_sm_v34},
-    'replace_sm_resp'         :{'hex':'80000007', 'name':'replace_sm_resp',          'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'cancel_sm'               :{'hex':'00000008', 'name':'cancel_sm',                'encode_fn':encode_cancel,             'decode_fn':decode_cancel},
-    'cancel_sm_resp'          :{'hex':'80000008', 'name':'cancel_sm_resp',           'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'bind_transceiver'        :{'hex':'00000009', 'name':'bind_transceiver',         'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    'bind_transceiver_resp'   :{'hex':'80000009', 'name':'bind_transceiver_resp',    'encode_fn':encode_bind_resp_v34,      'decode_fn':decode_bind_resp_v34},
-    'outbind'                 :{'hex':'0000000b', 'name':'outbind',                  'encode_fn':encode_outbind_v34,        'decode_fn':decode_outbind_v34},
-    'enquire_link'            :{'hex':'00000015', 'name':'enquire_link',             'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'enquire_link_resp'       :{'hex':'80000015', 'name':'enquire_link_resp',        'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'submit_multi'            :{'hex':'00000021', 'name':'submit_multi',             'encode_fn':encode_submit_multi,       'decode_fn':decode_submit_multi},
-    'submit_multi_resp'       :{'hex':'80000021', 'name':'submit_multi_resp',        'encode_fn':encode_submit_multi_resp,  'decode_fn':decode_submit_multi_resp},
-    'alert_notification'      :{'hex':'00000102', 'name':'alert_notification',       'encode_fn':encode_alert_notification, 'decode_fn':decode_alert_notification},
-    'data_sm'                 :{'hex':'00000103', 'name':'data_sm',                  'encode_fn':encode_data_sm,            'decode_fn':decode_data_sm},
-    'data_sm_resp'            :{'hex':'80000103', 'name':'data_sm_resp',             'encode_fn':encode_submit_resp_v34,    'decode_fn':decode_submit_resp_v34},
+    'generic_nack'            :{'hex':'80000000', 'name':'generic_nack'},
+    'bind_receiver'           :{'hex':'00000001', 'name':'bind_receiver'},
+    'bind_receiver_resp'      :{'hex':'80000001', 'name':'bind_receiver_resp'},
+    'bind_transmitter'        :{'hex':'00000002', 'name':'bind_transmitter'},
+    'bind_transmitter_resp'   :{'hex':'80000002', 'name':'bind_transmitter_resp'},
+    'query_sm'                :{'hex':'00000003', 'name':'query_sm'},
+    'query_sm_resp'           :{'hex':'80000003', 'name':'query_sm_resp'},
+    'submit_sm'               :{'hex':'00000004', 'name':'submit_sm'},
+    'submit_sm_resp'          :{'hex':'80000004', 'name':'submit_sm_resp'},
+    'deliver_sm'              :{'hex':'00000005', 'name':'deliver_sm'},
+    'deliver_sm_resp'         :{'hex':'80000005', 'name':'deliver_sm_resp'},
+    'unbind'                  :{'hex':'00000006', 'name':'unbind'},
+    'unbind_resp'             :{'hex':'80000006', 'name':'unbind_resp'},
+    'replace_sm'              :{'hex':'00000007', 'name':'replace_sm'},
+    'replace_sm_resp'         :{'hex':'80000007', 'name':'replace_sm_resp'},
+    'cancel_sm'               :{'hex':'00000008', 'name':'cancel_sm'},
+    'cancel_sm_resp'          :{'hex':'80000008', 'name':'cancel_sm_resp'},
+    'bind_transceiver'        :{'hex':'00000009', 'name':'bind_transceiver'},
+    'bind_transceiver_resp'   :{'hex':'80000009', 'name':'bind_transceiver_resp'},
+    'outbind'                 :{'hex':'0000000b', 'name':'outbind'},
+    'enquire_link'            :{'hex':'00000015', 'name':'enquire_link'},
+    'enquire_link_resp'       :{'hex':'80000015', 'name':'enquire_link_resp'},
+    'submit_multi'            :{'hex':'00000021', 'name':'submit_multi'},
+    'submit_multi_resp'       :{'hex':'80000021', 'name':'submit_multi_resp'},
+    'alert_notification'      :{'hex':'00000102', 'name':'alert_notification'},
+    'data_sm'                 :{'hex':'00000103', 'name':'data_sm'},
+    'data_sm_resp'            :{'hex':'80000103', 'name':'data_sm_resp'},
 
                                # v4 codes
 
-    'generic_nack_v4'         :{'hex':'80010000', 'name':'generic_nack_v4',          'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'bind_receiver_v4'        :{'hex':'00010001', 'name':'bind_receiver_v4',         'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    'bind_receiver_resp_v4'   :{'hex':'80010001', 'name':'bind_receiver_resp_v4',    'encode_fn':encode_bind_resp_v4,       'decode_fn':decode_bind_resp_v4},
-    'bind_transmitter_v4'     :{'hex':'00010002', 'name':'bind_transmitter_v4',      'encode_fn':encode_bind,               'decode_fn':decode_bind},
-    'bind_transmitter_resp_v4':{'hex':'80010002', 'name':'bind_transmitter_resp_v4', 'encode_fn':encode_bind_resp_v4,       'decode_fn':decode_bind_resp_v4},
-    'query_sm_v4'             :{'hex':'00010003', 'name':'query_sm_v4',              'encode_fn':encode_query_v4,           'decode_fn':decode_query_v4},
-    'query_sm_resp_v4'        :{'hex':'80010003', 'name':'query_sm_resp_v4',         'encode_fn':encode_query_resp_v4,      'decode_fn':decode_query_resp_v4},
-    'submit_sm_v4'            :{'hex':'00010004', 'name':'submit_sm_v4',             'encode_fn':encode_submit_v4,          'decode_fn':decode_submit_v4},
-    'submit_sm_resp_v4'       :{'hex':'80010004', 'name':'submit_sm_resp_v4',        'encode_fn':encode_submit_sm_resp_v4,  'decode_fn':decode_submit_sm_resp_v4},
-    'deliver_sm_v4'           :{'hex':'00010005', 'name':'deliver_sm_v4',            'encode_fn':encode_deliver_sm_v4,      'decode_fn':decode_deliver_sm_v4},
-    'deliver_sm_resp_v4'      :{'hex':'80010005', 'name':'deliver_sm_resp_v4',       'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'unbind_v4'               :{'hex':'00010006', 'name':'unbind_v4',                'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'unbind_resp_v4'          :{'hex':'80010006', 'name':'unbind_resp_v4',           'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'replace_sm_v4'           :{'hex':'00010007', 'name':'replace_sm_v4',            'encode_fn':encode_replace_sm_v4,      'decode_fn':decode_replace_sm_v4},
-    'replace_sm_resp_v4'      :{'hex':'80010007', 'name':'replace_sm_resp_v4',       'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'cancel_sm_v4'            :{'hex':'00010008', 'name':'cancel_sm_v4',             'encode_fn':encode_cancel,             'decode_fn':decode_cancel},
-    'cancel_sm_resp_v4'       :{'hex':'80010008', 'name':'cancel_sm_resp_v4',        'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'delivery_receipt_v4'     :{'hex':'00010009', 'name':'delivery_receipt_v4',      'encode_fn':encode_delivery_receipt,   'decode_fn':decode_delivery_receipt},
-    'delivery_receipt_resp_v4':{'hex':'80010009', 'name':'delivery_receipt_resp_v4', 'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'enquire_link_v4'         :{'hex':'0001000a', 'name':'enquire_link_v4',          'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'enquire_link_resp_v4'    :{'hex':'8001000a', 'name':'enquire_link_resp_v4',     'encode_fn':encode_empty,              'decode_fn':decode_empty},
-    'outbind_v4'              :{'hex':'0001000b', 'name':'outbind_v4',               'encode_fn':encode_outbind_v4,         'decode_fn':decode_outbind_v4}
+    'generic_nack_v4'         :{'hex':'80010000', 'name':'generic_nack_v4'},
+    'bind_receiver_v4'        :{'hex':'00010001', 'name':'bind_receiver_v4'},
+    'bind_receiver_resp_v4'   :{'hex':'80010001', 'name':'bind_receiver_resp_v4'},
+    'bind_transmitter_v4'     :{'hex':'00010002', 'name':'bind_transmitter_v4'},
+    'bind_transmitter_resp_v4':{'hex':'80010002', 'name':'bind_transmitter_resp_v4'},
+    'query_sm_v4'             :{'hex':'00010003', 'name':'query_sm_v4'},
+    'query_sm_resp_v4'        :{'hex':'80010003', 'name':'query_sm_resp_v4'},
+    'submit_sm_v4'            :{'hex':'00010004', 'name':'submit_sm_v4'},
+    'submit_sm_resp_v4'       :{'hex':'80010004', 'name':'submit_sm_resp_v4'},
+    'deliver_sm_v4'           :{'hex':'00010005', 'name':'deliver_sm_v4'},
+    'deliver_sm_resp_v4'      :{'hex':'80010005', 'name':'deliver_sm_resp_v4'},
+    'unbind_v4'               :{'hex':'00010006', 'name':'unbind_v4'},
+    'unbind_resp_v4'          :{'hex':'80010006', 'name':'unbind_resp_v4'},
+    'replace_sm_v4'           :{'hex':'00010007', 'name':'replace_sm_v4'},
+    'replace_sm_resp_v4'      :{'hex':'80010007', 'name':'replace_sm_resp_v4'},
+    'cancel_sm_v4'            :{'hex':'00010008', 'name':'cancel_sm_v4'},
+    'cancel_sm_resp_v4'       :{'hex':'80010008', 'name':'cancel_sm_resp_v4'},
+    'delivery_receipt_v4'     :{'hex':'00010009', 'name':'delivery_receipt_v4'},
+    'delivery_receipt_resp_v4':{'hex':'80010009', 'name':'delivery_receipt_resp_v4'},
+    'enquire_link_v4'         :{'hex':'0001000a', 'name':'enquire_link_v4'},
+    'enquire_link_resp_v4'    :{'hex':'8001000a', 'name':'enquire_link_resp_v4'},
+    'outbind_v4'              :{'hex':'0001000b', 'name':'outbind_v4'}
 }
-
 def command_id_hex_by_name(n):
     return command_id_by_name.get(n,{}).get('hex')
 
-def command_id_decode_fn_by_name(n):
-    return command_id_by_name.get(n,{}).get('decode_fn')
 
-def command_id_encode_fn_by_name(n):
-    return command_id_by_name.get(n,{}).get('encode_fn')
+mandatory_parameter_lists = {
+    'bind_transmitter':[ # SMPP v3.4, section 4.1.1, table 4-1, page 46
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'password',                'min':1, 'max':9,   'var':True,        'type':'string',        'hex_map':None},
+        {'name':'system_type',             'min':1, 'max':13,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_ton_by_hex},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_npi_by_hex},
+        {'name':'address_range',           'min':1, 'max':41,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'bind_transmitter_resp':[ # SMPP v3.4, section 4.1.2, table 4-2, page 47
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'bind_receiver':[ # SMPP v3.4, section 4.1.3, table 4-3, page 48
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'password',                'min':1, 'max':9,   'var':True,        'type':'string',        'hex_map':None},
+        {'name':'system_type',             'min':1, 'max':13,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_ton_by_hex},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_npi_by_hex},
+        {'name':'address_range',           'min':1, 'max':41,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'bind_receiver_resp':[ # SMPP v3.4, section 4.1.4, table 4-4, page 50
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'bind_transceiver':[ # SMPP v3.4, section 4.1.5, table 4-5, page 51
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'password',                'min':1, 'max':9,   'var':True,        'type':'string',        'hex_map':None},
+        {'name':'system_type',             'min':1, 'max':13,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_ton_by_hex},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_npi_by_hex},
+        {'name':'address_range',           'min':1, 'max':41,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'bind_transceiver_resp':[ # SMPP v3.4, section 4.1.6, table 4-6, page 52
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'outbind':[ # SMPP v3.4, section 4.1.7.1, page 54
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'password',                'min':1, 'max':9,   'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'unbind':[ # SMPP v3.4, section 4.2.1, table 4-7, page 56
+    ],
+    'unbind_resp':[ # SMPP v3.4, section 4.2.2, table 4-8, page 56
+    ],
+    'generic_nack':[ # SMPP v3.4, section 4.3.1, table 4-9, page 57
+    ],
+    'submit_sm':[ # SMPP v3.4, section 4.4.1, table 4-10, page 59-61
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'esm_class',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
+        {'name':'validity_period',         'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'sm_length',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length', 'type':'string',        'hex_map':None}
+    ],
+    'submit_sm_resp':[ # SMPP v3.4, section 4.4.2, table 4-11, page 67
+        {'name':'message_id',              'min':0, 'max':65,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'submit_multi':[ # SMPP v3.4, section 4.5.1, table 4-12, page 69-71
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'number_of_dests',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'dest_address',            'min':2, 'max':24,  'var':True,        'type':'dest_address',  'hex_map':None},
+        {'name':'esm_class',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
+        {'name':'validity_period',         'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'sm_length',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length', 'type':'string',        'hex_map':None}
+    ],
+    'dest_address':[ # SMPP v3.4, section 4.5.1.1, table 4-13, page 75
+        {'name':'dest_flag',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None}
+        # 'sme_dest_address' or 'distribution_list' goes here
+    ],
+    'sme_dest_address':[ # SMPP v3.4, section 4.5.1.1, table 4-14, page 75
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'distribution_list':[ # SMPP v3.4, section 4.5.1.2, table 4-15, page 75
+        {'name':'dl_name',                 'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'submit_multi_resp':[ # SMPP v3.4, section 4.5.2, table 4-16, page 76
+        {'name':'message_id',              'min':0, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'no_unsuccess',            'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'unsuccess_sme',           'min':7, 'max':27,  'var':True,        'type':'unsuccess_sme', 'hex_map':None}
+    ],
+    'deliver_sm':[ # SMPP v3.4, section 4.6.1, table 4-18, page 79-81
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'esm_class',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'schedule_delivery_time',  'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None},
+        {'name':'validity_period',         'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'sm_length',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length', 'type':'string',        'hex_map':None}
+    ],
+    'deliver_sm_resp':[ # SMPP v3.4, section 4.6.2, table 4-19, page 85
+        {'name':'message_id',              'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None}
+    ],
+    'data_sm':[ # SMPP v3.4, section 4.7.1, table 4-20, page 87-88
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr',             'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'destination_addr',        'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'esm_class',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None}
+    ],
+    'data_sm_resp':[ # SMPP v3.4, section 4.7.2, table 4-21, page 93
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'query_sm':[ # SMPP v3.4, section 4.8.1, table 4-22, page 95
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'query_sm_resp':[ # SMPP v3.4, section 4.7.2, table 4-21, page 93
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'final_date',              'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
+        {'name':'message_state',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'error_code',              'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None}
+    ],
+    'cancel_sm':[ # SMPP v3.4, section 4.9.1, table 4-24, page 98-99
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None}
+    ],
+    'cancel_sm_resp':[ # SMPP v3.4, section 4.9.2, table 4-25, page 100
+    ],
+    'replace_sm':[ # SMPP v3.4, section 4.10.1, table 4-26, page 102-103
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
+        {'name':'validity_period',         'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'sm_length',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length', 'type':'string',        'hex_map':None}
+    ],
+    'replace_sm_resp':[ # SMPP v3.4, section 4.10.2, table 4-27, page 104
+    ],
+    'enquire_link':[ # SMPP v3.4, section 4.11.1, table 4-28, page 106
+    ],
+    'enquire_link_resp':[ # SMPP v3.4, section 4.11.2, table 4-29, page 106
+    ],
+    'alert_notification':[ # SMPP v3.4, section 4.12.1, table 4-30, page 108
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr',             'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+        {'name':'esme_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
+        {'name':'esme_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'esme_addr',               'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
+    ]
+}
+def mandatory_parameter_list_by_command_name(command_name):
+    return mandatory_parameter_lists.get(command_name,[])
 
 
-def decode_body(pdu, body_hex):
+def octpop(hex_ref):
+    octet = None
+    if len(hex_ref[0]) > 1:
+        (octet, hex_ref[0]) = (hex_ref[0][0:2], hex_ref[0][2: ])
+    return octet
+
+
+def decode_hex_type(data, hex_type, hex_ref=['']):
+    if hex_type == 'integer':
+        return int(data, 16)
+    elif hex_type == 'string':
+        return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',data)))
+    elif hex_type == 'dest_address':
+        return data #TODO need a better function here
+    elif hex_type == 'unsuccess_sme':
+        return data #TODO need a better function here
+    else:
+        return data
+
+
+def decode_body(command, body_hex):
     body = {}
     body['mandatory_parameters'] = None
-    if pdu['command'] != None:
+    if command != None:
+        fields = mandatory_parameter_list_by_command_name(command)
         (body['mandatory_parameters'], optional_parameters_hex) = \
-                command_id_decode_fn_by_name(pdu['command'])(body_hex)
+                decode_mandatory_parameters(fields, [body_hex])
     body['optional_parameters'] = decode_optional_parameters(optional_parameters_hex)
     return body
 
@@ -726,7 +821,7 @@ def unpack_pdu(pdu_bin):
     pdu['command'] = command
     pdu['status'] = status
     pdu['sequence'] = sequence
-    pdu['body'] = decode_body(pdu, body_hex)
+    pdu['body'] = decode_body(command, body_hex)
     print pdu
     return pdu
 
@@ -751,29 +846,31 @@ def pack_pdu(command='bind_transmitter', status='ESME_ROK', sequence=0, body_hex
     return binascii.a2b_hex(pdu_hex)
 
 
-def decode_mandatory_parameters(fields, source):
+def decode_mandatory_parameters(fields, hex_ref):
     mandatory_parameters = {}
-    for field in fields:
-        data = ''
-        octet = ''
-        count = 0
-        while (len(source[0]) > 1
-                and (count < field['min']
-                    or (count < field['max']
-                        and (octet != '00')))):
-            octet = octpop(source)
-            data += octet
-            count += 1
-        if field['hex_map'] != None:
-            mandatory_parameters[field['name']] = field.get('hex_map',{data:data})[data]
-        else:
-            mandatory_parameters[field['name']] = decode_hex_type(data, field['type'])
-    if mandatory_parameters.get('sm_length', None) != None:
-        short_message_hex = ''
-        for i in range(mandatory_parameters['sm_length']):
-            short_message_hex += octpop(source)
-        mandatory_parameters['short_message'] = decode_hex_type(short_message_hex, 'string')
-    return (mandatory_parameters, source[0])
+    print "<<<< mand hex >>>", repr(hex_ref[0])
+    if len(hex_ref[0]) > 1:
+        for field in fields:
+            data = ''
+            octet = ''
+            count = 0
+            if field['var'] != True and field['var'] != False:
+                for i in range(mandatory_parameters[field['var']]):
+                    if len(hex_ref[0]) > 1:
+                        data += octpop(hex_ref)
+            else:
+                while (len(hex_ref[0]) > 1
+                        and (count < field['min']
+                            or (count < field['max']
+                                and (octet != '00')))):
+                    octet = octpop(hex_ref)
+                    data += octet
+                    count += 1
+            if field['hex_map'] != None:
+                mandatory_parameters[field['name']] = field.get('hex_map',{data:data})[data]
+            else:
+                mandatory_parameters[field['name']] = decode_hex_type(data, field['type'])
+    return (mandatory_parameters, hex_ref[0])
 
 
 def encode_mandatory_parameters(fields, json):
