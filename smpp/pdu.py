@@ -794,16 +794,16 @@ def decode_hex_type(data, type, count=0, hex_ref=['']):
         list = []
         fields = mandatory_parameter_list_by_command_name(type)
         for i in range(count):
-            (element, hex_ref[0]) = decode_mandatory_parameters(fields, hex_ref)
-            if element.get('dest_flag', None) == 1:
+            (item, hex_ref[0]) = decode_mandatory_parameters(fields, hex_ref)
+            if item.get('dest_flag', None) == 1:
                 subfields = mandatory_parameter_list_by_command_name('sme_dest_address')
                 (rest, hex_ref[0]) = decode_mandatory_parameters(subfields, hex_ref)
-                element = dict(element, **rest)
-            elif element.get('dest_flag', None) == 2:
+                item.update(rest)
+            elif item.get('dest_flag', None) == 2:
                 subfields = mandatory_parameter_list_by_command_name('distribution_list')
                 (rest, hex_ref[0]) = decode_mandatory_parameters(subfields, hex_ref)
-                element = dict(element, **rest)
-            list.append(element)
+                item.update(rest)
+            list.append(item)
         return list
     else:
         return data
@@ -880,7 +880,7 @@ def decode_mandatory_parameters(fields, hex_ref):
                 while (len(hex_ref[0]) > 1
                         and (count < field['min']
                             or (count < field['max']
-                                and (octet != '00')))):
+                                and octet != '00'))):
                     octet = octpop(hex_ref)
                     data += octet
                     count += 1
