@@ -552,10 +552,10 @@ maps['registered_delivery_bits'] = {
 
 
 # submit_multi dest_flag constants - SMPP v3.4, section 5.2.25, page 129
-maps['dest_flag_by_name'] = {
-    'SME_Address':1,
-    'dist_list'  :2
-}
+#maps['dest_flag_by_name'] = {
+    #'SME Address'           :1,
+    #'Distribution List Name':2
+#}
 
 
 # Message State codes returned in query_sm_resp PDUs - SMPP v3.4, section 5.2.28, table 5-6, page 130
@@ -789,12 +789,20 @@ def decode_hex_type(data, type, count=0, hex_ref=['']):
         return int(data, 16)
     elif type == 'string':
         return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',data)))
-    elif type == 'dest_address' \
-      or type == 'unsuccess_sme':
+    elif (type == 'dest_address'
+            or type == 'unsuccess_sme'):
         list = []
         fields = mandatory_parameter_list_by_command_name(type)
         for i in range(count):
             (element, hex_ref[0]) = decode_mandatory_parameters(fields, hex_ref)
+            if element.get('dest_flag', None) == 1:
+                subfields = mandatory_parameter_list_by_command_name('sme_dest_address')
+                (rest, hex_ref[0]) = decode_mandatory_parameters(subfields, hex_ref)
+                element = dict(element, **rest)
+            elif element.get('dest_flag', None) == 2:
+                subfields = mandatory_parameter_list_by_command_name('distribution_list')
+                (rest, hex_ref[0]) = decode_mandatory_parameters(subfields, hex_ref)
+                element = dict(element, **rest)
             list.append(element)
         return list
     else:
@@ -862,7 +870,7 @@ def pack_pdu(command='bind_transmitter', status='ESME_ROK', sequence=0, body_hex
 
 def decode_mandatory_parameters(fields, hex_ref):
     mandatory_parameters = {}
-    print "<<<< mand & opt hex >>>", repr(hex_ref[0])
+    #print "<<<< mand & opt hex >>>", repr(hex_ref[0])
     if len(hex_ref[0]) > 1:
         for field in fields:
             data = ''
@@ -883,7 +891,7 @@ def decode_mandatory_parameters(fields, hex_ref):
                         data += octpop(hex_ref)
             else:
                 count = mandatory_parameters[field['var']]
-            print '>', count, data
+            print '>', count, '<', data, '>', field['name']
             if field['hex_map'] != None:
                 mandatory_parameters[field['name']] = maps.get(field['hex_map'],{data:data})[data]
             else:
