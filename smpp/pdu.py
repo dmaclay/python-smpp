@@ -2,6 +2,8 @@ import binascii
 import re
 
 
+maps = {} # Inserting certain referenced dicts in here means they can be declared in the same order as in the spec.
+
 
 # SMPP Error Codes (ESME) - SMPP v3.4, section 5.1.3, table 5-2, page 112-114
 
@@ -114,7 +116,7 @@ def command_status_hex_by_name(n):
 
 # Type of Number (TON) - SMPP v3.4, section 5.2.5, table 5-3, page 117
 
-addr_ton_by_name = {
+maps['addr_ton_by_name'] = {
     'unknown'          :'00',
     'international'    :'01',
     'national'         :'02',
@@ -124,7 +126,7 @@ addr_ton_by_name = {
     'abbreviated'      :'06'
 }
 
-addr_ton_by_hex = {
+maps['addr_ton_by_hex'] = {
     '00':'unknown',
     '01':'international',
     '02':'national',
@@ -137,7 +139,7 @@ addr_ton_by_hex = {
 
 # Numberic Plan Indicator (NPI) - SMPP v3.4, section 5.2.6, table 5-4, page 118
 
-addr_npi_by_name = {
+maps['addr_npi_by_name'] = {
     'unknown'    :'00',
     'ISDN'       :'01',
     'data'       :'03',
@@ -150,7 +152,7 @@ addr_npi_by_name = {
     'WAP'        :'12'
 }
 
-addr_npi_by_hex = {
+maps['addr_npi_by_hex'] = {
     '00':'unknown',
     '01':'ISDN',
     '03':'data',
@@ -166,7 +168,7 @@ addr_npi_by_hex = {
 
 # ESM Class bits  - SMPP v3.4, section 5.2.12, page 121
 
-esm_class_bits = {
+maps['esm_class_bits'] = {
     'mode_mask'                  :'03',
     'type_mask'                  :'3c',
     'feature_mask'               :'c0',
@@ -202,7 +204,7 @@ esm_class_bits = {
 
 # Registered Delivery bits - SMPP v3.4, section 5.2.17, page 124
 
-registered_delivery_bits = {
+maps['registered_delivery_bits'] = {
     'receipt_mask'         :'03',
     'ack_mask'             :'0c',
     'intermed_notif_mask'  :'80',
@@ -223,14 +225,14 @@ registered_delivery_bits = {
 
 
 # submit_multi dest_flag constants - SMPP v3.4, section 5.2.25, page 129
-dest_flag_by_name = {
+maps['dest_flag_by_name'] = {
     'SME_Address':1,
     'dist_list'  :2
 }
 
 
 # Message State codes returned in query_sm_resp PDUs - SMPP v3.4, section 5.2.28, table 5-6, page 130
-message_state_by_name = {
+maps['message_state_by_name'] = {
     'ENROUTE'      :1,
     'DELIVERED'    :2,
     'EXPIRED'      :3,
@@ -244,7 +246,7 @@ message_state_by_name = {
 
 # Facility Code bits for SMPP v4
 
-facility_code_bits = {
+maps['facility_code_bits'] = {
     'GF_PVCY'   :'00000001',
     'GF_SUBADDR':'00000002',
     'NF_CC'     :'00080000',
@@ -572,8 +574,8 @@ mandatory_parameter_lists = {
         {'name':'password',                'min':1, 'max':9,   'var':True,        'type':'string',        'hex_map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,        'type':'string',        'hex_map':None},
         {'name':'interface_version',       'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None},
-        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_ton_by_hex},
-        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_npi_by_hex},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':'addr_ton_by_hex'},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':'addr_npi_by_hex'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,        'type':'string',        'hex_map':None}
     ],
     'bind_transmitter_resp':[ # SMPP v3.4, section 4.1.2, table 4-2, page 47
@@ -584,8 +586,8 @@ mandatory_parameter_lists = {
         {'name':'password',                'min':1, 'max':9,   'var':True,        'type':'string',        'hex_map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,        'type':'string',        'hex_map':None},
         {'name':'interface_version',       'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None},
-        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_ton_by_hex},
-        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_npi_by_hex},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':'addr_ton_by_hex'},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':'addr_npi_by_hex'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,        'type':'string',        'hex_map':None}
     ],
     'bind_receiver_resp':[ # SMPP v3.4, section 4.1.4, table 4-4, page 50
@@ -596,8 +598,8 @@ mandatory_parameter_lists = {
         {'name':'password',                'min':1, 'max':9,   'var':True,        'type':'string',        'hex_map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,        'type':'string',        'hex_map':None},
         {'name':'interface_version',       'min':1, 'max':1,   'var':False,       'type':'string',        'hex_map':None},
-        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_ton_by_hex},
-        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':addr_npi_by_hex},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':'addr_ton_by_hex'},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,       'type':None,            'hex_map':'addr_npi_by_hex'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,        'type':'string',        'hex_map':None}
     ],
     'bind_transceiver_resp':[ # SMPP v3.4, section 4.1.6, table 4-6, page 52
@@ -615,11 +617,11 @@ mandatory_parameter_lists = {
     ],
     'submit_sm':[ # SMPP v3.4, section 4.4.1, table 4-10, page 59-61
         {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'destination_addr',        'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
         {'name':'esm_class',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
         {'name':'protocol_id',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
@@ -638,8 +640,8 @@ mandatory_parameter_lists = {
     ],
     'submit_multi':[ # SMPP v3.4, section 4.5.1, table 4-12, page 69-71
         {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
         {'name':'number_of_dests',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
         {'name':'dest_address',            'min':2, 'max':24,  'var':True,        'type':'dest_address',  'hex_map':None},
@@ -660,8 +662,8 @@ mandatory_parameter_lists = {
         # 'sme_dest_address' or 'distribution_list' goes here
     ],
     'sme_dest_address':[ # SMPP v3.4, section 4.5.1.1, table 4-14, page 75
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'destination_addr',        'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None}
     ],
     'distribution_list':[ # SMPP v3.4, section 4.5.1.2, table 4-15, page 75
@@ -674,11 +676,11 @@ mandatory_parameter_lists = {
     ],
     'deliver_sm':[ # SMPP v3.4, section 4.6.1, table 4-18, page 79-81
         {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'destination_addr',        'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
         {'name':'esm_class',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
         {'name':'protocol_id',             'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
@@ -697,11 +699,11 @@ mandatory_parameter_lists = {
     ],
     'data_sm':[ # SMPP v3.4, section 4.7.1, table 4-20, page 87-88
         {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'source_addr',             'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'destination_addr',        'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
         {'name':'esm_class',               'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
         {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':None},
@@ -712,8 +714,8 @@ mandatory_parameter_lists = {
     ],
     'query_sm':[ # SMPP v3.4, section 4.8.1, table 4-22, page 95
         {'name':'message_id',              'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None}
     ],
     'query_sm_resp':[ # SMPP v3.4, section 4.7.2, table 4-21, page 93
@@ -725,19 +727,19 @@ mandatory_parameter_lists = {
     'cancel_sm':[ # SMPP v3.4, section 4.9.1, table 4-24, page 98-99
         {'name':'service_type',            'min':1, 'max':6,   'var':True,        'type':'string',        'hex_map':None},
         {'name':'message_id',              'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'destination_addr',        'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None}
     ],
     'cancel_sm_resp':[ # SMPP v3.4, section 4.9.2, table 4-25, page 100
     ],
     'replace_sm':[ # SMPP v3.4, section 4.10.1, table 4-26, page 102-103
         {'name':'message_id',              'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'source_addr',             'min':1, 'max':21,  'var':True,        'type':'string',        'hex_map':None},
         {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
         {'name':'validity_period',         'min':1, 'max':17,  'var':False,       'type':'string',        'hex_map':None},
@@ -755,11 +757,11 @@ mandatory_parameter_lists = {
     'enquire_link_resp':[ # SMPP v3.4, section 4.11.2, table 4-29, page 106
     ],
     'alert_notification':[ # SMPP v3.4, section 4.12.1, table 4-30, page 108
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'source_addr',             'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
-        {'name':'esme_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_ton_by_hex},
-        {'name':'esme_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':addr_npi_by_hex},
+        {'name':'esme_addr_ton',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_ton_by_hex'},
+        {'name':'esme_addr_npi',           'min':1, 'max':1,   'var':False,       'type':'integer',       'hex_map':'addr_npi_by_hex'},
         {'name':'esme_addr',               'min':1, 'max':65,  'var':True,        'type':'string',        'hex_map':None},
     ]
 }
@@ -867,7 +869,7 @@ def decode_mandatory_parameters(fields, hex_ref):
                     data += octet
                     count += 1
             if field['hex_map'] != None:
-                mandatory_parameters[field['name']] = field.get('hex_map',{data:data})[data]
+                mandatory_parameters[field['name']] = maps.get(field['hex_map'],{data:data})[data]
             else:
                 mandatory_parameters[field['name']] = decode_hex_type(data, field['type'])
     return (mandatory_parameters, hex_ref[0])
