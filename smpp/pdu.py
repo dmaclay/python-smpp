@@ -9,44 +9,44 @@ maps = {} # Inserting certain referenced dicts in here means they can be declare
 
 mandatory_parameter_lists = {
     'bind_transmitter':[ # SMPP v3.4, section 4.1.1, table 4-1, page 46
-        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'hex_map':None},
-        {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'hex_map':None},
-        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':None,            'hex_map':'addr_ton_by_hex'},
-        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':None,            'hex_map':'addr_npi_by_hex'},
-        {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
+        {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
+        {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
     ],
     'bind_transmitter_resp':[ # SMPP v3.4, section 4.1.2, table 4-2, page 47
-        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None}
     ],
     'bind_receiver':[ # SMPP v3.4, section 4.1.3, table 4-3, page 48
-        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'hex_map':None},
-        {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'hex_map':None},
-        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':None,            'hex_map':'addr_ton_by_hex'},
-        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':None,            'hex_map':'addr_npi_by_hex'},
-        {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
+        {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
+        {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
     ],
     'bind_receiver_resp':[ # SMPP v3.4, section 4.1.4, table 4-4, page 50
-        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None}
     ],
     'bind_transceiver':[ # SMPP v3.4, section 4.1.5, table 4-5, page 51
-        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'hex_map':None},
-        {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'hex_map':None},
-        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':None,            'hex_map':'addr_ton_by_hex'},
-        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':None,            'hex_map':'addr_npi_by_hex'},
-        {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
+        {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
+        {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
     ],
     'bind_transceiver_resp':[ # SMPP v3.4, section 4.1.6, table 4-6, page 52
-        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None}
     ],
     'outbind':[ # SMPP v3.4, section 4.1.7.1, page 54
-        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'hex_map':None}
+        {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
+        {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None}
     ],
     'unbind':[ # SMPP v3.4, section 4.2.1, table 4-7, page 56
     ],
@@ -55,145 +55,145 @@ mandatory_parameter_lists = {
     'generic_nack':[ # SMPP v3.4, section 4.3.1, table 4-9, page 57
     ],
     'submit_sm':[ # SMPP v3.4, section 4.4.1, table 4-10, page 59-61
-        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'esm_class',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,             'type':'string',        'hex_map':None},
-        {'name':'validity_period',         'min':1, 'max':17,  'var':False,             'type':'string',        'hex_map':None},
-        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'hex_map':None}
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'map':None},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'map':None},
+        {'name':'esm_class',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,             'type':'string',        'map':None},
+        {'name':'validity_period',         'min':1, 'max':17,  'var':False,             'type':'string',        'map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'map':None}
     ],
     'submit_sm_resp':[ # SMPP v3.4, section 4.4.2, table 4-11, page 67
-        {'name':'message_id',              'min':0, 'max':65,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'message_id',              'min':0, 'max':65,  'var':True,              'type':'string',        'map':None}
     ],
     'submit_multi':[ # SMPP v3.4, section 4.5.1, table 4-12, page 69-71
-        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'number_of_dests',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'dest_address',            'min':0, 'max':0,   'var':'number_of_dests', 'type':'dest_address',  'hex_map':None},
-        {'name':'esm_class',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,             'type':'string',        'hex_map':None},
-        {'name':'validity_period',         'min':1, 'max':17,  'var':False,             'type':'string',        'hex_map':None},
-        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'hex_map':None}
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'map':None},
+        {'name':'number_of_dests',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'dest_address',            'min':0, 'max':0,   'var':'number_of_dests', 'type':'dest_address',  'map':None},
+        {'name':'esm_class',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,             'type':'string',        'map':None},
+        {'name':'validity_period',         'min':1, 'max':17,  'var':False,             'type':'string',        'map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'map':None}
     ],
     'dest_address':[ # SMPP v3.4, section 4.5.1.1, table 4-13, page 75
-        {'name':'dest_flag',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None}
+        {'name':'dest_flag',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None}
         # 'sme_dest_address' or 'distribution_list' goes here
     ],
     'sme_dest_address':[ # SMPP v3.4, section 4.5.1.1, table 4-14, page 75
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'map':None}
     ],
     'distribution_list':[ # SMPP v3.4, section 4.5.1.2, table 4-15, page 75
-        {'name':'dl_name',                 'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'dl_name',                 'min':1, 'max':21,  'var':True,              'type':'string',        'map':None}
     ],
     'submit_multi_resp':[ # SMPP v3.4, section 4.5.2, table 4-16, page 76
-        {'name':'message_id',              'min':0, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'no_unsuccess',            'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'unsuccess_sme',           'min':0, 'max':0,   'var':'no_unsuccess',    'type':'unsuccess_sme', 'hex_map':None}
+        {'name':'message_id',              'min':0, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'no_unsuccess',            'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'unsuccess_sme',           'min':0, 'max':0,   'var':'no_unsuccess',    'type':'unsuccess_sme', 'map':None}
     ],
     'unsuccess_sme':[ # SMPP v3.4, section 4.5.2.1, table 4-17, page 77
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'error_status_code',       'min':4, 'max':4,   'var':False,             'type':'integer',       'hex_map':None}
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'map':None},
+        {'name':'error_status_code',       'min':4, 'max':4,   'var':False,             'type':'integer',       'map':None}
     ],
     'deliver_sm':[ # SMPP v3.4, section 4.6.1, table 4-18, page 79-81
-        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'esm_class',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'schedule_delivery_time',  'min':1, 'max':1,   'var':False,             'type':'string',        'hex_map':None},
-        {'name':'validity_period',         'min':1, 'max':1,   'var':False,             'type':'string',        'hex_map':None},
-        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'hex_map':None}
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'map':None},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'map':None},
+        {'name':'esm_class',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'protocol_id',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'priority_flag',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'schedule_delivery_time',  'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'validity_period',         'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'map':None}
     ],
     'deliver_sm_resp':[ # SMPP v3.4, section 4.6.2, table 4-19, page 85
-        {'name':'message_id',              'min':1, 'max':1,   'var':False,             'type':'string',        'hex_map':None}
+        {'name':'message_id',              'min':1, 'max':1,   'var':False,             'type':'string',        'map':None}
     ],
     'data_sm':[ # SMPP v3.4, section 4.7.1, table 4-20, page 87-88
-        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'source_addr',             'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'destination_addr',        'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'esm_class',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None}
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'source_addr',             'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'destination_addr',        'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'esm_class',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None}
     ],
     'data_sm_resp':[ # SMPP v3.4, section 4.7.2, table 4-21, page 93
-        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'map':None}
     ],
     'query_sm':[ # SMPP v3.4, section 4.8.1, table 4-22, page 95
-        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'map':None}
     ],
     'query_sm_resp':[ # SMPP v3.4, section 4.7.2, table 4-21, page 93
-        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'final_date',              'min':1, 'max':17,  'var':False,             'type':'string',        'hex_map':None},
-        {'name':'message_state',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'error_code',              'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None}
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'final_date',              'min':1, 'max':17,  'var':False,             'type':'string',        'map':None},
+        {'name':'message_state',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'error_code',              'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None}
     ],
     'cancel_sm':[ # SMPP v3.4, section 4.9.1, table 4-24, page 98-99
-        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'hex_map':None},
-        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None}
+        {'name':'service_type',            'min':1, 'max':6,   'var':True,              'type':'string',        'map':None},
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'map':None},
+        {'name':'dest_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'dest_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'destination_addr',        'min':1, 'max':21,  'var':True,              'type':'string',        'map':None}
     ],
     'cancel_sm_resp':[ # SMPP v3.4, section 4.9.2, table 4-25, page 100
     ],
     'replace_sm':[ # SMPP v3.4, section 4.10.1, table 4-26, page 102-103
-        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,             'type':'string',        'hex_map':None},
-        {'name':'validity_period',         'min':1, 'max':17,  'var':False,             'type':'string',        'hex_map':None},
-        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':None},
-        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'hex_map':None}
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'source_addr',             'min':1, 'max':21,  'var':True,              'type':'string',        'map':None},
+        {'name':'schedule_delivery_time',  'min':1, 'max':17,  'var':False,             'type':'string',        'map':None},
+        {'name':'validity_period',         'min':1, 'max':17,  'var':False,             'type':'string',        'map':None},
+        {'name':'registered_delivery',     'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'replace_if_present_flag', 'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'map':None}
     ],
     'replace_sm_resp':[ # SMPP v3.4, section 4.10.2, table 4-27, page 104
     ],
@@ -202,12 +202,12 @@ mandatory_parameter_lists = {
     'enquire_link_resp':[ # SMPP v3.4, section 4.11.2, table 4-29, page 106
     ],
     'alert_notification':[ # SMPP v3.4, section 4.12.1, table 4-30, page 108
-        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'source_addr',             'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
-        {'name':'esme_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_ton_by_hex'},
-        {'name':'esme_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'hex_map':'addr_npi_by_hex'},
-        {'name':'esme_addr',               'min':1, 'max':65,  'var':True,              'type':'string',        'hex_map':None},
+        {'name':'source_addr_ton',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'source_addr_npi',         'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'source_addr',             'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'esme_addr_ton',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
+        {'name':'esme_addr_npi',           'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
+        {'name':'esme_addr',               'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
     ]
 }
 def mandatory_parameter_list_by_command_name(command_name):
@@ -586,99 +586,102 @@ maps['facility_code_bits'] = {
 # Optional Parameter Tags - SMPP v3.4, section 5.3.2, Table 5-7, page 132-133
 
 optional_parameter_tag_by_hex = {
-    '0005':{'hex':'0005', 'name':'dest_addr_subunit',            'technology':'GSM'},
-    '0006':{'hex':'0006', 'name':'dest_network_type',            'technology':'Generic'},
-    '0007':{'hex':'0007', 'name':'dest_bearer_type',             'technology':'Generic'},
-    '0008':{'hex':'0008', 'name':'dest_telematics_id',           'technology':'GSM'},
+    '0005':{'hex':'0005', 'name':'dest_addr_subunit',            'type':'integer', 'technology':'GSM'},
+    '0006':{'hex':'0006', 'name':'dest_network_type',            'type':'integer', 'technology':'Generic'},
+    '0007':{'hex':'0007', 'name':'dest_bearer_type',             'type':'integer', 'technology':'Generic'},
+    '0008':{'hex':'0008', 'name':'dest_telematics_id',           'type':'integer', 'technology':'GSM'},
 
-    '000d':{'hex':'000d', 'name':'source_addr_subunit',          'technology':'GSM'},
-    '000e':{'hex':'000e', 'name':'source_network_type',          'technology':'Generic'},
-    '000f':{'hex':'000f', 'name':'source_bearer_type',           'technology':'Generic'},
-    '0010':{'hex':'0010', 'name':'source_telematics_id',         'technology':'GSM'},
+    '000d':{'hex':'000d', 'name':'source_addr_subunit',          'type':'integer', 'technology':'GSM'},
+    '000e':{'hex':'000e', 'name':'source_network_type',          'type':'integer', 'technology':'Generic'},
+    '000f':{'hex':'000f', 'name':'source_bearer_type',           'type':'integer', 'technology':'Generic'},
+    '0010':{'hex':'0010', 'name':'source_telematics_id',         'type':'integer', 'technology':'GSM'},
 
-    '0017':{'hex':'0017', 'name':'qos_time_to_live',             'technology':'Generic'},
-    '0019':{'hex':'0019', 'name':'payload_type',                 'technology':'Generic'},
-    '001d':{'hex':'001d', 'name':'additional_status_info_text',  'technology':'Generic'},
-    '001e':{'hex':'001e', 'name':'receipted_message_id',         'technology':'Generic'},
-    '0030':{'hex':'0030', 'name':'ms_msg_wait_facilities',       'technology':'GSM'},
+    '0017':{'hex':'0017', 'name':'qos_time_to_live',             'type':'integer', 'technology':'Generic'},
+    '0019':{'hex':'0019', 'name':'payload_type',                 'type':'integer', 'technology':'Generic'},
+    '001d':{'hex':'001d', 'name':'additional_status_info_text',  'type':'string' , 'technology':'Generic'},
+    '001e':{'hex':'001e', 'name':'receipted_message_id',         'type':'string' , 'technology':'Generic'},
+    '0030':{'hex':'0030', 'name':'ms_msg_wait_facilities',       'type':'bitmask', 'technology':'GSM'},
 
-    '0101':{'hex':'0101', 'name':'PVCY_AuthenticationStr',       'technology':'? (J-Phone)'}, # v4 page 58-62
+    '0101':{'hex':'0101', 'name':'PVCY_AuthenticationStr',       'type':None,      'technology':'? (J-Phone)'}, # v4 page 58-62
 
-    '0201':{'hex':'0201', 'name':'privacy_indicator',            'technology':'CDMA,TDMA'},
-    '0202':{'hex':'0202', 'name':'source_subaddress',            'technology':'CDMA,TDMA'}, # v4 page 65-67
-    '0203':{'hex':'0203', 'name':'dest_subaddress',              'technology':'CDMA,TDMA'}, # v4 page 65-67
-    '0204':{'hex':'0204', 'name':'user_message_reference',       'technology':'Generic'},
-    '0205':{'hex':'0205', 'name':'user_response_code',           'technology':'CDMA,TDMA'},
-    '020a':{'hex':'020a', 'name':'source_port',                  'technology':'WAP'},
-    '020b':{'hex':'020b', 'name':'destination_port',             'technology':'WAP'},
-    '020c':{'hex':'020c', 'name':'sar_msg_ref_num',              'technology':'Generic'},
-    '020d':{'hex':'020d', 'name':'language_indicator',           'technology':'CDMA,TDMA'},
-    '020e':{'hex':'020e', 'name':'sar_total_segments',           'technology':'Generic'},
-    '020f':{'hex':'020f', 'name':'sar_segment_seqnum',           'technology':'Generic'},
-    '0210':{'hex':'0210', 'name':'sc_interface_version',         'technology':'Generic'},
+    '0201':{'hex':'0201', 'name':'privacy_indicator',            'type':'integer', 'technology':'CDMA,TDMA'},
+    '0202':{'hex':'0202', 'name':'source_subaddress',            'type':'hex',     'technology':'CDMA,TDMA'},
+    '0203':{'hex':'0203', 'name':'dest_subaddress',              'type':'hex',     'technology':'CDMA,TDMA'},
+    '0204':{'hex':'0204', 'name':'user_message_reference',       'type':'integer', 'technology':'Generic'},
+    '0205':{'hex':'0205', 'name':'user_response_code',           'type':'integer', 'technology':'CDMA,TDMA'},
+    '020a':{'hex':'020a', 'name':'source_port',                  'type':'integer', 'technology':'WAP'},
+    '020b':{'hex':'020b', 'name':'destination_port',             'type':'integer', 'technology':'WAP'},
+    '020c':{'hex':'020c', 'name':'sar_msg_ref_num',              'type':'integer', 'technology':'Generic'},
+    '020d':{'hex':'020d', 'name':'language_indicator',           'type':'integer', 'technology':'CDMA,TDMA'},
+    '020e':{'hex':'020e', 'name':'sar_total_segments',           'type':'integer', 'technology':'Generic'},
+    '020f':{'hex':'020f', 'name':'sar_segment_seqnum',           'type':'integer', 'technology':'Generic'},
+    '0210':{'hex':'0210', 'name':'sc_interface_version',         'type':'integer', 'technology':'Generic'},
 
-    '0301':{'hex':'0301', 'name':'CC_CBN',                       'technology':'V4'}, # v4 page 70
-    '0302':{'hex':'0302', 'name':'callback_num_pres_ind',        'technology':'TDMA'}, # v4 page 71
-    '0303':{'hex':'0303', 'name':'callback_num_atag',            'technology':'TDMA'}, # v4 page 71
-    '0304':{'hex':'0304', 'name':'number_of_messages',           'technology':'CDMA'}, # v4 page 72
-    '0381':{'hex':'0381', 'name':'callback_num',                 'technology':'CDMA,TDMA,GSM,iDEN'},
+    '0301':{'hex':'0301', 'name':'CC_CBN',                       'type':None,      'technology':'V4'}, # v4 page 70
+    '0302':{'hex':'0302', 'name':'callback_num_pres_ind',        'type':'bitmask', 'technology':'TDMA'},
+    '0303':{'hex':'0303', 'name':'callback_num_atag',            'type':'hex',     'technology':'TDMA'},
+    '0304':{'hex':'0304', 'name':'number_of_messages',           'type':'integer', 'technology':'CDMA'},
+    '0381':{'hex':'0381', 'name':'callback_num',                 'type':'hex',     'technology':'CDMA,TDMA,GSM,iDEN'},
 
-    '0420':{'hex':'0420', 'name':'dpf_result',                   'technology':'Generic'},
-    '0421':{'hex':'0421', 'name':'set_dpf',                      'technology':'Generic'},
-    '0422':{'hex':'0422', 'name':'ms_availability_status',       'technology':'Generic'},
-    '0423':{'hex':'0423', 'name':'network_error_code',           'technology':'Generic'},
-    '0424':{'hex':'0424', 'name':'message_payload',              'technology':'Generic'},
-    '0425':{'hex':'0425', 'name':'delivery_failure_reason',      'technology':'Generic'},
-    '0426':{'hex':'0426', 'name':'more_messages_to_send',        'technology':'GSM'},
-    '0427':{'hex':'0427', 'name':'message_state',                'technology':'Generic'},
-    '0428':{'hex':'0428', 'name':'congestion_state',             'technology':'Generic'},
+    '0420':{'hex':'0420', 'name':'dpf_result',                   'type':'integer', 'technology':'Generic'},
+    '0421':{'hex':'0421', 'name':'set_dpf',                      'type':'integer', 'technology':'Generic'},
+    '0422':{'hex':'0422', 'name':'ms_availability_status',       'type':'integer', 'technology':'Generic'},
+    '0423':{'hex':'0423', 'name':'network_error_code',           'type':'hex',     'technology':'Generic'},
+    '0424':{'hex':'0424', 'name':'message_payload',              'type':'hex',     'technology':'Generic'},
+    '0425':{'hex':'0425', 'name':'delivery_failure_reason',      'type':'integer', 'technology':'Generic'},
+    '0426':{'hex':'0426', 'name':'more_messages_to_send',        'type':'integer', 'technology':'GSM'},
+    '0427':{'hex':'0427', 'name':'message_state',                'type':'integer', 'technology':'Generic'},
+    '0428':{'hex':'0428', 'name':'congestion_state',             'type':'integer', 'technology':'Generic'},
 
-    '0501':{'hex':'0501', 'name':'ussd_service_op',              'technology':'GSM (USSD)'},
+    '0501':{'hex':'0501', 'name':'ussd_service_op',              'type':'hex',     'technology':'GSM (USSD)'},
 
-    '0600':{'hex':'0600', 'name':'broadcast_channel_indicator',  'technology':'GSM'},
-    '0601':{'hex':'0601', 'name':'broadcast_content_type',       'technology':'CDMA, TDMA, GSM'},
-    '0602':{'hex':'0602', 'name':'broadcast_content_type_info',  'technology':'CDMA, TDMA'},
-    '0603':{'hex':'0603', 'name':'broadcast_message_class',      'technology':'GSM'},
-    '0604':{'hex':'0604', 'name':'broadcast_rep_num',            'technology':'GSM'},
-    '0605':{'hex':'0605', 'name':'broadcast_frequency_interval', 'technology':'CDMA, TDMA, GSM'},
-    '0606':{'hex':'0606', 'name':'broadcast_area_identifier',    'technology':'CDMA, TDMA, GSM'},
-    '0607':{'hex':'0607', 'name':'broadcast_error_status',       'technology':'CDMA, TDMA, GSM'},
-    '0608':{'hex':'0608', 'name':'broadcast_area_success',       'technology':'GSM'},
-    '0609':{'hex':'0609', 'name':'broadcast_end_time',           'technology':'CDMA, TDMA, GSM'},
-    '060a':{'hex':'060a', 'name':'broadcast_service_group',      'technology':'CDMA, TDMA'},
-    '060b':{'hex':'060b', 'name':'billing_identification',       'technology':'Generic'},
-    '060d':{'hex':'060d', 'name':'source_network_id',            'technology':'Generic'},
-    '060e':{'hex':'060e', 'name':'dest_network_id',              'technology':'Generic'},
-    '060f':{'hex':'060f', 'name':'source_node_id',               'technology':'Generic'},
-    '0610':{'hex':'0610', 'name':'dest_node_id',                 'technology':'Generic'},
-    '0611':{'hex':'0611', 'name':'dest_addr_np_resolution',      'technology':'CDMA, TDMA (US Only)'},
-    '0612':{'hex':'0612', 'name':'dest_addr_np_information',     'technology':'CDMA, TDMA (US Only)'},
-    '0613':{'hex':'0613', 'name':'dest_addr_np_country',         'technology':'CDMA, TDMA (US Only)'},
+    '0600':{'hex':'0600', 'name':'broadcast_channel_indicator',  'type':'integer', 'technology':'GSM'},
+    '0601':{'hex':'0601', 'name':'broadcast_content_type',       'type':'integer', 'technology':'CDMA, TDMA, GSM'},
+    '0602':{'hex':'0602', 'name':'broadcast_content_type_info',  'type':'integer', 'technology':'CDMA, TDMA'},
+    '0603':{'hex':'0603', 'name':'broadcast_message_class',      'type':'integer', 'technology':'GSM'},
+    '0604':{'hex':'0604', 'name':'broadcast_rep_num',            'type':'integer', 'technology':'GSM'},
+    '0605':{'hex':'0605', 'name':'broadcast_frequency_interval', 'type':'integer', 'technology':'CDMA, TDMA, GSM'},
+    '0606':{'hex':'0606', 'name':'broadcast_area_identifier',    'type':'integer', 'technology':'CDMA, TDMA, GSM'},
+    '0607':{'hex':'0607', 'name':'broadcast_error_status',       'type':'integer', 'technology':'CDMA, TDMA, GSM'},
+    '0608':{'hex':'0608', 'name':'broadcast_area_success',       'type':'integer', 'technology':'GSM'},
+    '0609':{'hex':'0609', 'name':'broadcast_end_time',           'type':'integer', 'technology':'CDMA, TDMA, GSM'},
+    '060a':{'hex':'060a', 'name':'broadcast_service_group',      'type':'integer', 'technology':'CDMA, TDMA'},
+    '060b':{'hex':'060b', 'name':'billing_identification',       'type':'integer', 'technology':'Generic'},
+    '060d':{'hex':'060d', 'name':'source_network_id',            'type':'integer', 'technology':'Generic'},
+    '060e':{'hex':'060e', 'name':'dest_network_id',              'type':'integer', 'technology':'Generic'},
+    '060f':{'hex':'060f', 'name':'source_node_id',               'type':'integer', 'technology':'Generic'},
+    '0610':{'hex':'0610', 'name':'dest_node_id',                 'type':'integer', 'technology':'Generic'},
+    '0611':{'hex':'0611', 'name':'dest_addr_np_resolution',      'type':'integer', 'technology':'CDMA, TDMA (US Only)'},
+    '0612':{'hex':'0612', 'name':'dest_addr_np_information',     'type':'integer', 'technology':'CDMA, TDMA (US Only)'},
+    '0613':{'hex':'0613', 'name':'dest_addr_np_country',         'type':'integer', 'technology':'CDMA, TDMA (US Only)'},
 
-    '1201':{'hex':'1201', 'name':'display_time',                 'technology':'CDMA,TDMA'},
-    '1203':{'hex':'1203', 'name':'sms_signal',                   'technology':'TDMA'},
-    '1204':{'hex':'1204', 'name':'ms_validity',                  'technology':'CDMA,TDMA'},
+    '1201':{'hex':'1201', 'name':'display_time',                 'type':'integer', 'technology':'CDMA,TDMA'},
+    '1203':{'hex':'1203', 'name':'sms_signal',                   'type':'integer', 'technology':'TDMA'},
+    '1204':{'hex':'1204', 'name':'ms_validity',                  'type':'integer', 'technology':'CDMA,TDMA'},
 
-    '1304':{'hex':'1304', 'name':'IS95A_AlertOnDelivery',        'technology':'CDMA'}, # v4 page 85
-    '1306':{'hex':'1306', 'name':'IS95A_LanguageIndicator',      'technology':'CDMA'}, # v4 page 86
-    '130c':{'hex':'130c', 'name':'alert_on_message_delivery',    'technology':'CDMA'},
-    '1380':{'hex':'1380', 'name':'its_reply_type',               'technology':'CDMA'},
-    '1383':{'hex':'1383', 'name':'its_session_info',             'technology':'CDMA Korean [KORITS]'},
+    '1304':{'hex':'1304', 'name':'IS95A_AlertOnDelivery',        'type':None,      'technology':'CDMA'}, # v4 page 85
+    '1306':{'hex':'1306', 'name':'IS95A_LanguageIndicator',      'type':None,      'technology':'CDMA'}, # v4 page 86
+    '130c':{'hex':'130c', 'name':'alert_on_message_delivery',    'type':'integer', 'technology':'CDMA'},
+    '1380':{'hex':'1380', 'name':'its_reply_type',               'type':'integer', 'technology':'CDMA'},
+    '1383':{'hex':'1383', 'name':'its_session_info',             'type':'hex',     'technology':'CDMA Korean [KORITS]'},
 
-    '1402':{'hex':'1402', 'name':'operator_id',                  'technology':'vendor extension'},
-    '1403':{'hex':'1403', 'name':'tariff',                       'technology':'Mobile Network Code vendor extension'},
-    '1450':{'hex':'1450', 'name':'mcc',                          'technology':'Mobile Country Code vendor extension'},
-    '1451':{'hex':'1451', 'name':'mnc',                          'technology':'Mobile Network Code vendor extension'},
+    '1402':{'hex':'1402', 'name':'operator_id',                  'type':'integer', 'technology':'vendor extension'},
+    '1403':{'hex':'1403', 'name':'tariff',                       'type':'integer', 'technology':'Mobile Network Code vendor extension'},
+    '1450':{'hex':'1450', 'name':'mcc',                          'type':'integer', 'technology':'Mobile Country Code vendor extension'},
+    '1451':{'hex':'1451', 'name':'mnc',                          'type':'integer', 'technology':'Mobile Network Code vendor extension'},
 
-    '1101':{'hex':'1101', 'name':'PDC_MessageClass',             'technology':'? (J-Phone)'}, # v4 page 75
-    '1102':{'hex':'1102', 'name':'PDC_PresentationOption',       'technology':'? (J-Phone)'}, # v4 page 76
-    '1103':{'hex':'1103', 'name':'PDC_AlertMechanism',           'technology':'? (J-Phone)'}, # v4 page 76
-    '1104':{'hex':'1104', 'name':'PDC_Teleservice',              'technology':'? (J-Phone)'}, # v4 page 77
-    '1105':{'hex':'1105', 'name':'PDC_MultiPartMessage',         'technology':'? (J-Phone)'}, # v4 page 77
-    '1106':{'hex':'1106', 'name':'PDC_PredefinedMsg',            'technology':'? (J-Phone)'} # v4 page 78
+    '1101':{'hex':'1101', 'name':'PDC_MessageClass',             'type':None,      'technology':'? (J-Phone)'}, # v4 page 75
+    '1102':{'hex':'1102', 'name':'PDC_PresentationOption',       'type':None,      'technology':'? (J-Phone)'}, # v4 page 76
+    '1103':{'hex':'1103', 'name':'PDC_AlertMechanism',           'type':None,      'technology':'? (J-Phone)'}, # v4 page 76
+    '1104':{'hex':'1104', 'name':'PDC_Teleservice',              'type':None,      'technology':'? (J-Phone)'}, # v4 page 77
+    '1105':{'hex':'1105', 'name':'PDC_MultiPartMessage',         'type':None,      'technology':'? (J-Phone)'}, # v4 page 77
+    '1106':{'hex':'1106', 'name':'PDC_PredefinedMsg',            'type':None,      'technology':'? (J-Phone)'} # v4 page 78
 }
 def optional_parameter_tag_name_by_hex(x):
     return optional_parameter_tag_by_hex.get(x,{}).get('name')
+
+def optional_parameter_tag_type_by_hex(x):
+    return optional_parameter_tag_by_hex.get(x,{}).get('type')
 
 
 optional_parameter_tag_by_name = {
@@ -849,8 +852,8 @@ def decode_mandatory_parameters(fields, hex_ref):
                         data += octpop(hex_ref)
             else:
                 count = mandatory_parameters[field['var']]
-            if field['hex_map'] != None:
-                mandatory_parameters[field['name']] = maps.get(field['hex_map'],{data:data})[data]
+            if field['map'] != None:
+                mandatory_parameters[field['name']] = maps.get(field['map']+'_by_hex',{data:data})[data]
             else:
                 mandatory_parameters[field['name']] = decode_hex_type(data, field['type'], count, hex_ref)
             print 'm==>', field['name'], ':', repr(mandatory_parameters[field['name']])
@@ -859,27 +862,27 @@ def decode_mandatory_parameters(fields, hex_ref):
 
 def decode_optional_parameters(hex_ref):
     optional_parameters = []
-    data = hex_ref[0]
-    while len(data) > 0:
-        (tag_hex, length_hex, rest) = (data[0:4], data[4:8], data[8: ])
+    hex = hex_ref[0]
+    while len(hex) > 0:
+        (tag_hex, length_hex, rest) = (hex[0:4], hex[4:8], hex[8: ])
         tag = optional_parameter_tag_name_by_hex(tag_hex)
         length = int(length_hex, 16)
         (value_hex, tail) = (rest[0:length*2], rest[length*2: ])
         if len(value_hex) == 0:
-            value = 0 #TODO remove after testing
+            value = None
         else:
-            value = int(value_hex, 16) #TODO need decoding mapping
-        data = tail
+            value = decode_hex_type(value_hex, optional_parameter_tag_type_by_hex(tag_hex))
+        hex = tail
         optional_parameters.append({'tag':tag, 'length':length, 'value':value})
         print 'o==>', tag, '[', length, ']', ':', repr(value)
     return optional_parameters
 
 
-def decode_hex_type(data, type, count=0, hex_ref=['']):
+def decode_hex_type(hex, type, count=0, hex_ref=['']):
     if type == 'integer':
-        return int(data, 16)
+        return int(hex, 16)
     elif type == 'string':
-        return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',data)))
+        return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',hex)))
     elif (type == 'dest_address'
             or type == 'unsuccess_sme'):
         list = []
@@ -897,7 +900,7 @@ def decode_hex_type(data, type, count=0, hex_ref=['']):
             list.append(item)
         return list
     else:
-        return data
+        return hex
 
 
 def octpop(hex_ref):
