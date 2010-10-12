@@ -777,100 +777,58 @@ def optional_parameter_tag_hex_by_name(n):
     return optional_parameter_tag_by_name.get(n,{}).get('hex')
 
 
-def octpop(hex_ref):
-    octet = None
-    if len(hex_ref[0]) > 1:
-        (octet, hex_ref[0]) = (hex_ref[0][0:2], hex_ref[0][2: ])
-    return octet
-
-
-def decode_hex_type(data, type, count=0, hex_ref=['']):
-    if type == 'integer':
-        return int(data, 16)
-    elif type == 'string':
-        return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',data)))
-    elif (type == 'dest_address'
-            or type == 'unsuccess_sme'):
-        list = []
-        fields = mandatory_parameter_list_by_command_name(type)
-        for i in range(count):
-            (item, hex_ref[0]) = decode_mandatory_parameters(fields, hex_ref)
-            if item.get('dest_flag', None) == 1:
-                subfields = mandatory_parameter_list_by_command_name('sme_dest_address')
-                (rest, hex_ref[0]) = decode_mandatory_parameters(subfields, hex_ref)
-                item.update(rest)
-            elif item.get('dest_flag', None) == 2:
-                subfields = mandatory_parameter_list_by_command_name('distribution_list')
-                (rest, hex_ref[0]) = decode_mandatory_parameters(subfields, hex_ref)
-                item.update(rest)
-            list.append(item)
-        return list
-    else:
-        return data
-
-
-def decode_body(command, body_hex):
-    body = {}
-    body['mandatory_parameters'] = None
-    if command != None:
-        fields = mandatory_parameter_list_by_command_name(command)
-        (body['mandatory_parameters'], optional_parameters_hex) = \
-                decode_mandatory_parameters(fields, [body_hex])
-    body['optional_parameters'] = decode_optional_parameters(optional_parameters_hex)
-    return body
-
+#### Decoding functions #######################################################
 
 def unpack_pdu(pdu_bin):
-    pdu_hex = binascii.b2a_hex(pdu_bin)
-    (command_length, command_id,    command_status,  sequence_number, body_hex) = \
+    #return binascii.b2a_hex(pdu_bin)
+    return decode_pdu(binascii.b2a_hex(pdu_bin))
+
+
+def decode_pdu(pdu_hex):
+    print '\n===================================================='
+    hex_ref = [pdu_hex]
+    pdu = {}
+    pdu['header'] = decode_header(hex_ref)
+    command = pdu['header'].get('command_id', None)
+    if command != None:
+        pdu['body'] = decode_body(command, hex_ref)
+    print '====================================================\n'
+    return pdu
+
+
+def decode_header(hex_ref):
+    pdu_hex = hex_ref[0]
+    header = {}
+    (command_length, command_id,    command_status,  sequence_number, hex_ref[0]) = \
     (pdu_hex[0:8],   pdu_hex[8:16], pdu_hex[16:24],  pdu_hex[24:32],  pdu_hex[32: ])
     length = int(command_length, 16)
     command = command_id_name_by_hex(command_id)
     status = command_status_name_by_hex(command_status)
     sequence = int(sequence_number, 16)
-
-    print '\n--------incoming--------'
-    print command_length, length
-    print command_id, command
-    print command_status, status
-    print sequence_number, sequence
-    print body_hex
-    print pdu_hex
-    print '------------------------\n'
-
-    pdu = {}
-    pdu['length'] = length
-    pdu['command'] = command
-    pdu['status'] = status
-    pdu['sequence'] = sequence
-    pdu['body'] = decode_body(command, body_hex)
-    print pdu
-    return pdu
+    header = {}
+    header['command_length'] = length
+    header['command_id'] = command
+    header['command_status'] = status
+    header['sequence_number'] = sequence
+    print 'h==>', 'command_length', ':', repr(header['command_length'])
+    print 'h==>', 'command_id', ':', repr(header['command_id'])
+    print 'h==>', 'command_status', ':', repr(header['command_status'])
+    print 'h==>', 'sequence_number', ':', repr(header['sequence_number'])
+    return header
 
 
-def pack_pdu(command='bind_transmitter', status='ESME_ROK', sequence=0, body_hex=''):
-    length = 16 + len(body_hex)/2
-    command_length = '%08x' % length
-    command_id = command_id_hex_by_name(command)
-    command_status = command_status_hex_by_name(status)
-    sequence_number = '%08x' % sequence
-    pdu_hex = command_length + command_id + command_status + sequence_number + body_hex
-
-    print '\n--------outgoing--------'
-    print command_length, length
-    print command_id, command
-    print command_status, status
-    print sequence_number, sequence
-    print body_hex
-    print pdu_hex
-    print '------------------------\n'
-
-    return binascii.a2b_hex(pdu_hex)
+def decode_body(command, hex_ref):
+    body = {}
+    body['mandatory_parameters'] = None
+    if command != None:
+        fields = mandatory_parameter_list_by_command_name(command)
+        body['mandatory_parameters'] = decode_mandatory_parameters(fields, hex_ref)
+    body['optional_parameters'] = decode_optional_parameters(hex_ref)
+    return body
 
 
 def decode_mandatory_parameters(fields, hex_ref):
     mandatory_parameters = {}
-    #print "<<<< mand & opt hex >>>", repr(hex_ref[0])
     if len(hex_ref[0]) > 1:
         for field in fields:
             data = ''
@@ -891,22 +849,17 @@ def decode_mandatory_parameters(fields, hex_ref):
                         data += octpop(hex_ref)
             else:
                 count = mandatory_parameters[field['var']]
-            print '>', count, '<', data, '>', field['name']
             if field['hex_map'] != None:
                 mandatory_parameters[field['name']] = maps.get(field['hex_map'],{data:data})[data]
             else:
                 mandatory_parameters[field['name']] = decode_hex_type(data, field['type'], count, hex_ref)
-    return (mandatory_parameters, hex_ref[0])
+            print 'm==>', field['name'], ':', repr(mandatory_parameters[field['name']])
+    return mandatory_parameters
 
 
-def encode_mandatory_parameters(fields, json):
-    mandatory_hex = ''
-    return mandatory_hex
-
-
-def decode_optional_parameters(optional_parameters_hex):
+def decode_optional_parameters(hex_ref):
     optional_parameters = []
-    data = optional_parameters_hex
+    data = hex_ref[0]
     while len(data) > 0:
         (tag_hex, length_hex, rest) = (data[0:4], data[4:8], data[8: ])
         tag = optional_parameter_tag_name_by_hex(tag_hex)
@@ -918,7 +871,57 @@ def decode_optional_parameters(optional_parameters_hex):
             value = int(value_hex, 16) #TODO need decoding mapping
         data = tail
         optional_parameters.append({'tag':tag, 'length':length, 'value':value})
+        print 'o==>', tag, '[', length, ']', ':', repr(value)
     return optional_parameters
+
+
+def decode_hex_type(data, type, count=0, hex_ref=['']):
+    if type == 'integer':
+        return int(data, 16)
+    elif type == 'string':
+        return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',data)))
+    elif (type == 'dest_address'
+            or type == 'unsuccess_sme'):
+        list = []
+        fields = mandatory_parameter_list_by_command_name(type)
+        for i in range(count):
+            item = decode_mandatory_parameters(fields, hex_ref)
+            if item.get('dest_flag', None) == 1: # 'dest_address' only
+                subfields = mandatory_parameter_list_by_command_name('sme_dest_address')
+                rest = decode_mandatory_parameters(subfields, hex_ref)
+                item.update(rest)
+            elif item.get('dest_flag', None) == 2: # 'dest_address' only
+                subfields = mandatory_parameter_list_by_command_name('distribution_list')
+                rest = decode_mandatory_parameters(subfields, hex_ref)
+                item.update(rest)
+            list.append(item)
+        return list
+    else:
+        return data
+
+
+def octpop(hex_ref):
+    octet = None
+    if len(hex_ref[0]) > 1:
+        (octet, hex_ref[0]) = (hex_ref[0][0:2], hex_ref[0][2: ])
+    return octet
+
+
+#### Encoding functions #######################################################
+
+def pack_pdu(command='bind_transmitter', status='ESME_ROK', sequence=0, body_hex=''):
+    length = 16 + len(body_hex)/2
+    command_length = '%08x' % length
+    command_id = command_id_hex_by_name(command)
+    command_status = command_status_hex_by_name(status)
+    sequence_number = '%08x' % sequence
+    pdu_hex = command_length + command_id + command_status + sequence_number + body_hex
+    return binascii.a2b_hex(pdu_hex)
+
+
+def encode_mandatory_parameters(fields, json):
+    mandatory_hex = ''
+    return mandatory_hex
 
 
 def encode_optional_parameter(tag, value):
@@ -932,10 +935,11 @@ def encode_optional_parameter(tag, value):
 
 
 def json_to_pdu(json):
+    header = json.get('header', {})
     body_hex = ''
     body = json.get('body', {})
     for opt in body.get('optional_parameters',[]):
         body_hex += encode_optional_parameter(opt['tag'], opt['value'])
-    return pack_pdu(json['command'], json['status'], json['sequence'], body_hex)
+    return pack_pdu(header['command_id'], header['command_status'], header['sequence_number'], body_hex)
 
 
