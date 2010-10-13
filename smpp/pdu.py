@@ -450,6 +450,7 @@ def command_status_hex_by_name(n):
 # Type of Number (TON) - SMPP v3.4, section 5.2.5, table 5-3, page 117
 
 maps['addr_ton_by_name'] = {
+    ''                 :'00',
     'unknown'          :'00',
     'international'    :'01',
     'national'         :'02',
@@ -473,6 +474,7 @@ maps['addr_ton_by_hex'] = {
 # Numberic Plan Indicator (NPI) - SMPP v3.4, section 5.2.6, table 5-4, page 118
 
 maps['addr_npi_by_name'] = {
+    ''           :'00',
     'unknown'    :'00',
     'ISDN'       :'01',
     'data'       :'03',
@@ -803,7 +805,6 @@ def optional_parameter_tag_hex_by_name(n):
 #### Decoding functions #######################################################
 
 def unpack_pdu(pdu_bin):
-    #return binascii.b2a_hex(pdu_bin)
     return decode_pdu(binascii.b2a_hex(pdu_bin))
 
 
@@ -853,6 +854,7 @@ def decode_mandatory_parameters(fields, hex_ref):
     mandatory_parameters = {}
     if len(hex_ref[0]) > 1:
         for field in fields:
+            old = len(hex_ref[0])
             data = ''
             octet = ''
             count = 0
@@ -872,9 +874,11 @@ def decode_mandatory_parameters(fields, hex_ref):
             else:
                 count = mandatory_parameters[field['var']]
             if field['map'] != None:
+                print field, data
                 mandatory_parameters[field['name']] = maps.get(field['map']+'_by_hex',{data:data})[data]
             else:
                 mandatory_parameters[field['name']] = decode_hex_type(data, field['type'], count, hex_ref)
+            print field['type'], (old - len(hex_ref[0]))/2, repr(data), field['name'], mandatory_parameters[field['name']]
     return mandatory_parameters
 
 
@@ -931,18 +935,34 @@ def octpop(hex_ref):
 
 #### Encoding functions #######################################################
 
-def pack_pdu(command='bind_transmitter', status='ESME_ROK', sequence=0, body_hex=''):
-    length = 16 + len(body_hex)/2
-    command_length = '%08x' % length
-    command_id = command_id_hex_by_name(command)
-    command_status = command_status_hex_by_name(status)
-    sequence_number = '%08x' % sequence
+def pack_pdu(pdu_obj):
+    return binascii.a2b_hex(encode_pdu(pdu_obj))
+
+
+def encode_pdu(pdu_obj):
+    header = pdu_obj.get('header', {})
+    body = pdu_obj.get('body', {})
+    mandatory = body.get('mandatory_parameters', {})
+    optional = body.get('optional_parameters', [])
+    body_hex = ''
+    fields = mandatory_parameter_list_by_command_name(header['command_id'])
+    body_hex += encode_mandatory_parameters(mandatory, fields)
+    for opt in optional:
+        body_hex += encode_optional_parameter(opt['tag'], opt['value'])
+    actual_length = 16 + len(body_hex)/2
+    command_length = '%08x' % actual_length
+    command_id = command_id_hex_by_name(header['command_id'])
+    command_status = command_status_hex_by_name(header['command_status'])
+    sequence_number = '%08x' % header['sequence_number']
     pdu_hex = command_length + command_id + command_status + sequence_number + body_hex
-    return binascii.a2b_hex(pdu_hex)
+    return pdu_hex
 
 
-def encode_mandatory_parameters(fields, json):
+def encode_mandatory_parameters(mandatory_obj, fields):
     mandatory_hex = ''
+    for field in fields:
+        param = mandatory_obj[field['name']]
+        mandatory_hex += encode_param_type(param, field['type'], field['min'], field['max'])
     return mandatory_hex
 
 
@@ -956,12 +976,12 @@ def encode_optional_parameter(tag, value):
     return optional_hex
 
 
-def json_to_pdu(json):
-    header = json.get('header', {})
-    body_hex = ''
-    body = json.get('body', {})
-    for opt in body.get('optional_parameters',[]):
-        body_hex += encode_optional_parameter(opt['tag'], opt['value'])
-    return pack_pdu(header['command_id'], header['command_status'], header['sequence_number'], body_hex)
-
-
+def encode_param_type(param, type, min=0, max=None):
+    if type == 'integer':
+        return '%02x' % int(param)
+    elif type == 'string':
+        hex = binascii.b2a_hex(binascii.a2b_qp(str(param))) + '00'
+        print 'xxx', hex
+        return hex
+    else:
+        return '00'
