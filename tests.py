@@ -101,8 +101,8 @@ b = {
     },
     'body': {
         'mandatory_parameters': {
-            'system_id':'eee',
-            'password':'fff',
+            'system_id':'test_system',
+            'password':'abc123',
             'system_type':'',
             'interface_version':'',
             'addr_ton':1,
@@ -118,5 +118,12 @@ b = {
     }
 }
 
-
+print '**********************************************************'
 print json.dumps(unpack_pdu(pack_pdu(b)), indent=4, sort_keys=True)
+
+print "'''''"
+for x in range(10000):
+    b['header']['sequence_number'] = x
+    u = unpack_pdu(pack_pdu(b))
+    print u['header']['sequence_number']
+print "'''''"
