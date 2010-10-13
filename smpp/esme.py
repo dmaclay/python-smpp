@@ -27,8 +27,3 @@ class ESME:
         unpack_pdu(length_bin + rest_bin)
 
 
-#esme = ESME()
-#esme.connect_SMSC('localhost')
-#esme.bind_SMSC()
-#esme.disconnect_SMSC()
-
