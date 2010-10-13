@@ -1,6 +1,15 @@
 
 from smpp.esme import *
 
+def prettydump(pdu_hex):
+    return json.dumps(unpack_pdu(binascii.a2b_hex(hexclean(x))), indent=4, sort_keys=True)
+
+def hexclean(dirtyhex):
+    return re.sub(r'\s','',re.sub(r'#.*\n','\n',dirtyhex))
+
+lines = "\n==================================================================\n"
+
+
 
 print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
@@ -9,31 +18,81 @@ print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 #esme.bind_SMSC()
 #esme.disconnect_SMSC()
 
-
 print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
-print "\n==============================================================="
-test_bin = binascii.a2b_hex(re.sub(' ','','00 00 00 3C 00 00 00 04 00 00 00 00 00 00 00 05 00 02 08 35 35 35 00 01 01 35 35 35 35 35 35 35 35 35 00 00 00 00 00 00 00 00 00 00 0F 48 65 6C 6C 6F 20 77 69 6B 69 70 65 64 69 61 00000000 001d00026566'))
-print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
+x = '''
+    0000003C # command_length
+    00000004 # command_id
+    00000000 # command_status
+    00000005 # sequence_number
+    00
+    02
+    08
+    35353500
+    01
+    01
+    35353535353535353500
+    00
+    00
+    00
+    00
+    00
+    00
+    00
+    00
+    00
+    0F
+    48656C6C6F2077696B697065646961
+    00000000
+    001d00026566
+'''
+print lines, prettydump(x)
 
-print "\n==============================================================="
-test_bin = binascii.a2b_hex(re.sub(' ','','00000000 00000021 00000000 00000000 00 00 00 00 02 0101016500 026600 00 00 00 00 00 00 00 00 00 00 000500020000 0000000400000000'))
-print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
 
-print "\n==============================================================="
-test_bin = binascii.a2b_hex(re.sub(' ','','00000000 80000021 00000000 00000000 00 02 01016565650000000000 01016666660000000000'))
-print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
+x = '''
+    00000000 # command_length
+    00000021 # command_id
+    00000000 # command_status
+    00000000 # sequence_number
+    00
+    00
+    00
+    00
+    02
+    01 01 01 6500
+    02 6600
+    00
+    00
+    00
+    00
+    00
+    00
+    00
+    00
+    00
+    00
+    0005 0002 0000
+    0000 0004 00000000
+'''
+print lines, prettydump(x)
 
-print "\n==============================================================="
-test_bin = pack_pdu('generic_nack','ESME_ROK',1,'001d000b6162636465666768696a6b')
-print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
 
-print "\n==============================================================="
-test_bin = pack_pdu()
-print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
+x = '''
+    00000000
+    80000021
+    00000000
+    00000000
+    00
+    02
+    01016565650000000000
+    01016666660000000000
+'''
+print lines, prettydump(x)
 
 
-j = {
+
+
+b = {
     'header': {
         'command_length': 16,
         'command_id': 'bind_transmitter',
@@ -41,6 +100,15 @@ j = {
         'sequence_number': 0
     },
     'body': {
+        'mandatory_parameters': {
+            'system_id':'eee',
+            'password':'fff',
+            'system_type':'',
+            'interface_version':'',
+            'addr_ton':1,
+            'addr_npi':1,
+            'address_range':'',
+        },
         'optional_parameters': [
             {
                 'tag':'payload_type',
@@ -50,4 +118,5 @@ j = {
     }
 }
 
-json_to_pdu(j)
+
+print json.dumps(unpack_pdu(pack_pdu(b)), indent=4, sort_keys=True)
