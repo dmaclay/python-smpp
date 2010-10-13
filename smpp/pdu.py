@@ -586,96 +586,103 @@ maps['facility_code_bits'] = {
 # Optional Parameter Tags - SMPP v3.4, section 5.3.2, Table 5-7, page 132-133
 
 optional_parameter_tag_by_hex = {
-    '0005':{'hex':'0005', 'name':'dest_addr_subunit',            'type':'integer', 'technology':'GSM'},
-    '0006':{'hex':'0006', 'name':'dest_network_type',            'type':'integer', 'technology':'Generic'},
-    '0007':{'hex':'0007', 'name':'dest_bearer_type',             'type':'integer', 'technology':'Generic'},
-    '0008':{'hex':'0008', 'name':'dest_telematics_id',           'type':'integer', 'technology':'GSM'},
+    '0005':{'hex':'0005', 'name':'dest_addr_subunit',            'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.1, page 134
+    '0006':{'hex':'0006', 'name':'dest_network_type',            'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.3, page 135
+    '0007':{'hex':'0007', 'name':'dest_bearer_type',             'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.5, page 136
+    '0008':{'hex':'0008', 'name':'dest_telematics_id',           'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.7, page 137
 
-    '000d':{'hex':'000d', 'name':'source_addr_subunit',          'type':'integer', 'technology':'GSM'},
-    '000e':{'hex':'000e', 'name':'source_network_type',          'type':'integer', 'technology':'Generic'},
-    '000f':{'hex':'000f', 'name':'source_bearer_type',           'type':'integer', 'technology':'Generic'},
-    '0010':{'hex':'0010', 'name':'source_telematics_id',         'type':'integer', 'technology':'GSM'},
+    '000d':{'hex':'000d', 'name':'source_addr_subunit',          'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.2, page 134
+    '000e':{'hex':'000e', 'name':'source_network_type',          'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.4, page 135
+    '000f':{'hex':'000f', 'name':'source_bearer_type',           'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.6, page 136
+    '0010':{'hex':'0010', 'name':'source_telematics_id',         'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.8, page 137
 
-    '0017':{'hex':'0017', 'name':'qos_time_to_live',             'type':'integer', 'technology':'Generic'},
-    '0019':{'hex':'0019', 'name':'payload_type',                 'type':'integer', 'technology':'Generic'},
-    '001d':{'hex':'001d', 'name':'additional_status_info_text',  'type':'string' , 'technology':'Generic'},
-    '001e':{'hex':'001e', 'name':'receipted_message_id',         'type':'string' , 'technology':'Generic'},
-    '0030':{'hex':'0030', 'name':'ms_msg_wait_facilities',       'type':'bitmask', 'technology':'GSM'},
+    '0017':{'hex':'0017', 'name':'qos_time_to_live',             'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.9, page 138
+    '0019':{'hex':'0019', 'name':'payload_type',                 'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.10, page 138
 
-    '0101':{'hex':'0101', 'name':'PVCY_AuthenticationStr',       'type':None,      'technology':'? (J-Phone)'}, # v4 page 58-62
+    '001d':{'hex':'001d', 'name':'additional_status_info_text',  'type':'string',  'tech':'Generic'},               # SMPP v3.4, section 5.3.2.11, page 139
+    '001e':{'hex':'001e', 'name':'receipted_message_id',         'type':'string',  'tech':'Generic'},               # SMPP v3.4, section 5.3.2.12, page 139
 
-    '0201':{'hex':'0201', 'name':'privacy_indicator',            'type':'integer', 'technology':'CDMA,TDMA'},
-    '0202':{'hex':'0202', 'name':'source_subaddress',            'type':'hex',     'technology':'CDMA,TDMA'},
-    '0203':{'hex':'0203', 'name':'dest_subaddress',              'type':'hex',     'technology':'CDMA,TDMA'},
-    '0204':{'hex':'0204', 'name':'user_message_reference',       'type':'integer', 'technology':'Generic'},
-    '0205':{'hex':'0205', 'name':'user_response_code',           'type':'integer', 'technology':'CDMA,TDMA'},
-    '020a':{'hex':'020a', 'name':'source_port',                  'type':'integer', 'technology':'WAP'},
-    '020b':{'hex':'020b', 'name':'destination_port',             'type':'integer', 'technology':'WAP'},
-    '020c':{'hex':'020c', 'name':'sar_msg_ref_num',              'type':'integer', 'technology':'Generic'},
-    '020d':{'hex':'020d', 'name':'language_indicator',           'type':'integer', 'technology':'CDMA,TDMA'},
-    '020e':{'hex':'020e', 'name':'sar_total_segments',           'type':'integer', 'technology':'Generic'},
-    '020f':{'hex':'020f', 'name':'sar_segment_seqnum',           'type':'integer', 'technology':'Generic'},
-    '0210':{'hex':'0210', 'name':'sc_interface_version',         'type':'integer', 'technology':'Generic'},
+    '0030':{'hex':'0030', 'name':'ms_msg_wait_facilities',       'type':'bitmask', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.13, page 140
 
-    '0301':{'hex':'0301', 'name':'CC_CBN',                       'type':None,      'technology':'V4'}, # v4 page 70
-    '0302':{'hex':'0302', 'name':'callback_num_pres_ind',        'type':'bitmask', 'technology':'TDMA'},
-    '0303':{'hex':'0303', 'name':'callback_num_atag',            'type':'hex',     'technology':'TDMA'},
-    '0304':{'hex':'0304', 'name':'number_of_messages',           'type':'integer', 'technology':'CDMA'},
-    '0381':{'hex':'0381', 'name':'callback_num',                 'type':'hex',     'technology':'CDMA,TDMA,GSM,iDEN'},
+    '0101':{'hex':'0101', 'name':'PVCY_AuthenticationStr',       'type':None,      'tech':'? (J-Phone)'},           # v4 page 58-62
 
-    '0420':{'hex':'0420', 'name':'dpf_result',                   'type':'integer', 'technology':'Generic'},
-    '0421':{'hex':'0421', 'name':'set_dpf',                      'type':'integer', 'technology':'Generic'},
-    '0422':{'hex':'0422', 'name':'ms_availability_status',       'type':'integer', 'technology':'Generic'},
-    '0423':{'hex':'0423', 'name':'network_error_code',           'type':'hex',     'technology':'Generic'},
-    '0424':{'hex':'0424', 'name':'message_payload',              'type':'hex',     'technology':'Generic'},
-    '0425':{'hex':'0425', 'name':'delivery_failure_reason',      'type':'integer', 'technology':'Generic'},
-    '0426':{'hex':'0426', 'name':'more_messages_to_send',        'type':'integer', 'technology':'GSM'},
-    '0427':{'hex':'0427', 'name':'message_state',                'type':'integer', 'technology':'Generic'},
-    '0428':{'hex':'0428', 'name':'congestion_state',             'type':'integer', 'technology':'Generic'},
+    '0201':{'hex':'0201', 'name':'privacy_indicator',            'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.14, page 141
+    '0202':{'hex':'0202', 'name':'source_subaddress',            'type':'hex',     'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.15, page 142
+    '0203':{'hex':'0203', 'name':'dest_subaddress',              'type':'hex',     'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.16, page 143
+    '0204':{'hex':'0204', 'name':'user_message_reference',       'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.17, page 143
+    '0205':{'hex':'0205', 'name':'user_response_code',           'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.18, page 144
 
-    '0501':{'hex':'0501', 'name':'ussd_service_op',              'type':'hex',     'technology':'GSM (USSD)'},
+    '020a':{'hex':'020a', 'name':'source_port',                  'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.20, page 145
+    '020b':{'hex':'020b', 'name':'destination_port',             'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.21, page 145
+    '020c':{'hex':'020c', 'name':'sar_msg_ref_num',              'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.22, page 146
+    '020d':{'hex':'020d', 'name':'language_indicator',           'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.19, page 144
+    '020e':{'hex':'020e', 'name':'sar_total_segments',           'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.23, page 147
+    '020f':{'hex':'020f', 'name':'sar_segment_seqnum',           'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.24, page 147
+    '0210':{'hex':'0210', 'name':'sc_interface_version',         'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.25, page 148
 
-    '0600':{'hex':'0600', 'name':'broadcast_channel_indicator',  'type':'integer', 'technology':'GSM'},
-    '0601':{'hex':'0601', 'name':'broadcast_content_type',       'type':'integer', 'technology':'CDMA, TDMA, GSM'},
-    '0602':{'hex':'0602', 'name':'broadcast_content_type_info',  'type':'integer', 'technology':'CDMA, TDMA'},
-    '0603':{'hex':'0603', 'name':'broadcast_message_class',      'type':'integer', 'technology':'GSM'},
-    '0604':{'hex':'0604', 'name':'broadcast_rep_num',            'type':'integer', 'technology':'GSM'},
-    '0605':{'hex':'0605', 'name':'broadcast_frequency_interval', 'type':'integer', 'technology':'CDMA, TDMA, GSM'},
-    '0606':{'hex':'0606', 'name':'broadcast_area_identifier',    'type':'integer', 'technology':'CDMA, TDMA, GSM'},
-    '0607':{'hex':'0607', 'name':'broadcast_error_status',       'type':'integer', 'technology':'CDMA, TDMA, GSM'},
-    '0608':{'hex':'0608', 'name':'broadcast_area_success',       'type':'integer', 'technology':'GSM'},
-    '0609':{'hex':'0609', 'name':'broadcast_end_time',           'type':'integer', 'technology':'CDMA, TDMA, GSM'},
-    '060a':{'hex':'060a', 'name':'broadcast_service_group',      'type':'integer', 'technology':'CDMA, TDMA'},
-    '060b':{'hex':'060b', 'name':'billing_identification',       'type':'integer', 'technology':'Generic'},
-    '060d':{'hex':'060d', 'name':'source_network_id',            'type':'integer', 'technology':'Generic'},
-    '060e':{'hex':'060e', 'name':'dest_network_id',              'type':'integer', 'technology':'Generic'},
-    '060f':{'hex':'060f', 'name':'source_node_id',               'type':'integer', 'technology':'Generic'},
-    '0610':{'hex':'0610', 'name':'dest_node_id',                 'type':'integer', 'technology':'Generic'},
-    '0611':{'hex':'0611', 'name':'dest_addr_np_resolution',      'type':'integer', 'technology':'CDMA, TDMA (US Only)'},
-    '0612':{'hex':'0612', 'name':'dest_addr_np_information',     'type':'integer', 'technology':'CDMA, TDMA (US Only)'},
-    '0613':{'hex':'0613', 'name':'dest_addr_np_country',         'type':'integer', 'technology':'CDMA, TDMA (US Only)'},
+    '0301':{'hex':'0301', 'name':'CC_CBN',                       'type':None,      'tech':'V4'},                    # v4 page 70
+    '0302':{'hex':'0302', 'name':'callback_num_pres_ind',        'type':'bitmask', 'tech':'TDMA'},                  # SMPP v3.4, section 5.3.2.37, page 156
+    '0303':{'hex':'0303', 'name':'callback_num_atag',            'type':'hex',     'tech':'TDMA'},                  # SMPP v3.4, section 5.3.2.38, page 157
+    '0304':{'hex':'0304', 'name':'number_of_messages',           'type':'integer', 'tech':'CDMA'},                  # SMPP v3.4, section 5.3.2.39, page 158
+    '0381':{'hex':'0381', 'name':'callback_num',                 'type':'hex',     'tech':'CDMA, TDMA, GSM, iDEN'}, # SMPP v3.4, section 5.3.2.36, page 155
 
-    '1201':{'hex':'1201', 'name':'display_time',                 'type':'integer', 'technology':'CDMA,TDMA'},
-    '1203':{'hex':'1203', 'name':'sms_signal',                   'type':'integer', 'technology':'TDMA'},
-    '1204':{'hex':'1204', 'name':'ms_validity',                  'type':'integer', 'technology':'CDMA,TDMA'},
+    '0420':{'hex':'0420', 'name':'dpf_result',                   'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.28, page 149
+    '0421':{'hex':'0421', 'name':'set_dpf',                      'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.29, page 150
+    '0422':{'hex':'0422', 'name':'ms_availability_status',       'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.30, page 151
+    '0423':{'hex':'0423', 'name':'network_error_code',           'type':'hex',     'tech':'Generic'},               # SMPP v3.4, section 5.3.2.31, page 152
+    '0424':{'hex':'0424', 'name':'message_payload',              'type':'hex',     'tech':'Generic'},               # SMPP v3.4, section 5.3.2.32, page 153
+    '0425':{'hex':'0425', 'name':'delivery_failure_reason',      'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.33, page 153
+    '0426':{'hex':'0426', 'name':'more_messages_to_send',        'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.34, page 154
+    '0427':{'hex':'0427', 'name':'message_state',                'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.35, page 154
+    '0428':{'hex':'0428', 'name':'congestion_state',             'type':None,      'tech':'Generic'},
 
-    '1304':{'hex':'1304', 'name':'IS95A_AlertOnDelivery',        'type':None,      'technology':'CDMA'}, # v4 page 85
-    '1306':{'hex':'1306', 'name':'IS95A_LanguageIndicator',      'type':None,      'technology':'CDMA'}, # v4 page 86
-    '130c':{'hex':'130c', 'name':'alert_on_message_delivery',    'type':'integer', 'technology':'CDMA'},
-    '1380':{'hex':'1380', 'name':'its_reply_type',               'type':'integer', 'technology':'CDMA'},
-    '1383':{'hex':'1383', 'name':'its_session_info',             'type':'hex',     'technology':'CDMA Korean [KORITS]'},
+    '0501':{'hex':'0501', 'name':'ussd_service_op',              'type':'hex',     'tech':'GSM (USSD)'},            # SMPP v3.4, section 5.3.2.44, page 161
 
-    '1402':{'hex':'1402', 'name':'operator_id',                  'type':'integer', 'technology':'vendor extension'},
-    '1403':{'hex':'1403', 'name':'tariff',                       'type':'integer', 'technology':'Mobile Network Code vendor extension'},
-    '1450':{'hex':'1450', 'name':'mcc',                          'type':'integer', 'technology':'Mobile Country Code vendor extension'},
-    '1451':{'hex':'1451', 'name':'mnc',                          'type':'integer', 'technology':'Mobile Network Code vendor extension'},
+    '0600':{'hex':'0600', 'name':'broadcast_channel_indicator',  'type':None,      'tech':'GSM'},
+    '0601':{'hex':'0601', 'name':'broadcast_content_type',       'type':None,      'tech':'CDMA, TDMA, GSM'},
+    '0602':{'hex':'0602', 'name':'broadcast_content_type_info',  'type':None,      'tech':'CDMA, TDMA'},
+    '0603':{'hex':'0603', 'name':'broadcast_message_class',      'type':None,      'tech':'GSM'},
+    '0604':{'hex':'0604', 'name':'broadcast_rep_num',            'type':None,      'tech':'GSM'},
+    '0605':{'hex':'0605', 'name':'broadcast_frequency_interval', 'type':None,      'tech':'CDMA, TDMA, GSM'},
+    '0606':{'hex':'0606', 'name':'broadcast_area_identifier',    'type':None,      'tech':'CDMA, TDMA, GSM'},
+    '0607':{'hex':'0607', 'name':'broadcast_error_status',       'type':None,      'tech':'CDMA, TDMA, GSM'},
+    '0608':{'hex':'0608', 'name':'broadcast_area_success',       'type':None,      'tech':'GSM'},
+    '0609':{'hex':'0609', 'name':'broadcast_end_time',           'type':None,      'tech':'CDMA, TDMA, GSM'},
+    '060a':{'hex':'060a', 'name':'broadcast_service_group',      'type':None,      'tech':'CDMA, TDMA'},
+    '060b':{'hex':'060b', 'name':'billing_identification',       'type':None,      'tech':'Generic'},
 
-    '1101':{'hex':'1101', 'name':'PDC_MessageClass',             'type':None,      'technology':'? (J-Phone)'}, # v4 page 75
-    '1102':{'hex':'1102', 'name':'PDC_PresentationOption',       'type':None,      'technology':'? (J-Phone)'}, # v4 page 76
-    '1103':{'hex':'1103', 'name':'PDC_AlertMechanism',           'type':None,      'technology':'? (J-Phone)'}, # v4 page 76
-    '1104':{'hex':'1104', 'name':'PDC_Teleservice',              'type':None,      'technology':'? (J-Phone)'}, # v4 page 77
-    '1105':{'hex':'1105', 'name':'PDC_MultiPartMessage',         'type':None,      'technology':'? (J-Phone)'}, # v4 page 77
-    '1106':{'hex':'1106', 'name':'PDC_PredefinedMsg',            'type':None,      'technology':'? (J-Phone)'} # v4 page 78
+    '060d':{'hex':'060d', 'name':'source_network_id',            'type':None,      'tech':'Generic'},
+    '060e':{'hex':'060e', 'name':'dest_network_id',              'type':None,      'tech':'Generic'},
+    '060f':{'hex':'060f', 'name':'source_node_id',               'type':None,      'tech':'Generic'},
+    '0610':{'hex':'0610', 'name':'dest_node_id',                 'type':None,      'tech':'Generic'},
+    '0611':{'hex':'0611', 'name':'dest_addr_np_resolution',      'type':None,      'tech':'CDMA, TDMA (US Only)'},
+    '0612':{'hex':'0612', 'name':'dest_addr_np_information',     'type':None,      'tech':'CDMA, TDMA (US Only)'},
+    '0613':{'hex':'0613', 'name':'dest_addr_np_country',         'type':None,      'tech':'CDMA, TDMA (US Only)'},
+
+    '1101':{'hex':'1101', 'name':'PDC_MessageClass',             'type':None,      'tech':'? (J-Phone)'},           # v4 page 75
+    '1102':{'hex':'1102', 'name':'PDC_PresentationOption',       'type':None,      'tech':'? (J-Phone)'},           # v4 page 76
+    '1103':{'hex':'1103', 'name':'PDC_AlertMechanism',           'type':None,      'tech':'? (J-Phone)'},           # v4 page 76
+    '1104':{'hex':'1104', 'name':'PDC_Teleservice',              'type':None,      'tech':'? (J-Phone)'},           # v4 page 77
+    '1105':{'hex':'1105', 'name':'PDC_MultiPartMessage',         'type':None,      'tech':'? (J-Phone)'},           # v4 page 77
+    '1106':{'hex':'1106', 'name':'PDC_PredefinedMsg',            'type':None,      'tech':'? (J-Phone)'},           # v4 page 78
+
+    '1201':{'hex':'1201', 'name':'display_time',                 'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.26, page 148
+
+    '1203':{'hex':'1203', 'name':'sms_signal',                   'type':'integer', 'tech':'TDMA'},                  # SMPP v3.4, section 5.3.2.40, page 158
+    '1204':{'hex':'1204', 'name':'ms_validity',                  'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.27, page 149
+
+    '1304':{'hex':'1304', 'name':'IS95A_AlertOnDelivery',        'type':None,      'tech':'CDMA'},                  # v4 page 85
+    '1306':{'hex':'1306', 'name':'IS95A_LanguageIndicator',      'type':None,      'tech':'CDMA'},                  # v4 page 86
+
+    '130c':{'hex':'130c', 'name':'alert_on_message_delivery',    'type':None,      'tech':'CDMA'},                  # SMPP v3.4, section 5.3.2.41, page 159
+
+    '1380':{'hex':'1380', 'name':'its_reply_type',               'type':'integer', 'tech':'CDMA'},                  # SMPP v3.4, section 5.3.2.42, page 159
+    '1383':{'hex':'1383', 'name':'its_session_info',             'type':'hex',     'tech':'CDMA'},                  # SMPP v3.4, section 5.3.2.43, page 160
+
+    '1402':{'hex':'1402', 'name':'operator_id',                  'type':None,      'tech':'vendor extension'},
+    '1403':{'hex':'1403', 'name':'tariff',                       'type':None,      'tech':'Mobile Network Code vendor extension'},
+    '1450':{'hex':'1450', 'name':'mcc',                          'type':None,      'tech':'Mobile Country Code vendor extension'},
+    '1451':{'hex':'1451', 'name':'mnc',                          'type':None,      'tech':'Mobile Network Code vendor extension'}
 }
 def optional_parameter_tag_name_by_hex(x):
     return optional_parameter_tag_by_hex.get(x,{}).get('name')
@@ -685,96 +692,103 @@ def optional_parameter_tag_type_by_hex(x):
 
 
 optional_parameter_tag_by_name = {
-    'dest_addr_subunit'           :{'hex':'0005', 'name':'dest_addr_subunit',            'technology':'GSM'},
-    'dest_network_type'           :{'hex':'0006', 'name':'dest_network_type',            'technology':'Generic'},
-    'dest_bearer_type'            :{'hex':'0007', 'name':'dest_bearer_type',             'technology':'Generic'},
-    'dest_telematics_id'          :{'hex':'0008', 'name':'dest_telematics_id',           'technology':'GSM'},
+    'dest_addr_subunit'           :{'hex':'0005', 'name':'dest_addr_subunit',            'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.1, page 134
+    'dest_network_type'           :{'hex':'0006', 'name':'dest_network_type',            'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.3, page 135
+    'dest_bearer_type'            :{'hex':'0007', 'name':'dest_bearer_type',             'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.5, page 136
+    'dest_telematics_id'          :{'hex':'0008', 'name':'dest_telematics_id',           'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.7, page 137
 
-    'source_addr_subunit'         :{'hex':'000d', 'name':'source_addr_subunit',          'technology':'GSM'},
-    'source_network_type'         :{'hex':'000e', 'name':'source_network_type',          'technology':'Generic'},
-    'source_bearer_type'          :{'hex':'000f', 'name':'source_bearer_type',           'technology':'Generic'},
-    'source_telematics_id'        :{'hex':'0010', 'name':'source_telematics_id',         'technology':'GSM'},
+    'source_addr_subunit'         :{'hex':'000d', 'name':'source_addr_subunit',          'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.2, page 134
+    'source_network_type'         :{'hex':'000e', 'name':'source_network_type',          'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.4, page 135
+    'source_bearer_type'          :{'hex':'000f', 'name':'source_bearer_type',           'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.6, page 136
+    'source_telematics_id'        :{'hex':'0010', 'name':'source_telematics_id',         'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.8, page 137
 
-    'qos_time_to_live'            :{'hex':'0017', 'name':'qos_time_to_live',             'technology':'Generic'},
-    'payload_type'                :{'hex':'0019', 'name':'payload_type',                 'technology':'Generic'},
-    'additional_status_info_text' :{'hex':'001d', 'name':'additional_status_info_text',  'technology':'Generic'},
-    'receipted_message_id'        :{'hex':'001e', 'name':'receipted_message_id',         'technology':'Generic'},
-    'ms_msg_wait_facilities'      :{'hex':'0030', 'name':'ms_msg_wait_facilities',       'technology':'GSM'},
+    'qos_time_to_live'            :{'hex':'0017', 'name':'qos_time_to_live',             'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.9, page 138
+    'payload_type'                :{'hex':'0019', 'name':'payload_type',                 'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.10, page 138
 
-    'PVCY_AuthenticationStr'      :{'hex':'0101', 'name':'PVCY_AuthenticationStr',       'technology':'? (J-Phone)'}, # v4 page 58-62
+    'additional_status_info_text' :{'hex':'001d', 'name':'additional_status_info_text',  'type':'string',  'tech':'Generic'},               # SMPP v3.4, section 5.3.2.11, page 139
+    'receipted_message_id'        :{'hex':'001e', 'name':'receipted_message_id',         'type':'string',  'tech':'Generic'},               # SMPP v3.4, section 5.3.2.12, page 139
 
-    'privacy_indicator'           :{'hex':'0201', 'name':'privacy_indicator',            'technology':'CDMA,TDMA'},
-    'source_subaddress'           :{'hex':'0202', 'name':'source_subaddress',            'technology':'CDMA,TDMA'}, # v4 page 65-67
-    'dest_subaddress'             :{'hex':'0203', 'name':'dest_subaddress',              'technology':'CDMA,TDMA'}, # v4 page 65-67
-    'user_message_reference'      :{'hex':'0204', 'name':'user_message_reference',       'technology':'Generic'},
-    'user_response_code'          :{'hex':'0205', 'name':'user_response_code',           'technology':'CDMA,TDMA'},
-    'source_port'                 :{'hex':'020a', 'name':'source_port',                  'technology':'WAP'},
-    'destination_port'            :{'hex':'020b', 'name':'destination_port',             'technology':'WAP'},
-    'sar_msg_ref_num'             :{'hex':'020c', 'name':'sar_msg_ref_num',              'technology':'Generic'},
-    'language_indicator'          :{'hex':'020d', 'name':'language_indicator',           'technology':'CDMA,TDMA'},
-    'sar_total_segments'          :{'hex':'020e', 'name':'sar_total_segments',           'technology':'Generic'},
-    'sar_segment_seqnum'          :{'hex':'020f', 'name':'sar_segment_seqnum',           'technology':'Generic'},
-    'sc_interface_version'        :{'hex':'0210', 'name':'sc_interface_version',         'technology':'Generic'},
+    'ms_msg_wait_facilities'      :{'hex':'0030', 'name':'ms_msg_wait_facilities',       'type':'bitmask', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.13, page 140
 
-    'CC_CBN'                      :{'hex':'0301', 'name':'CC_CBN',                       'technology':'V4'}, # v4 page 70
-    'callback_num_pres_ind'       :{'hex':'0302', 'name':'callback_num_pres_ind',        'technology':'TDMA'}, # v4 page 71
-    'callback_num_atag'           :{'hex':'0303', 'name':'callback_num_atag',            'technology':'TDMA'}, # v4 page 71
-    'number_of_messages'          :{'hex':'0304', 'name':'number_of_messages',           'technology':'CDMA'}, # v4 page 72
-    'callback_num'                :{'hex':'0381', 'name':'callback_num',                 'technology':'CDMA,TDMA,GSM,iDEN'},
+    'PVCY_AuthenticationStr'      :{'hex':'0101', 'name':'PVCY_AuthenticationStr',       'type':None,      'tech':'? (J-Phone)'},           # v4 page 58-62
 
-    'dpf_result'                  :{'hex':'0420', 'name':'dpf_result',                   'technology':'Generic'},
-    'set_dpf'                     :{'hex':'0421', 'name':'set_dpf',                      'technology':'Generic'},
-    'ms_availability_status'      :{'hex':'0422', 'name':'ms_availability_status',       'technology':'Generic'},
-    'network_error_code'          :{'hex':'0423', 'name':'network_error_code',           'technology':'Generic'},
-    'message_payload'             :{'hex':'0424', 'name':'message_payload',              'technology':'Generic'},
-    'delivery_failure_reason'     :{'hex':'0425', 'name':'delivery_failure_reason',      'technology':'Generic'},
-    'more_messages_to_send'       :{'hex':'0426', 'name':'more_messages_to_send',        'technology':'GSM'},
-    'message_state'               :{'hex':'0427', 'name':'message_state',                'technology':'Generic'},
-    'congestion_state'            :{'hex':'0428', 'name':'congestion_state',             'technology':'Generic'},
+    'privacy_indicator'           :{'hex':'0201', 'name':'privacy_indicator',            'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.14, page 141
+    'source_subaddress'           :{'hex':'0202', 'name':'source_subaddress',            'type':'hex',     'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.15, page 142
+    'dest_subaddress'             :{'hex':'0203', 'name':'dest_subaddress',              'type':'hex',     'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.16, page 143
+    'user_message_reference'      :{'hex':'0204', 'name':'user_message_reference',       'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.17, page 143
+    'user_response_code'          :{'hex':'0205', 'name':'user_response_code',           'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.18, page 144
 
-    'ussd_service_op'             :{'hex':'0501', 'name':'ussd_service_op',              'technology':'GSM (USSD)'},
+    'source_port'                 :{'hex':'020a', 'name':'source_port',                  'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.20, page 145
+    'destination_port'            :{'hex':'020b', 'name':'destination_port',             'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.21, page 145
+    'sar_msg_ref_num'             :{'hex':'020c', 'name':'sar_msg_ref_num',              'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.22, page 146
+    'language_indicator'          :{'hex':'020d', 'name':'language_indicator',           'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.19, page 144
+    'sar_total_segments'          :{'hex':'020e', 'name':'sar_total_segments',           'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.23, page 147
+    'sar_segment_seqnum'          :{'hex':'020f', 'name':'sar_segment_seqnum',           'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.24, page 147
+    'sc_interface_version'        :{'hex':'0210', 'name':'sc_interface_version',         'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.25, page 148
 
-    'broadcast_channel_indicator' :{'hex':'0600', 'name':'broadcast_channel_indicator',  'technology':'GSM'},
-    'broadcast_content_type'      :{'hex':'0601', 'name':'broadcast_content_type',       'technology':'CDMA, TDMA, GSM'},
-    'broadcast_content_type_info' :{'hex':'0602', 'name':'broadcast_content_type_info',  'technology':'CDMA, TDMA'},
-    'broadcast_message_class'     :{'hex':'0603', 'name':'broadcast_message_class',      'technology':'GSM'},
-    'broadcast_rep_num'           :{'hex':'0604', 'name':'broadcast_rep_num',            'technology':'GSM'},
-    'broadcast_frequency_interval':{'hex':'0605', 'name':'broadcast_frequency_interval', 'technology':'CDMA, TDMA, GSM'},
-    'broadcast_area_identifier'   :{'hex':'0606', 'name':'broadcast_area_identifier',    'technology':'CDMA, TDMA, GSM'},
-    'broadcast_error_status'      :{'hex':'0607', 'name':'broadcast_error_status',       'technology':'CDMA, TDMA, GSM'},
-    'broadcast_area_success'      :{'hex':'0608', 'name':'broadcast_area_success',       'technology':'GSM'},
-    'broadcast_end_time'          :{'hex':'0609', 'name':'broadcast_end_time',           'technology':'CDMA, TDMA, GSM'},
-    'broadcast_service_group'     :{'hex':'060a', 'name':'broadcast_service_group',      'technology':'CDMA, TDMA'},
-    'billing_identification'      :{'hex':'060b', 'name':'billing_identification',       'technology':'Generic'},
-    'source_network_id'           :{'hex':'060d', 'name':'source_network_id',            'technology':'Generic'},
-    'dest_network_id'             :{'hex':'060e', 'name':'dest_network_id',              'technology':'Generic'},
-    'source_node_id'              :{'hex':'060f', 'name':'source_node_id',               'technology':'Generic'},
-    'dest_node_id'                :{'hex':'0610', 'name':'dest_node_id',                 'technology':'Generic'},
-    'dest_addr_np_resolution'     :{'hex':'0611', 'name':'dest_addr_np_resolution',      'technology':'CDMA, TDMA (US Only)'},
-    'dest_addr_np_information'    :{'hex':'0612', 'name':'dest_addr_np_information',     'technology':'CDMA, TDMA (US Only)'},
-    'dest_addr_np_country'        :{'hex':'0613', 'name':'dest_addr_np_country',         'technology':'CDMA, TDMA (US Only)'},
+    'CC_CBN'                      :{'hex':'0301', 'name':'CC_CBN',                       'type':None,      'tech':'V4'},                    # v4 page 70
+    'callback_num_pres_ind'       :{'hex':'0302', 'name':'callback_num_pres_ind',        'type':'bitmask', 'tech':'TDMA'},                  # SMPP v3.4, section 5.3.2.37, page 156
+    'callback_num_atag'           :{'hex':'0303', 'name':'callback_num_atag',            'type':'hex',     'tech':'TDMA'},                  # SMPP v3.4, section 5.3.2.38, page 157
+    'number_of_messages'          :{'hex':'0304', 'name':'number_of_messages',           'type':'integer', 'tech':'CDMA'},                  # SMPP v3.4, section 5.3.2.39, page 158
+    'callback_num'                :{'hex':'0381', 'name':'callback_num',                 'type':'hex',     'tech':'CDMA, TDMA, GSM, iDEN'}, # SMPP v3.4, section 5.3.2.36, page 155
 
-    'display_time'                :{'hex':'1201', 'name':'display_time',                 'technology':'CDMA,TDMA'},
-    'sms_signal'                  :{'hex':'1203', 'name':'sms_signal',                   'technology':'TDMA'},
-    'ms_validity'                 :{'hex':'1204', 'name':'ms_validity',                  'technology':'CDMA,TDMA'},
+    'dpf_result'                  :{'hex':'0420', 'name':'dpf_result',                   'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.28, page 149
+    'set_dpf'                     :{'hex':'0421', 'name':'set_dpf',                      'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.29, page 150
+    'ms_availability_status'      :{'hex':'0422', 'name':'ms_availability_status',       'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.30, page 151
+    'network_error_code'          :{'hex':'0423', 'name':'network_error_code',           'type':'hex',     'tech':'Generic'},               # SMPP v3.4, section 5.3.2.31, page 152
+    'message_payload'             :{'hex':'0424', 'name':'message_payload',              'type':'hex',     'tech':'Generic'},               # SMPP v3.4, section 5.3.2.32, page 153
+    'delivery_failure_reason'     :{'hex':'0425', 'name':'delivery_failure_reason',      'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.33, page 153
+    'more_messages_to_send'       :{'hex':'0426', 'name':'more_messages_to_send',        'type':'integer', 'tech':'GSM'},                   # SMPP v3.4, section 5.3.2.34, page 154
+    'message_state'               :{'hex':'0427', 'name':'message_state',                'type':'integer', 'tech':'Generic'},               # SMPP v3.4, section 5.3.2.35, page 154
+    'congestion_state'            :{'hex':'0428', 'name':'congestion_state',             'type':None,      'tech':'Generic'},
 
-    'IS95A_AlertOnDelivery'       :{'hex':'1304', 'name':'IS95A_AlertOnDelivery',        'technology':'CDMA'}, # v4 page 85
-    'IS95A_LanguageIndicator'     :{'hex':'1306', 'name':'IS95A_LanguageIndicator',      'technology':'CDMA'}, # v4 page 86
-    'alert_on_message_delivery'   :{'hex':'130c', 'name':'alert_on_message_delivery',    'technology':'CDMA'},
-    'its_reply_type'              :{'hex':'1380', 'name':'its_reply_type',               'technology':'CDMA'},
-    'its_session_info'            :{'hex':'1383', 'name':'its_session_info',             'technology':'CDMA Korean [KORITS]'},
+    'ussd_service_op'             :{'hex':'0501', 'name':'ussd_service_op',              'type':'hex',     'tech':'GSM (USSD)'},            # SMPP v3.4, section 5.3.2.44, page 161
 
-    'operator_id'                 :{'hex':'1402', 'name':'operator_id',                  'technology':'vendor extension'},
-    'tariff'                      :{'hex':'1403', 'name':'tariff',                       'technology':'Mobile Network Code vendor extension'},
-    'mcc'                         :{'hex':'1450', 'name':'mcc',                          'technology':'Mobile Country Code vendor extension'},
-    'mnc'                         :{'hex':'1451', 'name':'mnc',                          'technology':'Mobile Network Code vendor extension'},
+    'broadcast_channel_indicator' :{'hex':'0600', 'name':'broadcast_channel_indicator',  'type':None,      'tech':'GSM'},
+    'broadcast_content_type'      :{'hex':'0601', 'name':'broadcast_content_type',       'type':None,      'tech':'CDMA, TDMA, GSM'},
+    'broadcast_content_type_info' :{'hex':'0602', 'name':'broadcast_content_type_info',  'type':None,      'tech':'CDMA, TDMA'},
+    'broadcast_message_class'     :{'hex':'0603', 'name':'broadcast_message_class',      'type':None,      'tech':'GSM'},
+    'broadcast_rep_num'           :{'hex':'0604', 'name':'broadcast_rep_num',            'type':None,      'tech':'GSM'},
+    'broadcast_frequency_interval':{'hex':'0605', 'name':'broadcast_frequency_interval', 'type':None,      'tech':'CDMA, TDMA, GSM'},
+    'broadcast_area_identifier'   :{'hex':'0606', 'name':'broadcast_area_identifier',    'type':None,      'tech':'CDMA, TDMA, GSM'},
+    'broadcast_error_status'      :{'hex':'0607', 'name':'broadcast_error_status',       'type':None,      'tech':'CDMA, TDMA, GSM'},
+    'broadcast_area_success'      :{'hex':'0608', 'name':'broadcast_area_success',       'type':None,      'tech':'GSM'},
+    'broadcast_end_time'          :{'hex':'0609', 'name':'broadcast_end_time',           'type':None,      'tech':'CDMA, TDMA, GSM'},
+    'broadcast_service_group'     :{'hex':'060a', 'name':'broadcast_service_group',      'type':None,      'tech':'CDMA, TDMA'},
+    'billing_identification'      :{'hex':'060b', 'name':'billing_identification',       'type':None,      'tech':'Generic'},
 
-    'PDC_MessageClass'            :{'hex':'1101', 'name':'PDC_MessageClass',             'technology':'? (J-Phone)'}, # v4 page 75
-    'PDC_PresentationOption'      :{'hex':'1102', 'name':'PDC_PresentationOption',       'technology':'? (J-Phone)'}, # v4 page 76
-    'PDC_AlertMechanism'          :{'hex':'1103', 'name':'PDC_AlertMechanism',           'technology':'? (J-Phone)'}, # v4 page 76
-    'PDC_Teleservice'             :{'hex':'1104', 'name':'PDC_Teleservice',              'technology':'? (J-Phone)'}, # v4 page 77
-    'PDC_MultiPartMessage'        :{'hex':'1105', 'name':'PDC_MultiPartMessage',         'technology':'? (J-Phone)'}, # v4 page 77
-    'PDC_PredefinedMsg'           :{'hex':'1106', 'name':'PDC_PredefinedMsg',            'technology':'? (J-Phone)'} # v4 page 78
+    'source_network_id'           :{'hex':'060d', 'name':'source_network_id',            'type':None,      'tech':'Generic'},
+    'dest_network_id'             :{'hex':'060e', 'name':'dest_network_id',              'type':None,      'tech':'Generic'},
+    'source_node_id'              :{'hex':'060f', 'name':'source_node_id',               'type':None,      'tech':'Generic'},
+    'dest_node_id'                :{'hex':'0610', 'name':'dest_node_id',                 'type':None,      'tech':'Generic'},
+    'dest_addr_np_resolution'     :{'hex':'0611', 'name':'dest_addr_np_resolution',      'type':None,      'tech':'CDMA, TDMA (US Only)'},
+    'dest_addr_np_information'    :{'hex':'0612', 'name':'dest_addr_np_information',     'type':None,      'tech':'CDMA, TDMA (US Only)'},
+    'dest_addr_np_country'        :{'hex':'0613', 'name':'dest_addr_np_country',         'type':None,      'tech':'CDMA, TDMA (US Only)'},
+
+    'PDC_MessageClass'            :{'hex':'1101', 'name':'PDC_MessageClass',             'type':None,      'tech':'? (J-Phone)'},           # v4 page 75
+    'PDC_PresentationOption'      :{'hex':'1102', 'name':'PDC_PresentationOption',       'type':None,      'tech':'? (J-Phone)'},           # v4 page 76
+    'PDC_AlertMechanism'          :{'hex':'1103', 'name':'PDC_AlertMechanism',           'type':None,      'tech':'? (J-Phone)'},           # v4 page 76
+    'PDC_Teleservice'             :{'hex':'1104', 'name':'PDC_Teleservice',              'type':None,      'tech':'? (J-Phone)'},           # v4 page 77
+    'PDC_MultiPartMessage'        :{'hex':'1105', 'name':'PDC_MultiPartMessage',         'type':None,      'tech':'? (J-Phone)'},           # v4 page 77
+    'PDC_PredefinedMsg'           :{'hex':'1106', 'name':'PDC_PredefinedMsg',            'type':None,      'tech':'? (J-Phone)'},           # v4 page 78
+
+    'display_time'                :{'hex':'1201', 'name':'display_time',                 'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.26, page 148
+
+    'sms_signal'                  :{'hex':'1203', 'name':'sms_signal',                   'type':'integer', 'tech':'TDMA'},                  # SMPP v3.4, section 5.3.2.40, page 158
+    'ms_validity'                 :{'hex':'1204', 'name':'ms_validity',                  'type':'integer', 'tech':'CDMA, TDMA'},            # SMPP v3.4, section 5.3.2.27, page 149
+
+    'IS95A_AlertOnDelivery'       :{'hex':'1304', 'name':'IS95A_AlertOnDelivery',        'type':None,      'tech':'CDMA'},                  # v4 page 85
+    'IS95A_LanguageIndicator'     :{'hex':'1306', 'name':'IS95A_LanguageIndicator',      'type':None,      'tech':'CDMA'},                  # v4 page 86
+
+    'alert_on_message_delivery'   :{'hex':'130c', 'name':'alert_on_message_delivery',    'type':None,      'tech':'CDMA'},                  # SMPP v3.4, section 5.3.2.41, page 159
+
+    'its_reply_type'              :{'hex':'1380', 'name':'its_reply_type',               'type':'integer', 'tech':'CDMA'},                  # SMPP v3.4, section 5.3.2.42, page 159
+    'its_session_info'            :{'hex':'1383', 'name':'its_session_info',             'type':'hex',     'tech':'CDMA'},                  # SMPP v3.4, section 5.3.2.43, page 160
+
+    'operator_id'                 :{'hex':'1402', 'name':'operator_id',                  'type':None,      'tech':'vendor extension'},
+    'tariff'                      :{'hex':'1403', 'name':'tariff',                       'type':None,      'tech':'Mobile Network Code vendor extension'},
+    'mcc'                         :{'hex':'1450', 'name':'mcc',                          'type':None,      'tech':'Mobile Country Code vendor extension'},
+    'mnc'                         :{'hex':'1451', 'name':'mnc',                          'type':None,      'tech':'Mobile Network Code vendor extension'}
 }
 def optional_parameter_tag_hex_by_name(n):
     return optional_parameter_tag_by_name.get(n,{}).get('hex')
@@ -866,6 +880,8 @@ def decode_optional_parameters(hex_ref):
     while len(hex) > 0:
         (tag_hex, length_hex, rest) = (hex[0:4], hex[4:8], hex[8: ])
         tag = optional_parameter_tag_name_by_hex(tag_hex)
+        if tag == None:
+            tag = tag_hex
         length = int(length_hex, 16)
         (value_hex, tail) = (rest[0:length*2], rest[length*2: ])
         if len(value_hex) == 0:
