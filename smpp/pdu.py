@@ -1,5 +1,11 @@
 import binascii
 import re
+try:
+    import json
+except:
+    import simplejson as json
+
+
 
 
 maps = {} # Inserting certain referenced dicts in here means they can be declared in the same order as in the spec.
@@ -802,14 +808,14 @@ def unpack_pdu(pdu_bin):
 
 
 def decode_pdu(pdu_hex):
-    print '\n===================================================='
     hex_ref = [pdu_hex]
     pdu = {}
     pdu['header'] = decode_header(hex_ref)
     command = pdu['header'].get('command_id', None)
     if command != None:
-        pdu['body'] = decode_body(command, hex_ref)
-    print '====================================================\n'
+        body = decode_body(command, hex_ref)
+        if len(body) > 0:
+            pdu['body'] = body
     return pdu
 
 
@@ -827,20 +833,19 @@ def decode_header(hex_ref):
     header['command_id'] = command
     header['command_status'] = status
     header['sequence_number'] = sequence
-    print 'h==>', 'command_length', ':', repr(header['command_length'])
-    print 'h==>', 'command_id', ':', repr(header['command_id'])
-    print 'h==>', 'command_status', ':', repr(header['command_status'])
-    print 'h==>', 'sequence_number', ':', repr(header['sequence_number'])
     return header
 
 
 def decode_body(command, hex_ref):
     body = {}
-    body['mandatory_parameters'] = None
     if command != None:
         fields = mandatory_parameter_list_by_command_name(command)
-        body['mandatory_parameters'] = decode_mandatory_parameters(fields, hex_ref)
-    body['optional_parameters'] = decode_optional_parameters(hex_ref)
+        mandatory = decode_mandatory_parameters(fields, hex_ref)
+        if len(mandatory) > 0:
+            body['mandatory_parameters'] = mandatory
+    optional = decode_optional_parameters(hex_ref)
+    if len(optional) > 0:
+            body['optional_parameters'] = optional
     return body
 
 
@@ -870,7 +875,6 @@ def decode_mandatory_parameters(fields, hex_ref):
                 mandatory_parameters[field['name']] = maps.get(field['map']+'_by_hex',{data:data})[data]
             else:
                 mandatory_parameters[field['name']] = decode_hex_type(data, field['type'], count, hex_ref)
-            print 'm==>', field['name'], ':', repr(mandatory_parameters[field['name']])
     return mandatory_parameters
 
 
@@ -890,7 +894,6 @@ def decode_optional_parameters(hex_ref):
             value = decode_hex_type(value_hex, optional_parameter_tag_type_by_hex(tag_hex))
         hex = tail
         optional_parameters.append({'tag':tag, 'length':length, 'value':value})
-        print 'o==>', tag, '[', length, ']', ':', repr(value)
     return optional_parameters
 
 
