@@ -874,11 +874,11 @@ def decode_mandatory_parameters(fields, hex_ref):
             else:
                 count = mandatory_parameters[field['var']]
             if field['map'] != None:
-                print field, data
+                #print field, data
                 mandatory_parameters[field['name']] = maps.get(field['map']+'_by_hex',{data:data})[data]
             else:
                 mandatory_parameters[field['name']] = decode_hex_type(data, field['type'], count, hex_ref)
-            print field['type'], (old - len(hex_ref[0]))/2, repr(data), field['name'], mandatory_parameters[field['name']]
+            #print field['type'], (old - len(hex_ref[0]))/2, repr(data), field['name'], mandatory_parameters[field['name']]
     return mandatory_parameters
 
 
@@ -981,7 +981,7 @@ def encode_param_type(param, type, min=0, max=None):
         return '%02x' % int(param)
     elif type == 'string':
         hex = binascii.b2a_hex(binascii.a2b_qp(str(param))) + '00'
-        print 'xxx', hex
+        #print 'xxx', hex
         return hex
     else:
         return '00'
