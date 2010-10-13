@@ -1,28 +1,36 @@
 
 from smpp.esme import *
 
+
+print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+
 #esme = ESME()
-#esme.connect_SMSC()
-
-#print str(binascii.a2b_hex(re.sub(' ','','00 00 00 3C 00 00 00 04 00 00 00 00 00 00 00 05 00 02 08 35 35 35 00 01 01 35 35 35 35 35 35 35 35 35 00 00 00 00 00 00 00 00 00 00 0F 48 65 6C 6C 6F 20 77 69 6B 69 70 65 64 69 61')))
-
-
+#esme.connect_SMSC('localhost')
+#esme.bind_SMSC()
+#esme.disconnect_SMSC()
 
 
 print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
+print "\n==============================================================="
 test_bin = binascii.a2b_hex(re.sub(' ','','00 00 00 3C 00 00 00 04 00 00 00 00 00 00 00 05 00 02 08 35 35 35 00 01 01 35 35 35 35 35 35 35 35 35 00 00 00 00 00 00 00 00 00 00 0F 48 65 6C 6C 6F 20 77 69 6B 69 70 65 64 69 61 00000000 001d00026566'))
-unpack_pdu(test_bin)
+print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
 
+print "\n==============================================================="
 test_bin = binascii.a2b_hex(re.sub(' ','','00000000 00000021 00000000 00000000 00 00 00 00 02 0101016500 026600 00 00 00 00 00 00 00 00 00 00 000500020000 0000000400000000'))
-print unpack_pdu(test_bin)
+print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
 
+print "\n==============================================================="
 test_bin = binascii.a2b_hex(re.sub(' ','','00000000 80000021 00000000 00000000 00 02 01016565650000000000 01016666660000000000'))
-print unpack_pdu(test_bin)
+print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
 
-pack_pdu('generic_nack','ESME_ROK',1,'00112233445566778899')
-pack_pdu()
-print unpack_pdu(pack_pdu())
+print "\n==============================================================="
+test_bin = pack_pdu('generic_nack','ESME_ROK',1,'001d000b6162636465666768696a6b')
+print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
+
+print "\n==============================================================="
+test_bin = pack_pdu()
+print json.dumps(unpack_pdu(test_bin), indent=4, sort_keys=True)
 
 
 j = {
