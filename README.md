@@ -1,7 +1,7 @@
 Python SMPP
 ===========
 
-An SMPP version 3.4 library written in Python, suitable for using in [Twisted][twisted]
+An SMPP version 3.4 library written in Python, suitable for use in [Twisted][twisted]
 
 To get started with development:
 
@@ -12,5 +12,9 @@ To get started with development:
     (ve)$ python
     >>> import smpp
     >>>
+
+Run the tests with nose
+
+    (ve)$ nosetests
 
 [twisted]: http://www.twistedmatrix.com
