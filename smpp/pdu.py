@@ -115,7 +115,7 @@ mandatory_parameter_lists = {
         {'name':'dl_name',                 'min':1, 'max':21,  'var':True,              'type':'string',        'map':None}
     ],
     'submit_multi_resp':[ # SMPP v3.4, section 4.5.2, table 4-16, page 76
-        {'name':'message_id',              'min':0, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
         {'name':'no_unsuccess',            'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'unsuccess_sme',           'min':0, 'max':0,   'var':'no_unsuccess',    'type':'unsuccess_sme', 'map':None}
     ],
@@ -854,7 +854,7 @@ def decode_mandatory_parameters(fields, hex_ref):
     mandatory_parameters = {}
     if len(hex_ref[0]) > 1:
         for field in fields:
-            old = len(hex_ref[0])
+            #old = len(hex_ref[0])
             data = ''
             octet = ''
             count = 0
@@ -961,8 +961,10 @@ def encode_pdu(json_obj):
 def encode_mandatory_parameters(mandatory_obj, fields):
     mandatory_hex = ''
     for field in fields:
-        param = mandatory_obj[field['name']]
-        mandatory_hex += encode_param_type(param, field['type'], field['min'], field['max'])
+        param = mandatory_obj.get(field['name'], None)
+        if param != None or field['min'] > 0:
+            mandatory_hex += encode_param_type(
+                    param, field['type'], field['min'], field['max'])
     return mandatory_hex
 
 
