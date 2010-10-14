@@ -1,5 +1,7 @@
+from datetime import datetime
 
 from smpp.esme import *
+
 
 def prettydump(pdu_hex):
     return json.dumps(unpack_pdu(binascii.a2b_hex(hexclean(x))), indent=4, sort_keys=True)
@@ -7,7 +9,7 @@ def prettydump(pdu_hex):
 def hexclean(dirtyhex):
     return re.sub(r'\s','',re.sub(r'#.*\n','\n',dirtyhex))
 
-lines = "\n==================================================================\n"
+stars = "\n******************************************************************\n"
 
 
 
@@ -46,7 +48,7 @@ x = '''
     00000000
     001d00026566
 '''
-print lines, prettydump(x)
+print stars, prettydump(x)
 
 
 x = '''
@@ -74,7 +76,7 @@ x = '''
     0005 0002 0000
     0000 0004 00000000
 '''
-print lines, prettydump(x)
+print stars, prettydump(x)
 
 
 x = '''
@@ -87,7 +89,7 @@ x = '''
     01016565650000000000
     01016666660000000000
 '''
-print lines, prettydump(x)
+print stars, prettydump(x)
 
 
 
@@ -118,12 +120,13 @@ b = {
     }
 }
 
-print '**********************************************************'
-print json.dumps(unpack_pdu(pack_pdu(b)), indent=4, sort_keys=True)
+print stars, json.dumps(unpack_pdu(pack_pdu(b)), indent=4, sort_keys=True)
 
-print "'''''"
-for x in range(10000):
+start = datetime.now()
+for x in range(100000):
     b['header']['sequence_number'] = x
     u = unpack_pdu(pack_pdu(b))
-    print u['header']['sequence_number']
-print "'''''"
+print stars, x+1, ':', datetime.now() - start
+
+
+
