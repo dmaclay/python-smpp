@@ -935,13 +935,13 @@ def octpop(hex_ref):
 
 #### Encoding functions #######################################################
 
-def pack_pdu(pdu_obj):
-    return binascii.a2b_hex(encode_pdu(pdu_obj))
+def pack_pdu(json_obj):
+    return binascii.a2b_hex(encode_pdu(json_obj))
 
 
-def encode_pdu(pdu_obj):
-    header = pdu_obj.get('header', {})
-    body = pdu_obj.get('body', {})
+def encode_pdu(json_obj):
+    header = json_obj.get('header', {})
+    body = json_obj.get('body', {})
     mandatory = body.get('mandatory_parameters', {})
     optional = body.get('optional_parameters', [])
     body_hex = ''
