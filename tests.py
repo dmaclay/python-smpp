@@ -39,7 +39,7 @@ class PythonSmppTestCase(TestCase):
         # Sample dictionary used for packing & unpacking
         self.dictionary = {
             'header': {
-                'command_length': 16,
+                'command_length': 45,
                 'command_id': 'bind_transmitter',
                 'command_status': 'ESME_ROK',
                 'sequence_number': 0
