@@ -511,11 +511,43 @@ for m in minimal_defaults:
             sort_keys=True)
 
 
-#start = datetime.now()
-#for x in range(100000):
-    #b['header']['sequence_number'] = x
-    #u = unpack_pdu(pack_pdu(b))
-#print stars, x+1, ':', datetime.now() - start
+test_submit = {
+    'header': {
+        'command_length': 0,
+        'command_id': 'submit_sm',
+        'command_status': 'ESME_ROK',
+        'sequence_number': 0,
+    },
+    'body': {
+        'mandatory_parameters': {
+            'service_type':'',
+            'source_addr_ton':1,
+            'source_addr_npi':1,
+            'source_addr':'',
+            'dest_addr_ton':1,
+            'dest_addr_npi':1,
+            'destination_addr':'',
+            'esm_class':0,
+            'protocol_id':0,
+            'priority_flag':0,
+            'schedule_delivery_time':'',
+            'validity_period':'',
+            'registered_delivery':0,
+            'replace_if_present_flag':0,
+            'data_coding':0,
+            'sm_default_msg_id':0,
+            'sm_length':1,
+            'short_message':'', # TODO actual msg
+        },
+    },
+}
+
+start = datetime.now()
+for x in range(100000):
+    x += 1
+    test_submit['header']['sequence_number'] = x
+    u = unpack_pdu(pack_pdu(test_submit))
+print stars, x, ':', datetime.now() - start
 
 
 
