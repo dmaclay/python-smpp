@@ -1,6 +1,8 @@
 from unittest import TestCase
 from datetime import datetime
 from smpp.esme import *
+from smpp import pdu
+import collections
 
 def unpack(pdu_hex):
     """Unpack PDU and return it as a dictionary"""
@@ -14,6 +16,22 @@ def hexclean(dirtyhex):
     """Remove whitespace, comments & newlines from hex string"""
     return re.sub(r'\s','',re.sub(r'#.*\n','\n',dirtyhex))
 
+def hex_to_named(dictionary):
+    """
+    Recursive function to convert values in test dictionaries to
+    their named counterparts that unpack_pdu returns
+    """
+    clone = dictionary.copy()
+    for key, value in clone.items():
+        if isinstance(value, collections.Mapping):
+            clone[key] = hex_to_named(value)
+        else:
+            lookup_table = pdu.maps.get('%s_by_hex' % key)
+            if lookup_table:
+                # overwrite with mapped value or keep using
+                # default if the dictionary key doesn't exist
+                clone[key] = lookup_table.get("%.2d" % value, value)
+    return clone
 
 class PythonSmppTestCase(TestCase):
     
@@ -39,7 +57,8 @@ class PythonSmppTestCase(TestCase):
                 'optional_parameters': [
                     {
                         'tag':'payload_type',
-                        'value':0
+                        'value':0,
+                        'length':1
                     }
                 ]
             }
@@ -47,6 +66,35 @@ class PythonSmppTestCase(TestCase):
     
     def tearDown(self):
         pass
+    
+    def assertDictEquals(self, dictionary1, dictionary2, depth=[]):
+        """
+        Recursive dictionary comparison, will fail if any keys and values
+        in the two dictionaries don't match. Displays the key chain / depth 
+        and which parts of the two dictionaries didn't match.
+        """
+        d1_keys = dictionary1.keys()
+        d1_keys.sort()
+        
+        d2_keys = dictionary2.keys()
+        d2_keys.sort()
+        
+        self.failUnlessEqual(d1_keys, d2_keys, 
+            "Dictionary keys do not match, %s vs %s" % (
+                d1_keys, d2_keys))
+        for key, value in dictionary1.items():
+            if isinstance(value, collections.Mapping):
+                # go recursive
+                depth.append(key)
+                self.assertDictEquals(value, dictionary2[key], depth)
+            else:
+                self.failUnlessEqual(value, dictionary2[key], 
+                    "Dictionary values do not match for key '%s' " \
+                    "(%s vs %s) at depth: %s.\nDictionary 1: %s\n" \
+                    "Dictionary 2: %s\n" % (
+                        key, value, dictionary2[key], ".".join(depth),
+                        dictionary1, dictionary2))
+    
     
     def test_pretty_dump_1(self):
         """Read the hex data, clean it and display the JSON"""
@@ -77,7 +125,7 @@ class PythonSmppTestCase(TestCase):
             001d00026566
         '''
         
-        self.assertEquals(unpack(x), {
+        self.assertDictEquals(unpack(x), {
             "body": {
                 "mandatory_parameters": {
                     "data_coding": 0, 
@@ -147,7 +195,7 @@ class PythonSmppTestCase(TestCase):
             0005 0002 0000
             0000 0004 00000000
         '''
-        self.assertEquals(unpack(x), {
+        self.assertDictEquals(unpack(x), {
             "body": {
                 "mandatory_parameters": {
                     "priority_flag": 0,
@@ -208,7 +256,7 @@ class PythonSmppTestCase(TestCase):
             01016565650000000000
             01016666660000000000
         '''
-        self.assertEquals(unpack(x), {
+        self.assertDictEquals(unpack(x), {
             "body": {
                 "mandatory_parameters": {
                     "message_id": "",
@@ -235,13 +283,16 @@ class PythonSmppTestCase(TestCase):
             }
         })
 
-    def test_packing_of_dictionary(self):
+    def test_packing_and_unpacking_of_dictionary(self):
         """
         It should take a dictionary, pack and unpack it and dump
         it as JSON correctly.
         """
         dictionary = self.dictionary.copy()
-        print json.dumps(unpack_pdu(pack_pdu(dictionary)), indent=4, sort_keys=True)
+        self.assertDictEquals(
+            hex_to_named(dictionary),
+            unpack_pdu(pack_pdu(dictionary))
+        )
     
     def test_packing_of_100000_sequence(self):
         """Test time to pack & unpack 10000 dictionaries"""
@@ -250,7 +301,7 @@ class PythonSmppTestCase(TestCase):
         for x in range(100000):
             dictionary['header']['sequence_number'] = x
             u = unpack_pdu(pack_pdu(dictionary))
-            print x+1, ':', datetime.now() - start
+        print x+1, ':', datetime.now() - start
     
 
 
