@@ -93,40 +93,429 @@ print stars, prettydump(x)
 
 
 
-
-b = {
-    'header': {
-        'command_length': 16,
-        'command_id': 'bind_transmitter',
-        'command_status': 'ESME_ROK',
-        'sequence_number': 0
-    },
-    'body': {
-        'mandatory_parameters': {
-            'system_id':'test_system',
-            'password':'abc123',
-            'system_type':'',
-            'interface_version':'',
-            'addr_ton':1,
-            'addr_npi':1,
-            'address_range':'',
+minimal_defaults = [
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'bind_transmitter',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
         },
-        'optional_parameters': [
-            {
-                'tag':'payload_type',
-                'value':0
-            }
-        ]
-    }
-}
+        'body': {
+            'mandatory_parameters': {
+                'system_id':'test_system',
+                'password':'abc123',
+                'system_type':'',
+                'interface_version':'',
+                'addr_ton':1,
+                'addr_npi':1,
+                'address_range':'',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'bind_transmitter_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'system_id':'test_system',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'bind_receiver',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'system_id':'test_system',
+                'password':'abc123',
+                'system_type':'',
+                'interface_version':'',
+                'addr_ton':1,
+                'addr_npi':1,
+                'address_range':'',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'bind_receiver_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'system_id':'test_system',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'bind_transceiver',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'system_id':'test_system',
+                'password':'abc123',
+                'system_type':'',
+                'interface_version':'',
+                'addr_ton':1,
+                'addr_npi':1,
+                'address_range':'',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'bind_transceiver_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'system_id':'test_system',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'outbind',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'system_id':'test_system',
+                'password':'abc123',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'unbind',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'unbind_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'generic_nack',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'submit_sm',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'service_type':'',
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+                'dest_addr_ton':1,
+                'dest_addr_npi':1,
+                'destination_addr':'',
+                'esm_class':0,
+                'protocol_id':0,
+                'priority_flag':0,
+                'schedule_delivery_time':'',
+                'validity_period':'',
+                'registered_delivery':0,
+                'replace_if_present_flag':0,
+                'data_coding':0,
+                'sm_default_msg_id':0,
+                'sm_length':1,
+                'short_message':'', # TODO actual msg
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'submit_sm_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'message_id':'',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'submit_sm_resp',
+            'command_status': 'ESME_RSYSERR',
+            'sequence_number': 0,
+        },
+        # submit_sm can have no body on failure
+    },
+    # TODO submit_multi
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'submit_multi_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'message_id':'',
+                'no_unsuccess':0,
+                #'unsuccess_sme':'', TODO
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'deliver_sm',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'service_type':'',
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+                'dest_addr_ton':1,
+                'dest_addr_npi':1,
+                'destination_addr':'',
+                'esm_class':0,
+                'protocol_id':0,
+                'priority_flag':0,
+                'schedule_delivery_time':'',
+                'validity_period':'',
+                'registered_delivery':0,
+                'replace_if_present_flag':0,
+                'data_coding':0,
+                'sm_default_msg_id':0,
+                'sm_length':1,
+                'short_message':'', # TODO actual msg
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'deliver_sm_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'message_id':'',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'data_sm',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'service_type':'',
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+                'dest_addr_ton':1,
+                'dest_addr_npi':1,
+                'destination_addr':'',
+                'esm_class':0,
+                'registered_delivery':0,
+                'data_coding':0,
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'data_sm_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'message_id':'',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'query_sm',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'message_id':'',
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'query_sm_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'message_id':'',
+                'final_date':'',
+                'message_state':0,
+                'error_code':0,
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'cancel_sm',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'service_type':'',
+                'message_id':'',
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+                'dest_addr_ton':1,
+                'dest_addr_npi':1,
+                'destination_addr':'',
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'cancel_sm_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'replace_sm',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'message_id':'',
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+                'schedule_delivery_time':'',
+                'validity_period':'',
+                'registered_delivery':0,
+                'replace_if_present_flag':0,
+                'data_coding':0,
+                'sm_default_msg_id':0,
+                'sm_length':1,
+                'short_message':'', # TODO actual msg
+            },
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'replace_sm_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'enquire_link',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'enquire_link_resp',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+    },
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'alert_notification',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+                'esme_addr_ton':1,
+                'esme_addr_npi':1,
+                'esme_addr':'',
+            },
+        },
+    },
+]
 
-print stars, json.dumps(unpack_pdu(pack_pdu(b)), indent=4, sort_keys=True)
+for m in minimal_defaults:
+    print stars,
+    print m['header']['command_id']
+    print json.dumps(
+            unpack_pdu(pack_pdu(m)),
+            indent=4,
+            sort_keys=True)
 
-start = datetime.now()
-for x in range(100000):
-    b['header']['sequence_number'] = x
-    u = unpack_pdu(pack_pdu(b))
-print stars, x+1, ':', datetime.now() - start
+
+#start = datetime.now()
+#for x in range(100000):
+    #b['header']['sequence_number'] = x
+    #u = unpack_pdu(pack_pdu(b))
+#print stars, x+1, ':', datetime.now() - start
 
 
 
