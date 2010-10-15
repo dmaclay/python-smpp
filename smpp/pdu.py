@@ -450,7 +450,6 @@ def command_status_hex_by_name(n):
 # Type of Number (TON) - SMPP v3.4, section 5.2.5, table 5-3, page 117
 
 maps['addr_ton_by_name'] = {
-    ''                 :'00',
     'unknown'          :'00',
     'international'    :'01',
     'national'         :'02',
@@ -474,7 +473,6 @@ maps['addr_ton_by_hex'] = {
 # Numberic Plan Indicator (NPI) - SMPP v3.4, section 5.2.6, table 5-4, page 118
 
 maps['addr_npi_by_name'] = {
-    ''           :'00',
     'unknown'    :'00',
     'ISDN'       :'01',
     'data'       :'03',
@@ -874,9 +872,8 @@ def decode_mandatory_parameters(fields, hex_ref):
             else:
                 count = mandatory_parameters[field['var']]
             if field['map'] != None:
-                #print field, data
-                mandatory_parameters[field['name']] = maps.get(field['map']+'_by_hex',{data:data})[data]
-            else:
+                mandatory_parameters[field['name']] = maps[field['map']+'_by_hex'].get(data, None)
+            if field['map'] == None or mandatory_parameters[field['name']] == None:
                 mandatory_parameters[field['name']] = decode_hex_type(data, field['type'], count, hex_ref)
             #print field['type'], (old - len(hex_ref[0]))/2, repr(data), field['name'], mandatory_parameters[field['name']]
     return mandatory_parameters
@@ -963,8 +960,11 @@ def encode_mandatory_parameters(mandatory_obj, fields):
     for field in fields:
         param = mandatory_obj.get(field['name'], None)
         if param != None or field['min'] > 0:
+            map = None
+            if field['map'] != None:
+                map = maps.get(field['map']+'_by_name', None)
             mandatory_hex += encode_param_type(
-                    param, field['type'], field['min'], field['max'])
+                    param, field['type'], field['min'], field['max'], map)
     return mandatory_hex
 
 
@@ -978,12 +978,29 @@ def encode_optional_parameter(tag, value):
     return optional_hex
 
 
-def encode_param_type(param, type, min=0, max=None):
-    if type == 'integer':
-        return '%02x' % int(param)
+def encode_param_type(param, type, min=0, max=None, map=None):
+    #print type, min, max, repr(param), map
+    if map != None:
+        if (type == 'integer'
+                and min == max
+                and str(param) == repr(param)):
+            hex = ('%0'+str(min*2)+'x') % param
+        else:
+            hex = map.get(param, map.get('', map.get('00'))) #TODO too clever ?
+        #print repr(param), '->', repr(hex)
+    elif type == 'integer':
+        hex = ('%0'+str(min*2)+'x') % int(param)
     elif type == 'string':
         hex = binascii.b2a_hex(binascii.a2b_qp(str(param))) + '00'
-        #print 'xxx', hex
-        return hex
+    elif type == 'bitmask':
+        hex = param
     else:
-        return '00'
+        hex = None
+    if hex == None:
+        if min > 0:
+            hex = ('%0'+str(min*2)+'x') % 0
+        else:
+            hex = ''
+    return hex
+
+
