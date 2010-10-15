@@ -491,11 +491,11 @@ minimal_defaults = [
         },
         'body': {
             'mandatory_parameters': {
-                'source_addr_ton':1,
+                'source_addr_ton':'international',
                 'source_addr_npi':1,
                 'source_addr':'',
-                'esme_addr_ton':1,
-                'esme_addr_npi':1,
+                'esme_addr_ton':9,
+                'esme_addr_npi':'',
                 'esme_addr':'',
             },
         },
@@ -542,12 +542,12 @@ test_submit = {
     },
 }
 
-start = datetime.now()
-for x in range(1000000):
-    x += 1
-    test_submit['header']['sequence_number'] = x
-    u = unpack_pdu(pack_pdu(test_submit))
-print stars, x, ':', datetime.now() - start
+#start = datetime.now()
+#for x in range(1000000):
+    #x += 1
+    #test_submit['header']['sequence_number'] = x
+    #u = unpack_pdu(pack_pdu(test_submit))
+#print stars, x, ':', datetime.now() - start
 
 
 
