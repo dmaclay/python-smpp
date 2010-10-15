@@ -956,26 +956,40 @@ def encode_pdu(json_obj):
 
 
 def encode_mandatory_parameters(mandatory_obj, fields):
-    mandatory_hex = ''
+    mandatory_hex_array = []
+    index_names = {}
+    index = 0
     for field in fields:
         param = mandatory_obj.get(field['name'], None)
         if param != None or field['min'] > 0:
             map = None
             if field['map'] != None:
                 map = maps.get(field['map']+'_by_name', None)
-            mandatory_hex += encode_param_type(
-                    param, field['type'], field['min'], field['max'], map)
-    return mandatory_hex
+            mandatory_hex_array.append(
+                    encode_param_type(
+                        param, field['type'], field['min'], field['max'], map))
+            index_names[field['name']] = index
+            length_index = index_names.get(field['var'], None)
+            if length_index != None:
+                print index_names
+                print mandatory_hex_array
+                mandatory_hex_array[length_index] = encode_param_type(
+                        len(mandatory_hex_array[index])/2,
+                        'integer',
+                        len(mandatory_hex_array[length_index])/2)
+                print mandatory_hex_array
+            index += 1
+    return ''.join(mandatory_hex_array)
 
 
 def encode_optional_parameter(tag, value):
-    optional_hex = ''
+    optional_hex_array = []
     tag_hex = optional_parameter_tag_hex_by_name(tag)
     if tag_hex != None:
         value_hex = '%02x' % value #TODO need encoding mapping
         length_hex = '%04x' % (len(value_hex)/2)
-        optional_hex = tag_hex + length_hex + value_hex
-    return optional_hex
+        optional_hex_array.append(tag_hex + length_hex + value_hex)
+    return ''.join(optional_hex_array)
 
 
 def encode_param_type(param, type, min=0, max=None, map=None):
