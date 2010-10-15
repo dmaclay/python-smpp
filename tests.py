@@ -543,7 +543,7 @@ test_submit = {
 }
 
 start = datetime.now()
-for x in range(100000):
+for x in range(1000000):
     x += 1
     test_submit['header']['sequence_number'] = x
     u = unpack_pdu(pack_pdu(test_submit))
