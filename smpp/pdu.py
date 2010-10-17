@@ -1004,7 +1004,7 @@ def encode_optional_parameter(tag, value):
 
 
 def encode_param_type(param, type, min=0, max=None, map=None):
-    print type, min, max, repr(param), map, 
+    #print type, min, max, repr(param), map, 
     if map != None:
         if (type == 'integer' and isinstance(param, int)):
             hex = ('%0'+str(min*2)+'x') % param
@@ -1024,7 +1024,7 @@ def encode_param_type(param, type, min=0, max=None, map=None):
             hex = ('%0'+str(min*2)+'x') % 0
         else:
             hex = ''
-    print hex
+    #print hex
     return hex
 
 
