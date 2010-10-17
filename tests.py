@@ -293,6 +293,12 @@ minimal_defaults = [
                 'message_id':'',
                 'no_unsuccess':5,
                 'unsuccess_sme':[
+                    {
+                        'dest_addr_ton':1,
+                        'dest_addr_npi':1,
+                        'destination_addr':'',
+                        'error_status_code':0,
+                    },
                 ],
             },
         },
