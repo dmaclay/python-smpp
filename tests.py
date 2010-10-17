@@ -299,6 +299,12 @@ minimal_defaults = [
                         'destination_addr':'',
                         'error_status_code':0,
                     },
+                    {
+                        'dest_addr_ton':3,
+                        'dest_addr_npi':1,
+                        'destination_addr':'555',
+                        'error_status_code':0,
+                    },
                 ],
             },
         },
