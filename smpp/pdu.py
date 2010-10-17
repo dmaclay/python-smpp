@@ -985,7 +985,7 @@ def encode_mandatory_parameters(mandatory_obj, fields):
                 #print index_names
                 #print mandatory_hex_array
                 mandatory_hex_array[length_index] = encode_param_type(
-                        len(mandatory_hex_array[index])/2,
+                        param_length,
                         'integer',
                         len(mandatory_hex_array[length_index])/2)
                 #print mandatory_hex_array
