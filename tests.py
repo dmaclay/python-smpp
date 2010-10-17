@@ -254,7 +254,7 @@ minimal_defaults = [
                 'data_coding':0,
                 'sm_default_msg_id':0,
                 'sm_length':1,
-                'short_message':'', # TODO actual msg
+                'short_message':'testing 123',
             },
         },
     },
@@ -278,7 +278,7 @@ minimal_defaults = [
             'command_status': 'ESME_RSYSERR',
             'sequence_number': 0,
         },
-        # submit_sm can have no body on failure
+        # submit_sm_resp can have no body on failure
     },
     # TODO submit_multi
     {
@@ -291,11 +291,14 @@ minimal_defaults = [
         'body': {
             'mandatory_parameters': {
                 'message_id':'',
-                'no_unsuccess':0,
-                #'unsuccess_sme':'', TODO
+                'no_unsuccess':5,
+                'unsuccess_sme':[
+                ],
             },
         },
     },
+]
+breaker = [
     {
         'header': {
             'command_length': 0,
@@ -322,7 +325,7 @@ minimal_defaults = [
                 'data_coding':0,
                 'sm_default_msg_id':0,
                 'sm_length':1,
-                'short_message':'', # TODO actual msg
+                'short_message':'',
             },
         },
     },
@@ -454,7 +457,7 @@ minimal_defaults = [
                 'data_coding':0,
                 'sm_default_msg_id':0,
                 'sm_length':1,
-                'short_message':'', # TODO actual msg
+                'short_message':'',
             },
         },
     },
@@ -521,11 +524,11 @@ test_submit = {
     'body': {
         'mandatory_parameters': {
             'service_type':'',
-            'source_addr_ton':1,
+            'source_addr_ton':'international',
             'source_addr_npi':1,
             'source_addr':'',
-            'dest_addr_ton':1,
-            'dest_addr_npi':1,
+            'dest_addr_ton':9,
+            'dest_addr_npi':'',
             'destination_addr':'',
             'esm_class':0,
             'protocol_id':0,
@@ -537,16 +540,21 @@ test_submit = {
             'data_coding':0,
             'sm_default_msg_id':0,
             'sm_length':1,
-            'short_message':'', # TODO actual msg
+            'short_message':'',
         },
     },
 }
+
 
 #start = datetime.now()
 #for x in range(1000000):
     #x += 1
     #test_submit['header']['sequence_number'] = x
+    #sm = 'testing: x = '+str(x)+''
+    ##print repr(sm)
+    #test_submit['body']['mandatory_parameters']['short_message'] = sm
     #u = unpack_pdu(pack_pdu(test_submit))
+    ##print stars, json.dumps(u, indent=4, sort_keys=True)
 #print stars, x, ':', datetime.now() - start
 
 
