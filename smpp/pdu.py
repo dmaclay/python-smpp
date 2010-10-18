@@ -969,9 +969,14 @@ def encode_mandatory_parameters(mandatory_obj, fields):
             if isinstance(param, list):
                 hex_list = []
                 for item in param:
-                    hex_list.append(encode_mandatory_parameters(
-                        item,
-                        mandatory_parameter_list_by_command_name(field['type'])))
+                    subfields = mandatory_parameter_list_by_command_name(field['type'])
+                    if item.get('dest_flag', None) == 1:
+                        subfields = []+subfields+ mandatory_parameter_list_by_command_name('sme_dest_address')
+                    elif item.get('dest_flag', None) == 2:
+                        subfields = []+subfields+mandatory_parameter_list_by_command_name('distribution_list')
+                    hex_item = encode_mandatory_parameters(item, subfields)
+                    if isinstance(hex_item, str) and len(hex_item) > 0:
+                        hex_list.append(hex_item)
                 param_length = len(hex_list)
                 mandatory_hex_array.append(''.join(hex_list))
             else:
@@ -982,13 +987,10 @@ def encode_mandatory_parameters(mandatory_obj, fields):
             index_names[field['name']] = index
             length_index = index_names.get(field['var'], None)
             if length_index != None and param_length != None:
-                #print index_names
-                #print mandatory_hex_array
                 mandatory_hex_array[length_index] = encode_param_type(
                         param_length,
                         'integer',
                         len(mandatory_hex_array[length_index])/2)
-                #print mandatory_hex_array
             index += 1
     return ''.join(mandatory_hex_array)
 
@@ -1004,13 +1006,13 @@ def encode_optional_parameter(tag, value):
 
 
 def encode_param_type(param, type, min=0, max=None, map=None):
-    #print type, min, max, repr(param), map, 
-    if map != None:
-        if (type == 'integer' and isinstance(param, int)):
+    if param == None:
+        hex = None
+    elif map != None:
+        if type == 'integer' and isinstance(param, int):
             hex = ('%0'+str(min*2)+'x') % param
         else:
-            hex = map.get(param, map.get('', map.get('00'))) #TODO too clever ?
-        #print repr(param), '->', repr(hex)
+            hex = map.get(param, ('%0'+str(min*2)+'x') % 0)
     elif type == 'integer':
         hex = ('%0'+str(min*2)+'x') % int(param)
     elif type == 'string':
@@ -1019,12 +1021,11 @@ def encode_param_type(param, type, min=0, max=None, map=None):
         hex = param
     else:
         hex = None
-    if hex == None:
-        if min > 0:
-            hex = ('%0'+str(min*2)+'x') % 0
-        else:
-            hex = ''
-    #print hex
+    #if hex == None:
+        #hex = ''
+        #if min > 0:
+            #hex = ('%0'+str(min*2)+'x') % 0
+    #print type, min, max, repr(param), hex, map
     return hex
 
 
