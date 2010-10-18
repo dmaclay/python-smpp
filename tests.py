@@ -261,6 +261,38 @@ minimal_defaults = [
     {
         'header': {
             'command_length': 0,
+            'command_id': 'submit_sm',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'service_type':'',
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+                'dest_addr_ton':1,
+                'dest_addr_npi':1,
+                'destination_addr':'',
+                'esm_class':0,
+                'protocol_id':0,
+                'priority_flag':0,
+                'schedule_delivery_time':'',
+                'validity_period':'',
+                'registered_delivery':0,
+                'replace_if_present_flag':0,
+                'data_coding':0,
+                'sm_default_msg_id':0,
+                'sm_length':0,
+                # 'short_message' can be of zero length
+            },
+        },
+    },
+#]
+#breaker = [
+    {
+        'header': {
+            'command_length': 0,
             'command_id': 'submit_sm_resp',
             'command_status': 'ESME_ROK',
             'sequence_number': 0,
