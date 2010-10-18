@@ -278,9 +278,49 @@ minimal_defaults = [
             'command_status': 'ESME_RSYSERR',
             'sequence_number': 0,
         },
-        # submit_sm_resp can have no body on failure
+        # submit_sm_resp can have no body for failures
     },
-    # TODO submit_multi
+    {
+        'header': {
+            'command_length': 0,
+            'command_id': 'submit_multi',
+            'command_status': 'ESME_ROK',
+            'sequence_number': 0,
+        },
+        'body': {
+            'mandatory_parameters': {
+                'service_type':'',
+                'source_addr_ton':1,
+                'source_addr_npi':1,
+                'source_addr':'',
+                'number_of_dests':0,
+                'dest_address':[
+                    {
+                        'dest_flag':1,
+                        'dest_addr_ton':1,
+                        'dest_addr_npi':1,
+                        'destination_addr':'the address'
+                    },
+                    {
+                        'dest_flag':2,
+                        'dl_name':'the list',
+                    },
+                    #{}
+                    ],
+                'esm_class':0,
+                'protocol_id':0,
+                'priority_flag':0,
+                'schedule_delivery_time':'',
+                'validity_period':'',
+                'registered_delivery':0,
+                'replace_if_present_flag':0,
+                'data_coding':0,
+                'sm_default_msg_id':0,
+                'sm_length':1,
+                'short_message':'testing 123',
+            },
+        },
+    },
     {
         'header': {
             'command_length': 0,
@@ -309,8 +349,8 @@ minimal_defaults = [
             },
         },
     },
-]
-breaker = [
+#]
+#breaker = [
     {
         'header': {
             'command_length': 0,
@@ -568,6 +608,5 @@ test_submit = {
     #u = unpack_pdu(pack_pdu(test_submit))
     ##print stars, json.dumps(u, indent=4, sort_keys=True)
 #print stars, x, ':', datetime.now() - start
-
 
 
