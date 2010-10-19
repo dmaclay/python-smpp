@@ -337,6 +337,10 @@ minimal_defaults = [
                         'dest_flag':2,
                         'dl_name':'the list',
                     },
+                    {
+                        'dest_flag':2,
+                        'dl_name':'the other list',
+                    },
                     #{}
                     ],
                 'esm_class':0,
