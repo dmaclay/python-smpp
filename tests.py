@@ -555,7 +555,7 @@ minimal_defaults = [
                 'data_coding':0,
                 'sm_default_msg_id':0,
                 'sm_length':1,
-                'short_message':'',
+                'short_message':'is this an = sign?',
             },
         },
     },
@@ -649,11 +649,12 @@ test_submit = {
     #x += 1
     #test_submit['header']['sequence_number'] = x
     #sm = 'testing: x = '+str(x)+''
-    ##print repr(sm)
+    ##print stars, repr(sm)
     #test_submit['body']['mandatory_parameters']['short_message'] = sm
     #u = unpack_pdu(pack_pdu(test_submit))
     ##print stars, json.dumps(u, indent=4, sort_keys=True)
 #print stars, x, ':', datetime.now() - start
+
 
 print '\n\n======='
 quit()
