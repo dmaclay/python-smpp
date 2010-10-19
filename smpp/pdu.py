@@ -969,12 +969,13 @@ def encode_mandatory_parameters(mandatory_obj, fields):
             if isinstance(param, list):
                 hex_list = []
                 for item in param:
-                    subfields = mandatory_parameter_list_by_command_name(field['type'])
+                    flagfields = mandatory_parameter_list_by_command_name(field['type'])
+                    plusfields = []
                     if item.get('dest_flag', None) == 1:
-                        subfields = []+subfields+ mandatory_parameter_list_by_command_name('sme_dest_address')
+                        plusfields = mandatory_parameter_list_by_command_name('sme_dest_address')
                     elif item.get('dest_flag', None) == 2:
-                        subfields = []+subfields+mandatory_parameter_list_by_command_name('distribution_list')
-                    hex_item = encode_mandatory_parameters(item, subfields)
+                        plusfields = mandatory_parameter_list_by_command_name('distribution_list')
+                    hex_item = encode_mandatory_parameters(item, flagfields + plusfields)
                     if isinstance(hex_item, str) and len(hex_item) > 0:
                         hex_list.append(hex_item)
                 param_length = len(hex_list)
