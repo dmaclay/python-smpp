@@ -902,7 +902,7 @@ def decode_hex_type(hex, type, count=0, hex_ref=['']):
     if type == 'integer':
         return int(hex, 16)
     elif type == 'string':
-        return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',hex)))
+        return re.sub('00','',hex).decode('hex')
     elif (type == 'dest_address'
             or type == 'unsuccess_sme'):
         list = []
@@ -1017,7 +1017,7 @@ def encode_param_type(param, type, min=0, max=None, map=None):
     elif type == 'integer':
         hex = ('%0'+str(min*2)+'x') % int(param)
     elif type == 'string':
-        hex = binascii.b2a_hex(binascii.a2b_qp(str(param))) + '00'
+        hex = param.encode('hex') + '00'
     elif type == 'bitmask':
         hex = param
     else:
