@@ -932,13 +932,13 @@ def octpop(hex_ref):
 
 #### Encoding functions #######################################################
 
-def pack_pdu(json_obj):
-    return binascii.a2b_hex(encode_pdu(json_obj))
+def pack_pdu(pdu_obj):
+    return binascii.a2b_hex(encode_pdu(pdu_obj))
 
 
-def encode_pdu(json_obj):
-    header = json_obj.get('header', {})
-    body = json_obj.get('body', {})
+def encode_pdu(pdu_obj):
+    header = pdu_obj.get('header', {})
+    body = pdu_obj.get('body', {})
     mandatory = body.get('mandatory_parameters', {})
     optional = body.get('optional_parameters', [])
     body_hex = ''
@@ -1000,7 +1000,9 @@ def encode_optional_parameter(tag, value):
     optional_hex_array = []
     tag_hex = optional_parameter_tag_hex_by_name(tag)
     if tag_hex != None:
-        value_hex = '%02x' % value #TODO need encoding mapping
+        value_hex = encode_param_type(
+                value,
+                optional_parameter_tag_type_by_hex(tag_hex))
         length_hex = '%04x' % (len(value_hex)/2)
         optional_hex_array.append(tag_hex + length_hex + value_hex)
     return ''.join(optional_hex_array)
@@ -1019,6 +1021,8 @@ def encode_param_type(param, type, min=0, max=None, map=None):
     elif type == 'string':
         hex = param.encode('hex') + '00'
     elif type == 'bitmask':
+        hex = param
+    elif type == 'hex':
         hex = param
     else:
         hex = None
