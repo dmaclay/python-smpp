@@ -44,12 +44,16 @@ class SmppTestCase(unittest.TestCase):
         pdu_index = 0
         for pdu in pdu_objects:
             pdu_index += 1
+            padded_index = '%010d' % pdu_index
+            print padded_index
             self.assertEquals(
-                    json.dumps(
-                        unpack_pdu(pack_pdu(pdu)),
-                        indent=4,
-                        sort_keys=True),
-                    eval('pdu_asserts.pdu_json_'+('%010d' % pdu_index)))
+                    re.sub('\n *','',
+                        json.dumps(
+                            unpack_pdu(pack_pdu(pdu)),
+                            indent=4,
+                            sort_keys=True)),
+                    re.sub('\n *','',
+                        eval('pdu_asserts.pdu_json_'+padded_index)))
 
 
 if __name__ == '__main__':
