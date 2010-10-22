@@ -77,7 +77,7 @@ class PduTestCase(unittest.TestCase):
         for pdu in pdu_objects:
             pdu_index += 1
             padded_index = '%010d' % pdu_index
-            print padded_index
+            print '...', padded_index
             self.assertEquals(
                     re.sub('\n *','',
                         prettydump(unpack_pdu(pack_pdu(pdu)))),
@@ -94,7 +94,7 @@ class PduTestCase(unittest.TestCase):
         for pdu_hex in pdu_hex_strings:
             pdu_index += 1
             padded_index = '%010d' % pdu_index
-            print padded_index
+            print '...', padded_index
             self.assertEquals(
                     re.sub('\n *','',
                         prettydump(unpack_hex(pdu_hex))),
@@ -145,7 +145,7 @@ class PduTestCase(unittest.TestCase):
             submit_sm['body']['mandatory_parameters']['short_message'] = sm
             u = unpack_pdu(pack_pdu(submit_sm))
         delta = datetime.now() - start
-        print '2000 pack & unpacks in:', delta
+        print '... 2000 pack & unpacks in:', delta
         self.assertTrue(delta < timedelta(seconds=1))
 
 
@@ -153,6 +153,7 @@ class PduTestCase(unittest.TestCase):
 class PduBuilderTestCase(unittest.TestCase):
 
     def test_true(self):
+        print ''
         self.assertTrue(True)
 
 
