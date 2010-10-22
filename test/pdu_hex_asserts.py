@@ -68,7 +68,7 @@ pdu_json_0000000002 = '''{
             "replace_if_present_flag": 0, 
             "schedule_delivery_time": "", 
             "service_type": "", 
-            "short_message": "", 
+            "short_message": null, 
             "sm_default_msg_id": 0, 
             "sm_length": 0, 
             "source_addr": "", 
