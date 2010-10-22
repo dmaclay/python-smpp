@@ -866,9 +866,12 @@ def decode_mandatory_parameters(fields, hex_ref):
                     count += 1
             elif field['type'] == 'string':
                 count = mandatory_parameters[field['var']]
-                for i in range(count):
-                    if len(hex_ref[0]) > 1:
-                        data += octpop(hex_ref)
+                if count == 0:
+                    data = None
+                else:
+                    for i in range(count):
+                        if len(hex_ref[0]) > 1:
+                            data += octpop(hex_ref)
             else:
                 count = mandatory_parameters[field['var']]
             if field['map'] != None:
@@ -899,7 +902,9 @@ def decode_optional_parameters(hex_ref):
 
 
 def decode_hex_type(hex, type, count=0, hex_ref=['']):
-    if type == 'integer':
+    if hex == None:
+        return hex
+    elif type == 'integer':
         return int(hex, 16)
     elif type == 'string':
         return re.sub('00','',hex).decode('hex')
