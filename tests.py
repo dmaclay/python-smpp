@@ -8,7 +8,20 @@ except:
 
 from test.pdu import pdu_objects
 from test import pdu_asserts
+from test.pdu_hex import pdu_hex_strings
 
+
+def unpack_hex(pdu_hex):
+    """Unpack PDU hex string and return it as a dictionary"""
+    return unpack_pdu(binascii.a2b_hex(hexclean(pdu_hex)))
+
+def hexclean(dirtyhex):
+    """Remove whitespace, comments & newlines from hex string"""
+    return re.sub(r'\s','',re.sub(r'#.*\n','\n',dirtyhex))
+
+def prettydump(pdu_obj):
+    """Unpack PDU dictionary and dump it as a JSON formatted string"""
+    return json.dumps(pdu_obj, indent=4, sort_keys=True)
 
 
 def create_pdu_asserts():
@@ -19,10 +32,20 @@ def create_pdu_asserts():
         pstr += "pdu_json_"
         pstr += ('%010d' % pdu_index)
         pstr += " = '''"
-        pstr += json.dumps(
-                unpack_pdu(pack_pdu(pdu)),
-                indent=4,
-                sort_keys=True)
+        pstr += prettydump(unpack_pdu(pack_pdu(pdu)))
+        pstr += "'''"
+        print pstr
+
+
+def create_pdu_hex_asserts():
+    pdu_index = 0
+    for pdu_hex in pdu_hex_strings:
+        pdu_index += 1
+        pstr  = "\n########################################\n"
+        pstr += "pdu_json_"
+        pstr += ('%010d' % pdu_index)
+        pstr += " = '''"
+        pstr += prettydump(unpack_hex(pdu_hex))
         pstr += "'''"
         print pstr
 
@@ -30,6 +53,10 @@ def create_pdu_asserts():
 ## :w|!python % > test/pdu_asserts.py
 #create_pdu_asserts()
 #quit()
+
+## :w|!python % > test/pdu_hex_asserts.py
+create_pdu_hex_asserts()
+quit()
 
 
 class SmppTestCase(unittest.TestCase):
@@ -48,10 +75,7 @@ class SmppTestCase(unittest.TestCase):
             print padded_index
             self.assertEquals(
                     re.sub('\n *','',
-                        json.dumps(
-                            unpack_pdu(pack_pdu(pdu)),
-                            indent=4,
-                            sort_keys=True)),
+                        prettydump(unpack_pdu(pack_pdu(pdu)))),
                     re.sub('\n *','',
                         eval('pdu_asserts.pdu_json_'+padded_index)))
 
@@ -112,17 +136,6 @@ quit()
 
 
 
-def unpack(pdu_hex):
-    """Unpack PDU and return it as a dictionary"""
-    return unpack_pdu(binascii.a2b_hex(hexclean(pdu_hex)))
-
-def prettydump(pdu_hex):
-    """Unpack PDU and dump it as a JSON formatted string"""
-    return json.dumps(unpack_pdu(binascii.a2b_hex(hexclean(x))), indent=4, sort_keys=True)
-
-def hexclean(dirtyhex):
-    """Remove whitespace, comments & newlines from hex string"""
-    return re.sub(r'\s','',re.sub(r'#.*\n','\n',dirtyhex))
 
 stars = "\n******************************************************************\n"
 
