@@ -47,8 +47,8 @@ class BindTransmitter(PDU):
             password,
             system_type = '',
             interface_version = '',
-            addr_ton = 1,
-            addr_npi = 1,
+            addr_ton = 0,
+            addr_npi = 0,
             address_range = '',
             sequence_number = 1,
             ):
@@ -74,11 +74,11 @@ class SubmitSM(PDU):
     def __init__(self,
             sequence_number = 1,
             service_type = '',
-            source_addr_ton = 1,
-            source_addr_npi = 1,
+            source_addr_ton = 0,
+            source_addr_npi = 0,
             source_addr = '',
-            dest_addr_ton = 1,
-            dest_addr_npi = 1,
+            dest_addr_ton = 0,
+            dest_addr_npi = 0,
             destination_addr = '',
             esm_class = 0,
             protocol_id = 0,
@@ -134,7 +134,7 @@ print bind.get_hex()
 print bind.get_bin()
 #print json.dumps(bind.get_obj(), indent=4, sort_keys=True)
 #print json.dumps(decode_pdu(bind.get_hex()), indent=4, sort_keys=True)
-#print json.dumps(unpack_pdu(bind.get_bin()), indent=4, sort_keys=True)
+print json.dumps(unpack_pdu(bind.get_bin()), indent=4, sort_keys=True)
 
 sm = SubmitSM(short_message='testing testing')
 print json.dumps(unpack_pdu(sm.get_bin()), indent=4, sort_keys=True)
