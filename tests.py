@@ -70,10 +70,9 @@ class SmppTestCase(unittest.TestCase):
 
     def test_pack_unpack_pdu_objects(self):
         """
-        It should take a dictionary, pack and unpack it and dump
-        it as JSON correctly.
+        pdu_objects: take a dictionary, pack and unpack it and dump it as JSON correctly.
         """
-        print '\npdu_objects'
+        print ''
         pdu_index = 0
         for pdu in pdu_objects:
             pdu_index += 1
@@ -88,10 +87,9 @@ class SmppTestCase(unittest.TestCase):
 
     def test_pack_unpack_pdu_hex_strings(self):
         """
-        Read the hex data, clean it, and unpack it
-        to JSON correctly.
+        pdu_hex_strings: read the hex data, clean it, and unpack it to JSON correctly.
         """
-        print '\npdu_hex_strings'
+        print ''
         pdu_index = 0
         for pdu_hex in pdu_hex_strings:
             pdu_index += 1
@@ -106,10 +104,9 @@ class SmppTestCase(unittest.TestCase):
 
     def test_pack_unpack_performance(self):
         """
-        Test that time to pack & unpack 2000 dictionaries
-        is less than 1 second.
+        pack_unpack_performance: pack & unpack 2000 submit_sm PDUs in under 1 second.
         """
-        print '\npack_unpack_performance'
+        print ''
         submit_sm = {
             'header': {
                 'command_length': 0,
@@ -148,12 +145,8 @@ class SmppTestCase(unittest.TestCase):
             submit_sm['body']['mandatory_parameters']['short_message'] = sm
             u = unpack_pdu(pack_pdu(submit_sm))
         delta = datetime.now() - start
-        print '2000 pack/unpacks in:', delta
+        print '2000 pack & unpacks in:', delta
         self.assertTrue(delta < timedelta(seconds=1))
-
-
-if __name__ == '__main__':
-    unittest.main()
 
 
 
@@ -162,4 +155,7 @@ if __name__ == '__main__':
 #esme.bind_SMSC()
 #esme.disconnect_SMSC()
 
+
+if __name__ == '__main__':
+    unittest.main()
 
