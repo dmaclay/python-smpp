@@ -60,7 +60,7 @@ def create_pdu_hex_asserts():
 #quit()
 
 
-class SmppTestCase(unittest.TestCase):
+class PduTestCase(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -69,10 +69,10 @@ class SmppTestCase(unittest.TestCase):
         pass
 
     def test_pack_unpack_pdu_objects(self):
-        """
-        pdu_objects ... take a dictionary, pack and unpack it and dump it as JSON correctly
-        """
         print ''
+        """
+        Take a dictionary, pack and unpack it and dump it as JSON correctly
+        """
         pdu_index = 0
         for pdu in pdu_objects:
             pdu_index += 1
@@ -86,10 +86,10 @@ class SmppTestCase(unittest.TestCase):
 
 
     def test_pack_unpack_pdu_hex_strings(self):
-        """
-        pdu_hex_strings ... read the hex data, clean it, and unpack it to JSON correctly
-        """
         print ''
+        """
+        Read the hex data, clean it, and unpack it to JSON correctly
+        """
         pdu_index = 0
         for pdu_hex in pdu_hex_strings:
             pdu_index += 1
@@ -103,10 +103,10 @@ class SmppTestCase(unittest.TestCase):
 
 
     def test_pack_unpack_performance(self):
-        """
-        pack_unpack_performance ... pack & unpack 2000 submit_sm PDUs in under 1 second
-        """
         print ''
+        """
+        Pack & unpack 2000 submit_sm PDUs in under 1 second
+        """
         submit_sm = {
             'header': {
                 'command_length': 0,
@@ -147,6 +147,13 @@ class SmppTestCase(unittest.TestCase):
         delta = datetime.now() - start
         print '2000 pack & unpacks in:', delta
         self.assertTrue(delta < timedelta(seconds=1))
+
+
+
+class PduBuilderTestCase(unittest.TestCase):
+
+    def test_true(self):
+        self.assertTrue(True)
 
 
 
