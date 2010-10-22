@@ -191,6 +191,7 @@ pdu_objects = [
                 'data_coding':0,
                 'sm_default_msg_id':0,
                 'sm_length':0,
+                'short_message':None,
                 # 'short_message' can be of zero length
             },
             'optional_parameters': [
