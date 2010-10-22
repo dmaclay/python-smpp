@@ -9,6 +9,7 @@ except:
 from test.pdu import pdu_objects
 from test import pdu_asserts
 from test.pdu_hex import pdu_hex_strings
+from test import pdu_hex_asserts
 
 
 def unpack_hex(pdu_hex):
@@ -55,8 +56,8 @@ def create_pdu_hex_asserts():
 #quit()
 
 ## :w|!python % > test/pdu_hex_asserts.py
-create_pdu_hex_asserts()
-quit()
+#create_pdu_hex_asserts()
+#quit()
 
 
 class SmppTestCase(unittest.TestCase):
@@ -68,6 +69,7 @@ class SmppTestCase(unittest.TestCase):
         pass
 
     def test_pack_unpack_pdu_objects(self):
+        print '\npdu_objects'
         pdu_index = 0
         for pdu in pdu_objects:
             pdu_index += 1
@@ -80,7 +82,22 @@ class SmppTestCase(unittest.TestCase):
                         eval('pdu_asserts.pdu_json_'+padded_index)))
 
 
-    def test_pack_unpack_preformance(self):
+    def test_pack_unpack_pdu_hex_strings(self):
+        print '\npdu_hex_strings'
+        pdu_index = 0
+        for pdu_hex in pdu_hex_strings:
+            pdu_index += 1
+            padded_index = '%010d' % pdu_index
+            print padded_index
+            self.assertEquals(
+                    re.sub('\n *','',
+                        prettydump(unpack_hex(pdu_hex))),
+                    re.sub('\n *','',
+                        eval('pdu_hex_asserts.pdu_json_'+padded_index)))
+
+
+    def test_pack_unpack_performance(self):
+        print '\npack_unpack_performance'
         submit_sm = {
             'header': {
                 'command_length': 0,
@@ -119,7 +136,7 @@ class SmppTestCase(unittest.TestCase):
             submit_sm['body']['mandatory_parameters']['short_message'] = sm
             u = unpack_pdu(pack_pdu(submit_sm))
         delta = datetime.now() - start
-        print '\n2000 pack/unpacks:', delta
+        print '2000 pack/unpacks in:', delta
         self.assertTrue(delta < timedelta(seconds=1))
 
 
