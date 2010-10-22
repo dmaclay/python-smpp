@@ -70,7 +70,7 @@ class SmppTestCase(unittest.TestCase):
 
     def test_pack_unpack_pdu_objects(self):
         """
-        pdu_objects: take a dictionary, pack and unpack it and dump it as JSON correctly.
+        pdu_objects ... take a dictionary, pack and unpack it and dump it as JSON correctly
         """
         print ''
         pdu_index = 0
@@ -87,7 +87,7 @@ class SmppTestCase(unittest.TestCase):
 
     def test_pack_unpack_pdu_hex_strings(self):
         """
-        pdu_hex_strings: read the hex data, clean it, and unpack it to JSON correctly.
+        pdu_hex_strings ... read the hex data, clean it, and unpack it to JSON correctly
         """
         print ''
         pdu_index = 0
@@ -104,7 +104,7 @@ class SmppTestCase(unittest.TestCase):
 
     def test_pack_unpack_performance(self):
         """
-        pack_unpack_performance: pack & unpack 2000 submit_sm PDUs in under 1 second.
+        pack_unpack_performance ... pack & unpack 2000 submit_sm PDUs in under 1 second
         """
         print ''
         submit_sm = {
