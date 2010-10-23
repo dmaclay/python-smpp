@@ -158,12 +158,12 @@ class PduBuilderTestCase(unittest.TestCase):
 
 
 
-#esme = ESME()
-#esme.connect_SMSC('localhost')
-#esme.bind_SMSC()
-#esme.disconnect_SMSC()
+esme = ESME()
+esme.connect_SMSC('localhost')
+esme.bind_SMSC('test id', 'abc 123')
+esme.disconnect_SMSC()
 
 
-if __name__ == '__main__':
-    unittest.main()
+#if __name__ == '__main__':
+    #unittest.main()
 

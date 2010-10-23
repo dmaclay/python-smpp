@@ -1,3 +1,4 @@
+
 from pdu import *
 
 class PDU:
@@ -43,14 +44,14 @@ class PDU:
 class BindTransmitter(PDU):
 
     def __init__(self,
-            system_id,
-            password,
+            sequence_number = 0,
+            system_id = '',
+            password = '',
             system_type = '',
             interface_version = '',
             addr_ton = 0,
             addr_npi = 0,
             address_range = '',
-            sequence_number = 1,
             ):
         PDU.__init__(self,
                 'bind_transmitter',
@@ -72,7 +73,7 @@ class BindTransmitter(PDU):
 class SubmitSM(PDU):
 
     def __init__(self,
-            sequence_number = 1,
+            sequence_number = 0,
             service_type = '',
             source_addr_ton = 0,
             source_addr_npi = 0,
@@ -128,7 +129,7 @@ class SubmitSM(PDU):
 
 
 
-bind = BindTransmitter('test_id', 'abc123')
+bind = BindTransmitter(system_id='test_id', password='abc123')
 print bind.get_obj()
 print bind.get_hex()
 print bind.get_bin()
