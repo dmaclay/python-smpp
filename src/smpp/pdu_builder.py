@@ -2,11 +2,10 @@
 from pdu import *
 
 class PDU:
-
     def __init__(self,
             command_id,
             command_status,
-            sequence_number = 1,
+            sequence_number = 0,
             ):
         self.obj = {}
         header = {}
@@ -42,7 +41,6 @@ class PDU:
 
 
 class BindTransmitter(PDU):
-
     def __init__(self,
             sequence_number = 0,
             system_id = '',
@@ -68,6 +66,16 @@ class BindTransmitter(PDU):
         mandatory_parameters['addr_ton'] = addr_ton
         mandatory_parameters['addr_npi'] = addr_npi
         mandatory_parameters['address_range'] = address_range
+
+
+class Unbind(PDU):
+    def __init__(self,
+            sequence_number = 0,
+            ):
+        PDU.__init__(self,
+                'unbind',
+                'ESME_ROK',
+                sequence_number)
 
 
 class SubmitSM(PDU):
@@ -129,15 +137,15 @@ class SubmitSM(PDU):
 
 
 
-bind = BindTransmitter(system_id='test_id', password='abc123')
-print bind.get_obj()
-print bind.get_hex()
-print bind.get_bin()
-#print json.dumps(bind.get_obj(), indent=4, sort_keys=True)
-#print json.dumps(decode_pdu(bind.get_hex()), indent=4, sort_keys=True)
-print json.dumps(unpack_pdu(bind.get_bin()), indent=4, sort_keys=True)
+#bind = BindTransmitter(system_id='test_id', password='abc123')
+#print bind.get_obj()
+#print bind.get_hex()
+#print bind.get_bin()
+##print json.dumps(bind.get_obj(), indent=4, sort_keys=True)
+##print json.dumps(decode_pdu(bind.get_hex()), indent=4, sort_keys=True)
+#print json.dumps(unpack_pdu(bind.get_bin()), indent=4, sort_keys=True)
 
-sm = SubmitSM(short_message='testing testing')
-print json.dumps(unpack_pdu(sm.get_bin()), indent=4, sort_keys=True)
-sm.add_message_payload('616263646566676869')
-print json.dumps(unpack_pdu(sm.get_bin()), indent=4, sort_keys=True)
+#sm = SubmitSM(short_message='testing testing')
+#print json.dumps(unpack_pdu(sm.get_bin()), indent=4, sort_keys=True)
+#sm.add_message_payload('616263646566676869')
+#print json.dumps(unpack_pdu(sm.get_bin()), indent=4, sort_keys=True)
