@@ -159,15 +159,14 @@ class PduBuilderTestCase(unittest.TestCase):
 
 
 esme = ESME()
-esme.connect_SMSC('localhost')
-esme.bind_SMSC('test id', 'abc 123')
+esme.connect('localhost')
+esme.bind_transmitter('test id', 'abc 123')
 start = datetime.now()
 for x in range(5):
     esme.submit_sm('gobbledygook')
 delta = datetime.now() - start
 print delta
-esme.unbind_SMSC()
-esme.disconnect_SMSC()
+esme.disconnect()
 
 
 #if __name__ == '__main__':
