@@ -3,7 +3,7 @@ import socket
 from pdu_builder import *
 
 
-class ESME:
+class ESME(object):
 
     def __init__(self):
         self.state = 'CLOSED'
@@ -81,13 +81,23 @@ class ESME:
         self.__unbind()
 
 
-    def submit_sm(self, message=''):
+    def submit_sm(self, **kwargs):
         if self.state in ['BOUND_TX', 'BOUND_TRX']:
-            pdu = SubmitSM(sequence_number = self.sequence_number,
-                    short_message = message)
+            pdu = SubmitSM(sequence_number = self.sequence_number, **kwargs)
+            #print pdu.get_obj()
             self.conn.send(pdu.get_bin())
             self.sequence_number +=1
             submit_sm_resp = self.__recv()
             #print self.__is_ok(submit_sm_resp, 'submit_sm_resp')
+
+
+    def submit_multi(self, **kwargs):
+        if self.state in ['BOUND_TX', 'BOUND_TRX']:
+            pdu = SubmitMulti(sequence_number = self.sequence_number, **kwargs)
+            #print pdu.get_obj()
+            self.conn.send(pdu.get_bin())
+            self.sequence_number +=1
+            submit_multi_resp = self.__recv()
+            #print self.__is_ok(submit_multi_resp, 'submit_multi_resp')
 
 

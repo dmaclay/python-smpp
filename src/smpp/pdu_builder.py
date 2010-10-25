@@ -1,7 +1,7 @@
 
 from pdu import *
 
-class PDU:
+class PDU(object):
     def __init__(self,
             command_id,
             command_status,
@@ -51,10 +51,11 @@ class BindTransmitter(PDU):
             addr_npi = 0,
             address_range = '',
             ):
-        PDU.__init__(self,
+        super(BindTransmitter, self).__init__(
                 'bind_transmitter',
                 'ESME_ROK',
-                sequence_number)
+                sequence_number,
+                )
         body = {}
         self.obj['body'] = body
         mandatory_parameters = {}
@@ -72,23 +73,21 @@ class Unbind(PDU):
     def __init__(self,
             sequence_number = 0,
             ):
-        PDU.__init__(self,
+        super(Unbind, self).__init__(
                 'unbind',
                 'ESME_ROK',
-                sequence_number)
+                sequence_number,
+                )
 
 
-class SubmitSM(PDU):
-
+class SM1(PDU):
     def __init__(self,
+            command_id,
             sequence_number = 0,
             service_type = '',
             source_addr_ton = 0,
             source_addr_npi = 0,
             source_addr = '',
-            dest_addr_ton = 0,
-            dest_addr_npi = 0,
-            destination_addr = '',
             esm_class = 0,
             protocol_id = 0,
             priority_flag = 0,
@@ -101,10 +100,11 @@ class SubmitSM(PDU):
             sm_length = 0,
             short_message = None,
             ):
-        PDU.__init__(self,
-                'submit_sm',
+        super(SM1, self).__init__(
+                command_id,
                 'ESME_ROK',
-                sequence_number)
+                sequence_number,
+                )
         body = {}
         self.obj['body'] = body
         mandatory_parameters = {}
@@ -113,9 +113,6 @@ class SubmitSM(PDU):
         mandatory_parameters['source_addr_ton'] = source_addr_ton
         mandatory_parameters['source_addr_npi'] = source_addr_npi
         mandatory_parameters['source_addr'] = source_addr
-        mandatory_parameters['dest_addr_ton'] = dest_addr_ton
-        mandatory_parameters['dest_addr_npi'] = dest_addr_npi
-        mandatory_parameters['destination_addr'] = destination_addr
         mandatory_parameters['esm_class'] = esm_class
         mandatory_parameters['protocol_id'] = protocol_id
         mandatory_parameters['priority_flag'] = priority_flag
@@ -135,6 +132,38 @@ class SubmitSM(PDU):
         self._PDU__add_optional_parameter('message_payload', value)
 
 
+class SubmitMulti(SM1):
+    def __init__(self,
+            number_of_dests = 0,
+            dest_address = [],
+            **kwargs):
+        super(SubmitMulti, self).__init__('submit_multi', **kwargs)
+        mandatory_parameters = self.obj['body']['mandatory_parameters']
+        mandatory_parameters['number_of_dests'] = number_of_dests
+        mandatory_parameters['dest_address'] = dest_address
+
+
+class SM2(SM1):
+    def __init__(self,
+            command_id,
+            dest_addr_ton = 0,
+            dest_addr_npi = 0,
+            destination_addr = '',
+            **kwargs):
+        super(SM2, self).__init__(command_id, **kwargs)
+        mandatory_parameters = self.obj['body']['mandatory_parameters']
+        mandatory_parameters['dest_addr_ton'] = dest_addr_ton
+        mandatory_parameters['dest_addr_npi'] = dest_addr_npi
+        mandatory_parameters['destination_addr'] = destination_addr
+
+
+class SubmitSM(SM2):
+    def __init__(self, **kwargs):
+        super(SubmitSM, self).__init__('submit_sm', **kwargs)
+
+class DeliverSM(SM2):
+    def __init__(self, **kwargs):
+        super(DeliverSM, self).__init__('deliver_sm', **kwargs)
 
 
 #bind = BindTransmitter(system_id='test_id', password='abc123')

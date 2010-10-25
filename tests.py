@@ -160,15 +160,22 @@ class PduBuilderTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     esme = ESME()
-    esme.connect('localhost', 2777)
+    esme.connect('localhost', 2775)
     print esme.state
     esme.bind_transmitter('test id', 'abc 123')
     #esme.unbind()
     #esme.bind_transmitter('test id', 'abc 123')
     print esme.state
     start = datetime.now()
-    for x in range(5):
-        esme.submit_sm('gobbledygook')
+    for x in range(3):
+        esme.submit_sm(
+                short_message = 'gobbledygook',
+                destination_addr = '555',
+                )
+        esme.submit_multi(
+                short_message = 'gobbledygook',
+                dest_address = [],
+                )
         print esme.state
     delta = datetime.now() - start
     print delta
