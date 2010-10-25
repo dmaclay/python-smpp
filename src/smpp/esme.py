@@ -28,18 +28,21 @@ class ESME:
             self.state = 'CLOSED'
 
 
-    def do_recv(self):
-        resp_pdu = None
+    def __recv(self):
+        pdu = None
         length_bin = self.conn.recv(4)
-        #print 'length_bin', len(length_bin), length_bin
-        if len(length_bin) == 4:
-            length = int(binascii.b2a_hex(length_bin),16)
-            rest_bin = self.conn.recv(length-4)
-            resp_pdu = unpack_pdu(length_bin + rest_bin)
-            print '...', resp_pdu['header']['sequence_number'],
-            print '>',   resp_pdu['header']['command_id'],
-            print '...', resp_pdu['header']['command_status']
-        return resp_pdu
+        if not length_bin:
+            return None
+        else:
+            #print 'length_bin', len(length_bin), length_bin
+            if len(length_bin) == 4:
+                length = int(binascii.b2a_hex(length_bin),16)
+                rest_bin = self.conn.recv(length-4)
+                pdu = unpack_pdu(length_bin + rest_bin)
+                print '...', pdu['header']['sequence_number'],
+                print '>',   pdu['header']['command_id'],
+                print '...', pdu['header']['command_status']
+            return pdu
 
 
     def __is_ok(self, pdu, id_check=None):
@@ -61,7 +64,7 @@ class ESME:
                     password = self.password)
             self.conn.send(pdu.get_bin())
             self.sequence_number +=1
-            if self.__is_ok(self.do_recv(), 'bind_transmitter_resp'):
+            if self.__is_ok(self.__recv(), 'bind_transmitter_resp'):
                 self.state = 'BOUND_TX'
 
 
@@ -70,7 +73,7 @@ class ESME:
             pdu = Unbind(sequence_number = self.sequence_number)
             self.conn.send(pdu.get_bin())
             self.sequence_number +=1
-            if self.__is_ok(self.do_recv(), 'unbind_resp'):
+            if self.__is_ok(self.__recv(), 'unbind_resp'):
                 self.state = 'OPEN'
 
 
@@ -84,7 +87,7 @@ class ESME:
                     short_message = message)
             self.conn.send(pdu.get_bin())
             self.sequence_number +=1
-            submit_sm_resp = self.do_recv()
+            submit_sm_resp = self.__recv()
             #print self.__is_ok(submit_sm_resp, 'submit_sm_resp')
 
 
