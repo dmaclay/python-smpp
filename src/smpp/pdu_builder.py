@@ -5,7 +5,7 @@ class PDU(object):
     def __init__(self,
             command_id,
             command_status,
-            sequence_number = 0,
+            sequence_number,
             ):
         self.obj = {}
         header = {}
@@ -42,7 +42,7 @@ class PDU(object):
 
 class BindTransmitter(PDU):
     def __init__(self,
-            sequence_number = 0,
+            sequence_number,
             system_id = '',
             password = '',
             system_type = '',
@@ -71,7 +71,7 @@ class BindTransmitter(PDU):
 
 class Unbind(PDU):
     def __init__(self,
-            sequence_number = 0,
+            sequence_number,
             ):
         super(Unbind, self).__init__(
                 'unbind',
@@ -83,7 +83,7 @@ class Unbind(PDU):
 class SM1(PDU):
     def __init__(self,
             command_id,
-            sequence_number = 0,
+            sequence_number,
             service_type = '',
             source_addr_ton = 0,
             source_addr_npi = 0,
@@ -134,23 +134,59 @@ class SM1(PDU):
 
 class SubmitMulti(SM1):
     def __init__(self,
-            number_of_dests = 0,
-            dest_address = [],
+            sequence_number,
             **kwargs):
-        super(SubmitMulti, self).__init__('submit_multi', **kwargs)
+        super(SubmitMulti, self).__init__('submit_multi', sequence_number, **kwargs)
         mandatory_parameters = self.obj['body']['mandatory_parameters']
-        mandatory_parameters['number_of_dests'] = number_of_dests
-        mandatory_parameters['dest_address'] = dest_address
+        mandatory_parameters['number_of_dests'] = 0
+        mandatory_parameters['dest_address'] = []
+
+    def addDestinationAddress(self,
+            destination_addr,
+            dest_addr_ton = 0,
+            dest_addr_npi = 0,
+            ):
+        if isinstance(destination_addr, str) and len(destination_addr) > 0:
+            new_entry = {
+                    'dest_flag':1,
+                    'dest_addr_ton':dest_addr_ton,
+                    'dest_addr_npi':dest_addr_npi,
+                    'destination_addr':destination_addr,
+            }
+            mandatory_parameters = self.obj['body']['mandatory_parameters']
+            mandatory_parameters['dest_address'].append(new_entry)
+            mandatory_parameters['number_of_dests'] = len(
+                    mandatory_parameters['dest_address'])
+            return True
+        else:
+            return False
+
+    def addDistributionList(self,
+            dl_name,
+            ):
+        if isinstance(dl_name, str) and len(dl_name) > 0:
+            new_entry = {
+                    'dest_flag':2,
+                    'dl_name':dl_name,
+            }
+            mandatory_parameters = self.obj['body']['mandatory_parameters']
+            mandatory_parameters['dest_address'].append(new_entry)
+            mandatory_parameters['number_of_dests'] = len(
+                    mandatory_parameters['dest_address'])
+            return True
+        else:
+            return False
 
 
 class SM2(SM1):
     def __init__(self,
             command_id,
+            sequence_number,
             dest_addr_ton = 0,
             dest_addr_npi = 0,
             destination_addr = '',
             **kwargs):
-        super(SM2, self).__init__(command_id, **kwargs)
+        super(SM2, self).__init__(command_id, sequence_number, **kwargs)
         mandatory_parameters = self.obj['body']['mandatory_parameters']
         mandatory_parameters['dest_addr_ton'] = dest_addr_ton
         mandatory_parameters['dest_addr_npi'] = dest_addr_npi
@@ -158,12 +194,12 @@ class SM2(SM1):
 
 
 class SubmitSM(SM2):
-    def __init__(self, **kwargs):
-        super(SubmitSM, self).__init__('submit_sm', **kwargs)
+    def __init__(self, sequence_number, **kwargs):
+        super(SubmitSM, self).__init__('submit_sm', sequence_number, **kwargs)
 
 class DeliverSM(SM2):
-    def __init__(self, **kwargs):
-        super(DeliverSM, self).__init__('deliver_sm', **kwargs)
+    def __init__(self, sequence_number, **kwargs):
+        super(DeliverSM, self).__init__('deliver_sm',sequence_number,  **kwargs)
 
 
 #bind = BindTransmitter(system_id='test_id', password='abc123')

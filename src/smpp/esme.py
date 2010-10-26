@@ -59,7 +59,7 @@ class ESME(object):
         if self.state in ['OPEN']:
             if system_id != None: self.system_id = system_id
             if password != None: self.password = password
-            pdu = BindTransmitter(sequence_number = self.sequence_number,
+            pdu = BindTransmitter(self.sequence_number,
                     system_id = self.system_id,
                     password = self.password)
             self.conn.send(pdu.get_bin())
@@ -70,7 +70,7 @@ class ESME(object):
 
     def __unbind(self):
         if self.state in ['BOUND_TX', 'BOUND_RX', 'BOUND_TRX']:
-            pdu = Unbind(sequence_number = self.sequence_number)
+            pdu = Unbind(self.sequence_number)
             self.conn.send(pdu.get_bin())
             self.sequence_number +=1
             if self.__is_ok(self.__recv(), 'unbind_resp'):
@@ -83,18 +83,28 @@ class ESME(object):
 
     def submit_sm(self, **kwargs):
         if self.state in ['BOUND_TX', 'BOUND_TRX']:
-            pdu = SubmitSM(sequence_number = self.sequence_number, **kwargs)
-            #print pdu.get_obj()
+            pdu = SubmitSM(self.sequence_number, **kwargs)
             self.conn.send(pdu.get_bin())
             self.sequence_number +=1
             submit_sm_resp = self.__recv()
             #print self.__is_ok(submit_sm_resp, 'submit_sm_resp')
 
 
-    def submit_multi(self, **kwargs):
+    def submit_multi(self, dest_address=[], **kwargs):
         if self.state in ['BOUND_TX', 'BOUND_TRX']:
-            pdu = SubmitMulti(sequence_number = self.sequence_number, **kwargs)
-            #print pdu.get_obj()
+            pdu = SubmitMulti(self.sequence_number, **kwargs)
+            for item in dest_address:
+                if isinstance(item, str): # assume strings are addresses not lists
+                    pdu.addDestinationAddress(item)
+                elif isinstance(item, dict):
+                    if item.get('dest_flag') == 1:
+                        pdu.addDestinationAddress(
+                                item.get('destination_addr'),
+                                dest_addr_ton = item.get('dest_addr_ton', 0),
+                                dest_addr_npi = item.get('dest_addr_npi', 0),
+                                )
+                    elif item.get('dest_flag') == 2:
+                        pdu.addDistributionList(item.get('dl_name'))
             self.conn.send(pdu.get_bin())
             self.sequence_number +=1
             submit_multi_resp = self.__recv()

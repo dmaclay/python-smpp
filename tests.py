@@ -159,28 +159,38 @@ class PduBuilderTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    print '\n##########################################################\n'
     esme = ESME()
     esme.connect('localhost', 2775)
     print esme.state
     esme.bind_transmitter('test id', 'abc 123')
-    #esme.unbind()
-    #esme.bind_transmitter('test id', 'abc 123')
     print esme.state
     start = datetime.now()
-    for x in range(3):
+    for x in range(1):
         esme.submit_sm(
                 short_message = 'gobbledygook',
                 destination_addr = '555',
                 )
+        print esme.state
+    for x in range(1):
         esme.submit_multi(
                 short_message = 'gobbledygook',
-                dest_address = [],
+                dest_address = ['444','333'],
+                )
+        print esme.state
+    for x in range(1):
+        esme.submit_multi(
+                short_message = 'gobbledygook',
+                dest_address = [
+                    {'dest_flag':1, 'destination_addr':'111'},
+                    {'dest_flag':2, 'dl_name':'list22222'},
+                    ],
                 )
         print esme.state
     delta = datetime.now() - start
-    print delta
     esme.disconnect()
     print esme.state
+    print 'excluding binding ... time to send messages =', delta
 
 
 #if __name__ == '__main__':
