@@ -138,7 +138,6 @@ class SubmitMulti(SM1):
             number_of_dests = 0,
             dest_address = [],
             **kwargs):
-        print '####', number_of_dests, dest_address
         super(SubmitMulti, self).__init__('submit_multi', sequence_number, **kwargs)
         mandatory_parameters = self.obj['body']['mandatory_parameters']
         mandatory_parameters['number_of_dests'] = number_of_dests
