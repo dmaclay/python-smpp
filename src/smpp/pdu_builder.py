@@ -7,6 +7,7 @@ class PDU(object):
             command_status,
             sequence_number,
             ):
+        super(PDU, self).__init__()
         self.obj = {}
         header = {}
         self.obj['header'] = header
