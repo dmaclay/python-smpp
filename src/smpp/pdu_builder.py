@@ -135,11 +135,14 @@ class SM1(PDU):
 class SubmitMulti(SM1):
     def __init__(self,
             sequence_number,
+            number_of_dests = 0,
+            dest_address = [],
             **kwargs):
+        print '####', number_of_dests, dest_address
         super(SubmitMulti, self).__init__('submit_multi', sequence_number, **kwargs)
         mandatory_parameters = self.obj['body']['mandatory_parameters']
-        mandatory_parameters['number_of_dests'] = 0
-        mandatory_parameters['dest_address'] = []
+        mandatory_parameters['number_of_dests'] = number_of_dests
+        mandatory_parameters['dest_address'] = [] + dest_address
 
     def addDestinationAddress(self,
             destination_addr,
