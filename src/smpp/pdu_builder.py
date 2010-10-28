@@ -6,7 +6,7 @@ class PDU(object):
             command_id,
             command_status,
             sequence_number,
-            ):
+            **kwargs):
         super(PDU, self).__init__()
         self.obj = {}
         header = {}
@@ -51,7 +51,7 @@ class BindTransmitter(PDU):
             addr_ton = 0,
             addr_npi = 0,
             address_range = '',
-            ):
+            **kwargs):
         super(BindTransmitter, self).__init__(
                 'bind_transmitter',
                 'ESME_ROK',
@@ -73,7 +73,7 @@ class BindTransmitter(PDU):
 class Unbind(PDU):
     def __init__(self,
             sequence_number,
-            ):
+            **kwargs):
         super(Unbind, self).__init__(
                 'unbind',
                 'ESME_ROK',
@@ -100,7 +100,7 @@ class SM1(PDU):
             sm_default_msg_id = 0,
             sm_length = 0,
             short_message = None,
-            ):
+            **kwargs):
         super(SM1, self).__init__(
                 command_id,
                 'ESME_ROK',
@@ -197,11 +197,15 @@ class SM2(SM1):
 
 
 class SubmitSM(SM2):
-    def __init__(self, sequence_number, **kwargs):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
         super(SubmitSM, self).__init__('submit_sm', sequence_number, **kwargs)
 
 class DeliverSM(SM2):
-    def __init__(self, sequence_number, **kwargs):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
         super(DeliverSM, self).__init__('deliver_sm',sequence_number,  **kwargs)
 
 
