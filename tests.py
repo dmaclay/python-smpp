@@ -7,7 +7,8 @@ except:from src.smpp.esme import *
 try:from smpp.clickatell import *
 except:from src.smpp.clickatell import *
 
-import credentials_priv
+try:import credentials_priv
+except:pass
 import credentials_test
 
 from test.pdu import pdu_objects

@@ -9,9 +9,12 @@ class ESME(object):
         self.state = 'CLOSED'
         self.sequence_number = 1
         self.conn = None
-        self.system_id = None
-        self.password = None
-        self.defaults = {}
+        self.defaults = {
+                'host':'127.0.0.1',
+                'port':2775,
+                'dest_addr_ton':0,
+                'dest_addr_npi':0,
+                }
 
 
     def loadDefaults(self, defaults):
@@ -21,10 +24,7 @@ class ESME(object):
     def connect(self):
         if self.state in ['CLOSED']:
             self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.conn.connect((
-                self.defaults.get('host', '127.0.0.1'),
-                self.defaults.get('port', 2775),
-                ))
+            self.conn.connect((self.defaults['host'], self.defaults['port']))
             self.state = 'OPEN'
 
 
@@ -104,17 +104,17 @@ class ESME(object):
                 if isinstance(item, str): # assume strings are addresses not lists
                     pdu.addDestinationAddress(
                             item,
-                            dest_addr_ton = self.defaults.get('dest_addr_ton', 0),
-                            dest_addr_npi = self.defaults.get('dest_addr_npi', 0),
+                            dest_addr_ton = self.defaults['dest_addr_ton'],
+                            dest_addr_npi = self.defaults['dest_addr_npi'],
                             )
                 elif isinstance(item, dict):
                     if item.get('dest_flag') == 1:
                         pdu.addDestinationAddress(
-                                item.get('destination_addr'),
+                                item.get('destination_addr', ''),
                                 dest_addr_ton = item.get('dest_addr_ton',
-                                    self.defaults.get('dest_addr_ton', 0)),
+                                    self.defaults['dest_addr_ton']),
                                 dest_addr_npi = item.get('dest_addr_npi',
-                                    self.defaults.get('dest_addr_npi', 0)),
+                                    self.defaults['dest_addr_npi']),
                                 )
                     elif item.get('dest_flag') == 2:
                         pdu.addDistributionList(item.get('dl_name'))
