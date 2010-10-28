@@ -7,6 +7,8 @@ except:from src.smpp.esme import *
 try:from smpp.clickatell import *
 except:from src.smpp.clickatell import *
 
+import credentials_priv
+import credentials_test
 
 from test.pdu import pdu_objects
 from test import pdu_asserts
@@ -162,15 +164,9 @@ class PduBuilderTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     print '\n##########################################################\n'
-    credentials = {
-            'host':'localhost',
-            'port':2775,
-            'system_id':'test id',
-            'password':'abc 123',
-            }
     esme = ESME()
     esme.loadDefaults(clickatell_defaults)
-    esme.loadDefaults(credentials)
+    esme.loadDefaults(credentials_test.logica)
     print esme.defaults
     esme.bind_transmitter()
     print esme.state

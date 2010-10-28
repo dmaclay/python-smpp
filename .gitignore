@@ -2,4 +2,4 @@
 *.pyc
 *.egg-info
 ve/
-*.priv.py
+*_priv.py
