@@ -47,7 +47,7 @@ class BindTransmitter(PDU):
             system_id = '',
             password = '',
             system_type = '',
-            interface_version = '',
+            interface_version = '34',
             addr_ton = 0,
             addr_npi = 0,
             address_range = '',

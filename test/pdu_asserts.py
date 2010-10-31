@@ -6,7 +6,7 @@ pdu_json_0000000001 = '''{
             "addr_npi": "ISDN", 
             "addr_ton": "international", 
             "address_range": "", 
-            "interface_version": "", 
+            "interface_version": "34", 
             "password": "abc123", 
             "system_id": "test_system", 
             "system_type": ""
@@ -42,7 +42,7 @@ pdu_json_0000000003 = '''{
             "addr_npi": "ISDN", 
             "addr_ton": "international", 
             "address_range": "", 
-            "interface_version": "", 
+            "interface_version": "34", 
             "password": "abc123", 
             "system_id": "test_system", 
             "system_type": ""
@@ -78,7 +78,7 @@ pdu_json_0000000005 = '''{
             "addr_npi": "ISDN", 
             "addr_ton": "international", 
             "address_range": "", 
-            "interface_version": "", 
+            "interface_version": "34", 
             "password": "abc123", 
             "system_id": "test_system", 
             "system_type": ""

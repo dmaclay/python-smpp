@@ -18,7 +18,7 @@ mandatory_parameter_lists = {
         {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
         {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'hex',           'map':None},
         {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
         {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
@@ -30,7 +30,7 @@ mandatory_parameter_lists = {
         {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
         {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'hex',           'map':None},
         {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
         {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
@@ -42,7 +42,7 @@ mandatory_parameter_lists = {
         {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
         {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'hex',           'map':None},
         {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
         {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
