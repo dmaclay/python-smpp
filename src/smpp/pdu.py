@@ -18,7 +18,7 @@ mandatory_parameter_lists = {
         {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
         {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'hex',           'map':None},
         {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
         {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
@@ -30,7 +30,7 @@ mandatory_parameter_lists = {
         {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
         {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'hex',           'map':None},
         {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
         {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
@@ -42,7 +42,7 @@ mandatory_parameter_lists = {
         {'name':'system_id',               'min':1, 'max':16,  'var':True,              'type':'string',        'map':None},
         {'name':'password',                'min':1, 'max':9,   'var':True,              'type':'string',        'map':None},
         {'name':'system_type',             'min':1, 'max':13,  'var':True,              'type':'string',        'map':None},
-        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'string',        'map':None},
+        {'name':'interface_version',       'min':1, 'max':1,   'var':False,             'type':'hex',           'map':None},
         {'name':'addr_ton',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_ton'},
         {'name':'addr_npi',                'min':1, 'max':1,   'var':False,             'type':'integer',       'map':'addr_npi'},
         {'name':'address_range',           'min':1, 'max':41,  'var':True,              'type':'string',        'map':None}
@@ -115,7 +115,7 @@ mandatory_parameter_lists = {
         {'name':'dl_name',                 'min':1, 'max':21,  'var':True,              'type':'string',        'map':None}
     ],
     'submit_multi_resp':[ # SMPP v3.4, section 4.5.2, table 4-16, page 76
-        {'name':'message_id',              'min':0, 'max':65,  'var':True,              'type':'string',        'map':None},
+        {'name':'message_id',              'min':1, 'max':65,  'var':True,              'type':'string',        'map':None},
         {'name':'no_unsuccess',            'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'unsuccess_sme',           'min':0, 'max':0,   'var':'no_unsuccess',    'type':'unsuccess_sme', 'map':None}
     ],
@@ -450,7 +450,6 @@ def command_status_hex_by_name(n):
 # Type of Number (TON) - SMPP v3.4, section 5.2.5, table 5-3, page 117
 
 maps['addr_ton_by_name'] = {
-    ''                 :'00',
     'unknown'          :'00',
     'international'    :'01',
     'national'         :'02',
@@ -474,7 +473,6 @@ maps['addr_ton_by_hex'] = {
 # Numberic Plan Indicator (NPI) - SMPP v3.4, section 5.2.6, table 5-4, page 118
 
 maps['addr_npi_by_name'] = {
-    ''           :'00',
     'unknown'    :'00',
     'ISDN'       :'01',
     'data'       :'03',
@@ -854,7 +852,7 @@ def decode_mandatory_parameters(fields, hex_ref):
     mandatory_parameters = {}
     if len(hex_ref[0]) > 1:
         for field in fields:
-            old = len(hex_ref[0])
+            #old = len(hex_ref[0])
             data = ''
             octet = ''
             count = 0
@@ -868,15 +866,17 @@ def decode_mandatory_parameters(fields, hex_ref):
                     count += 1
             elif field['type'] == 'string':
                 count = mandatory_parameters[field['var']]
-                for i in range(count):
-                    if len(hex_ref[0]) > 1:
-                        data += octpop(hex_ref)
+                if count == 0:
+                    data = None
+                else:
+                    for i in range(count):
+                        if len(hex_ref[0]) > 1:
+                            data += octpop(hex_ref)
             else:
                 count = mandatory_parameters[field['var']]
             if field['map'] != None:
-                #print field, data
-                mandatory_parameters[field['name']] = maps.get(field['map']+'_by_hex',{data:data})[data]
-            else:
+                mandatory_parameters[field['name']] = maps[field['map']+'_by_hex'].get(data, None)
+            if field['map'] == None or mandatory_parameters[field['name']] == None:
                 mandatory_parameters[field['name']] = decode_hex_type(data, field['type'], count, hex_ref)
             #print field['type'], (old - len(hex_ref[0]))/2, repr(data), field['name'], mandatory_parameters[field['name']]
     return mandatory_parameters
@@ -902,10 +902,12 @@ def decode_optional_parameters(hex_ref):
 
 
 def decode_hex_type(hex, type, count=0, hex_ref=['']):
-    if type == 'integer':
+    if hex == None:
+        return hex
+    elif type == 'integer':
         return int(hex, 16)
     elif type == 'string':
-        return binascii.b2a_qp(binascii.a2b_hex(re.sub('00','',hex)))
+        return re.sub('00','',hex).decode('hex')
     elif (type == 'dest_address'
             or type == 'unsuccess_sme'):
         list = []
@@ -935,13 +937,13 @@ def octpop(hex_ref):
 
 #### Encoding functions #######################################################
 
-def pack_pdu(json_obj):
-    return binascii.a2b_hex(encode_pdu(json_obj))
+def pack_pdu(pdu_obj):
+    return binascii.a2b_hex(encode_pdu(pdu_obj))
 
 
-def encode_pdu(json_obj):
-    header = json_obj.get('header', {})
-    body = json_obj.get('body', {})
+def encode_pdu(pdu_obj):
+    header = pdu_obj.get('header', {})
+    body = pdu_obj.get('body', {})
     mandatory = body.get('mandatory_parameters', {})
     optional = body.get('optional_parameters', [])
     body_hex = ''
@@ -959,29 +961,81 @@ def encode_pdu(json_obj):
 
 
 def encode_mandatory_parameters(mandatory_obj, fields):
-    mandatory_hex = ''
+    mandatory_hex_array = []
+    index_names = {}
+    index = 0
     for field in fields:
-        param = mandatory_obj[field['name']]
-        mandatory_hex += encode_param_type(param, field['type'], field['min'], field['max'])
-    return mandatory_hex
+        param = mandatory_obj.get(field['name'], None)
+        param_length = None
+        if param != None or field['min'] > 0:
+            map = None
+            if field['map'] != None:
+                map = maps.get(field['map']+'_by_name', None)
+            if isinstance(param, list):
+                hex_list = []
+                for item in param:
+                    flagfields = mandatory_parameter_list_by_command_name(field['type'])
+                    plusfields = []
+                    if item.get('dest_flag', None) == 1:
+                        plusfields = mandatory_parameter_list_by_command_name('sme_dest_address')
+                    elif item.get('dest_flag', None) == 2:
+                        plusfields = mandatory_parameter_list_by_command_name('distribution_list')
+                    hex_item = encode_mandatory_parameters(item, flagfields + plusfields)
+                    if isinstance(hex_item, str) and len(hex_item) > 0:
+                        hex_list.append(hex_item)
+                param_length = len(hex_list)
+                mandatory_hex_array.append(''.join(hex_list))
+            else:
+                hex_param = encode_param_type(
+                        param, field['type'], field['min'], field['max'], map)
+                param_length = len(hex_param)/2
+                mandatory_hex_array.append(hex_param)
+            index_names[field['name']] = index
+            length_index = index_names.get(field['var'], None)
+            if length_index != None and param_length != None:
+                mandatory_hex_array[length_index] = encode_param_type(
+                        param_length,
+                        'integer',
+                        len(mandatory_hex_array[length_index])/2)
+            index += 1
+    return ''.join(mandatory_hex_array)
 
 
 def encode_optional_parameter(tag, value):
-    optional_hex = ''
+    optional_hex_array = []
     tag_hex = optional_parameter_tag_hex_by_name(tag)
     if tag_hex != None:
-        value_hex = '%02x' % value #TODO need encoding mapping
+        value_hex = encode_param_type(
+                value,
+                optional_parameter_tag_type_by_hex(tag_hex))
         length_hex = '%04x' % (len(value_hex)/2)
-        optional_hex = tag_hex + length_hex + value_hex
-    return optional_hex
+        optional_hex_array.append(tag_hex + length_hex + value_hex)
+    return ''.join(optional_hex_array)
 
 
-def encode_param_type(param, type, min=0, max=None):
-    if type == 'integer':
-        return '%02x' % int(param)
+def encode_param_type(param, type, min=0, max=None, map=None):
+    if param == None:
+        hex = None
+    elif map != None:
+        if type == 'integer' and isinstance(param, int):
+            hex = ('%0'+str(min*2)+'x') % param
+        else:
+            hex = map.get(param, ('%0'+str(min*2)+'x') % 0)
+    elif type == 'integer':
+        hex = ('%0'+str(min*2)+'x') % int(param)
     elif type == 'string':
-        hex = binascii.b2a_hex(binascii.a2b_qp(str(param))) + '00'
-        #print 'xxx', hex
-        return hex
+        hex = param.encode('hex') + '00'
+    elif type == 'bitmask':
+        hex = param
+    elif type == 'hex':
+        hex = param
     else:
-        return '00'
+        hex = None
+    #if hex == None:
+        #hex = ''
+        #if min > 0:
+            #hex = ('%0'+str(min*2)+'x') % 0
+    #print type, min, max, repr(param), hex, map
+    return hex
+
+
