@@ -3,9 +3,9 @@ from datetime import datetime, timedelta
 
 from smpp.esme import *
 from smpp.clickatell import *
+import credentials_test
 try:import credentials_priv
 except:pass
-import credentials_test
 
 from test.pdu import pdu_objects
 from test import pdu_asserts
