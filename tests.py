@@ -1,12 +1,8 @@
 import unittest
 from datetime import datetime, timedelta
 
-try:from smpp.esme import *
-except:from src.smpp.esme import *
-
-try:from smpp.clickatell import *
-except:from src.smpp.clickatell import *
-
+from smpp.esme import *
+from smpp.clickatell import *
 try:import credentials_priv
 except:pass
 import credentials_test
