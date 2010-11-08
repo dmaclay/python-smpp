@@ -41,8 +41,9 @@ class PDU(object):
         return pack_pdu(self.obj)
 
 
-class BindTransmitter(PDU):
+class Bind(PDU):
     def __init__(self,
+            command_id,
             sequence_number,
             system_id = '',
             password = '',
@@ -52,8 +53,8 @@ class BindTransmitter(PDU):
             addr_npi = 0,
             address_range = '',
             **kwargs):
-        super(BindTransmitter, self).__init__(
-                'bind_transmitter',
+        super(Bind, self).__init__(
+                command_id,
                 'ESME_ROK',
                 sequence_number,
                 )
@@ -68,6 +69,27 @@ class BindTransmitter(PDU):
         mandatory_parameters['addr_ton'] = addr_ton
         mandatory_parameters['addr_npi'] = addr_npi
         mandatory_parameters['address_range'] = address_range
+
+
+class BindTransmitter(Bind):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
+        super(BindTransmitter, self).__init__('bind_transmitter', sequence_number, **kwargs)
+
+
+class BindReceiver(Bind):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
+        super(BindReceiver, self).__init__('bind_receiver', sequence_number, **kwargs)
+
+
+class BindTransceiver(Bind):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
+        super(BindTransceiver, self).__init__('bind_transceiver', sequence_number, **kwargs)
 
 
 class Unbind(PDU):
