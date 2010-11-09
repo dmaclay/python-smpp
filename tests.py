@@ -161,6 +161,21 @@ class PduBuilderTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     print '\n##########################################################\n'
+    #deliv_sm_resp = DeliverSMResp(23)
+    #print deliv_sm_resp.get_obj()
+    #print deliv_sm_resp.get_hex()
+    #enq_lnk = EnquireLink(7)
+    #print enq_lnk.get_obj()
+    #print enq_lnk.get_hex()
+    #sub_sm = SubmitSM(5, short_message='testing testing')
+    #print sub_sm.get_obj()
+    #print sub_sm.get_hex()
+    #sub_sm.add_message_payload('01020304')
+    #print sub_sm.get_obj()
+    #print sub_sm.get_hex()
+    #print unpack_pdu(sub_sm.get_bin())
+    print '\n##########################################################\n'
+
     esme = ESME()
     esme.loadDefaults(clickatell_defaults)
     esme.loadDefaults(credentials_test.logica)
