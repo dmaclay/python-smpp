@@ -78,7 +78,7 @@ mandatory_parameter_lists = {
         {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
-        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'map':None}
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'xstring',       'map':None}
     ],
     'submit_sm_resp':[ # SMPP v3.4, section 4.4.2, table 4-11, page 67
         {'name':'message_id',              'min':0, 'max':65,  'var':True,              'type':'string',        'map':None}
@@ -100,7 +100,7 @@ mandatory_parameter_lists = {
         {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
-        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'map':None}
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'xstring',       'map':None}
     ],
     'dest_address':[ # SMPP v3.4, section 4.5.1.1, table 4-13, page 75
         {'name':'dest_flag',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None}
@@ -143,7 +143,7 @@ mandatory_parameter_lists = {
         {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
-        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'map':None}
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'xstring',       'map':None}
     ],
     'deliver_sm_resp':[ # SMPP v3.4, section 4.6.2, table 4-19, page 85
         {'name':'message_id',              'min':1, 'max':1,   'var':False,             'type':'string',        'map':None}
@@ -199,7 +199,7 @@ mandatory_parameter_lists = {
         {'name':'data_coding',             'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'sm_default_msg_id',       'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
         {'name':'sm_length',               'min':1, 'max':1,   'var':False,             'type':'integer',       'map':None},
-        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'string',        'map':None}
+        {'name':'short_message',           'min':0, 'max':254, 'var':'sm_length',       'type':'xstring',       'map':None}
     ],
     'replace_sm_resp':[ # SMPP v3.4, section 4.10.2, table 4-27, page 104
     ],
@@ -864,7 +864,7 @@ def decode_mandatory_parameters(fields, hex_ref):
                     octet = octpop(hex_ref)
                     data += octet
                     count += 1
-            elif field['type'] == 'string':
+            elif field['type'] in ['string', 'xstring']:
                 count = mandatory_parameters[field['var']]
                 if count == 0:
                     data = None
@@ -908,6 +908,8 @@ def decode_hex_type(hex, type, count=0, hex_ref=['']):
         return int(hex, 16)
     elif type == 'string':
         return re.sub('00','',hex).decode('hex')
+    elif type == 'xstring':
+        return hex.decode('hex')
     elif (type == 'dest_address'
             or type == 'unsuccess_sme'):
         list = []
@@ -1025,6 +1027,8 @@ def encode_param_type(param, type, min=0, max=None, map=None):
         hex = ('%0'+str(min*2)+'x') % int(param)
     elif type == 'string':
         hex = param.encode('hex') + '00'
+    elif type == 'xstring':
+        hex = param.encode('hex')
     elif type == 'bitmask':
         hex = param
     elif type == 'hex':

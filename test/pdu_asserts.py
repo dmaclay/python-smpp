@@ -170,7 +170,7 @@ pdu_json_0000000011 = '''{
             "service_type": "", 
             "short_message": "testing 123", 
             "sm_default_msg_id": 0, 
-            "sm_length": 12, 
+            "sm_length": 11, 
             "source_addr": "", 
             "source_addr_npi": "ISDN", 
             "source_addr_ton": "international", 
@@ -179,7 +179,7 @@ pdu_json_0000000011 = '''{
     }, 
     "header": {
         "command_id": "submit_sm", 
-        "command_length": 45, 
+        "command_length": 44, 
         "command_status": "ESME_ROK", 
         "sequence_number": 0
     }
@@ -280,7 +280,7 @@ pdu_json_0000000015 = '''{
             "service_type": "", 
             "short_message": "testing 123", 
             "sm_default_msg_id": 0, 
-            "sm_length": 12, 
+            "sm_length": 11, 
             "source_addr": "", 
             "source_addr_npi": "ISDN", 
             "source_addr_ton": "international", 
@@ -289,7 +289,7 @@ pdu_json_0000000015 = '''{
     }, 
     "header": {
         "command_id": "submit_multi", 
-        "command_length": 84, 
+        "command_length": 83, 
         "command_status": "ESME_ROK", 
         "sequence_number": 0
     }
@@ -340,9 +340,9 @@ pdu_json_0000000017 = '''{
             "replace_if_present_flag": 0, 
             "schedule_delivery_time": "", 
             "service_type": "", 
-            "short_message": "", 
+            "short_message": null, 
             "sm_default_msg_id": 0, 
-            "sm_length": 1, 
+            "sm_length": 0, 
             "source_addr": "", 
             "source_addr_npi": "ISDN", 
             "source_addr_ton": "international", 
@@ -351,7 +351,7 @@ pdu_json_0000000017 = '''{
     }, 
     "header": {
         "command_id": "deliver_sm", 
-        "command_length": 34, 
+        "command_length": 33, 
         "command_status": "ESME_ROK", 
         "sequence_number": 0
     }
@@ -497,7 +497,7 @@ pdu_json_0000000025 = '''{
             "schedule_delivery_time": "", 
             "short_message": "is this an = sign?", 
             "sm_default_msg_id": 0, 
-            "sm_length": 19, 
+            "sm_length": 18, 
             "source_addr": "", 
             "source_addr_npi": "ISDN", 
             "source_addr_ton": "international", 
@@ -506,7 +506,7 @@ pdu_json_0000000025 = '''{
     }, 
     "header": {
         "command_id": "replace_sm", 
-        "command_length": 46, 
+        "command_length": 45, 
         "command_status": "ESME_ROK", 
         "sequence_number": 0
     }
