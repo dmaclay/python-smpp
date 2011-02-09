@@ -859,7 +859,8 @@ def decode_mandatory_parameters(fields, hex_ref):
             if field['var'] == True or field['var'] == False:
                 while (len(hex_ref[0]) > 1
                         and (count < field['min']
-                            or (count < field['max']
+                            or (field['var'] == True
+                                and count < field['max']+1
                                 and octet != '00'))):
                     octet = octpop(hex_ref)
                     data += octet
