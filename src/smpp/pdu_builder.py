@@ -249,6 +249,27 @@ class EnquireLink(PDU):
                 **kwargs)
 
 
+class QuerySM(PDU):
+    def __init__(self,
+            sequence_number,
+            message_id,
+            source_addr_ton = 0,
+            source_addr_npi = 0,
+            source_addr = '',
+            **kwargs):
+        super(EnquireLink, self).__init__(
+                'query_sm',
+                'ESME_ROK',
+                sequence_number,
+                **kwargs)
+        self.obj['body'] = {}
+        self.obj['body']['mandatory_parameters'] = {}
+        self.obj['body']['mandatory_parameters']['message_id'] = message_id
+        self.obj['body']['mandatory_parameters']['source_addr_ton'] = source_addr_ton
+        self.obj['body']['mandatory_parameters']['source_addr_npi'] = source_addr_npi
+        self.obj['body']['mandatory_parameters']['source_addr'] = source_addr
+
+
 #bind = BindTransmitter(system_id='test_id', password='abc123')
 #print bind.get_obj()
 #print bind.get_hex()
