@@ -257,7 +257,7 @@ class QuerySM(PDU):
             source_addr_npi = 0,
             source_addr = '',
             **kwargs):
-        super(EnquireLink, self).__init__(
+        super(QuerySM, self).__init__(
                 'query_sm',
                 'ESME_ROK',
                 sequence_number,
