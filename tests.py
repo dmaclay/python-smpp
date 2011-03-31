@@ -1,8 +1,10 @@
-import unittest
+# -*- coding: utf-8 -*-
+import unittest, collections
 from datetime import datetime, timedelta
 
 from smpp.esme import *
 from smpp.clickatell import *
+from smpp import pdu
 import credentials_test
 try:import credentials_priv
 except:pass
@@ -25,6 +27,22 @@ def prettydump(pdu_obj):
     """Unpack PDU dictionary and dump it as a JSON formatted string"""
     return json.dumps(pdu_obj, indent=4, sort_keys=True)
 
+def hex_to_named(dictionary):
+    """
+    Recursive function to convert values in test dictionaries to
+    their named counterparts that unpack_pdu returns
+    """
+    clone = dictionary.copy()
+    for key, value in clone.items():
+        if isinstance(value, collections.Mapping):
+            clone[key] = hex_to_named(value)
+        else:
+            lookup_table = pdu.maps.get('%s_by_hex' % key)
+            if lookup_table:
+                # overwrite with mapped value or keep using
+                # default if the dictionary key doesn't exist
+                clone[key] = lookup_table.get("%.2d" % value, value)
+    return clone
 
 def create_pdu_asserts():
     pdu_index = 0
@@ -69,6 +87,34 @@ class PduTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def assertDictEquals(self, dictionary1, dictionary2, depth=[]):
+        """
+        Recursive dictionary comparison, will fail if any keys and values
+        in the two dictionaries don't match. Displays the key chain / depth 
+        and which parts of the two dictionaries didn't match.
+        """
+        d1_keys = dictionary1.keys()
+        d1_keys.sort()
+        
+        d2_keys = dictionary2.keys()
+        d2_keys.sort()
+        
+        self.failUnlessEqual(d1_keys, d2_keys, 
+            "Dictionary keys do not match, %s vs %s" % (
+                d1_keys, d2_keys))
+        for key, value in dictionary1.items():
+            if isinstance(value, collections.Mapping):
+                # go recursive
+                depth.append(key)
+                self.assertDictEquals(value, dictionary2[key], depth)
+            else:
+                self.failUnlessEqual(value, dictionary2[key], 
+                    "Dictionary values do not match for key '%s' " \
+                    "(%s vs %s) at depth: %s.\nDictionary 1: %s\n" \
+                    "Dictionary 2: %s\n" % (
+                        key, value, dictionary2[key], ".".join(depth),
+                        dictionary1, dictionary2))
+    
     def test_pack_unpack_pdu_objects(self):
         print ''
         """
@@ -149,7 +195,45 @@ class PduTestCase(unittest.TestCase):
         print '... 2000 pack & unpacks in:', delta
         self.assertTrue(delta < timedelta(seconds=1))
 
-
+    def test_pack_unpack_of_unicode(self):
+        """
+        SMPP module should be able to pack & unpack unicode characters
+        without a problem
+        """
+        submit_sm = {
+            'header': {
+                'command_length': 0,
+                'command_id': 'submit_sm',
+                'command_status': 'ESME_ROK',
+                'sequence_number': 0,
+            },
+            'body': {
+                'mandatory_parameters': {
+                    'service_type':'',
+                    'source_addr_ton':1,
+                    'source_addr_npi':1,
+                    'source_addr':'',
+                    'dest_addr_ton':1,
+                    'dest_addr_npi':1,
+                    'destination_addr':'',
+                    'esm_class':0,
+                    'protocol_id':0,
+                    'priority_flag':0,
+                    'schedule_delivery_time':'',
+                    'validity_period':'',
+                    'registered_delivery':0,
+                    'replace_if_present_flag':0,
+                    'data_coding':0,
+                    'sm_default_msg_id':0,
+                    'sm_length':1,
+                    'short_message':'أبن الشرموطة',
+                },
+            },
+        }
+        self.assertDictEquals(
+            hex_to_named(submit_sm),
+            unpack_pdu(pack_pdu(submit_sm))
+        )
 
 class PduBuilderTestCase(unittest.TestCase):
 
