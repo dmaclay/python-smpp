@@ -3,3 +3,5 @@
 *.egg-info
 ve/
 *_priv.py
+.coverage
+coverage-html/
