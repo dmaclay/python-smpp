@@ -113,7 +113,7 @@ class PduTestCase(unittest.TestCase):
                     "(%s vs %s) at depth: %s.\nDictionary 1: %s\n" \
                     "Dictionary 2: %s\n" % (
                         key, value, dictionary2[key], ".".join(depth),
-                        dictionary1, dictionary2))
+                        prettydump(dictionary1), prettydump(dictionary2)))
     
     def test_pack_unpack_pdu_objects(self):
         print ''
@@ -225,7 +225,7 @@ class PduTestCase(unittest.TestCase):
                     'replace_if_present_flag':0,
                     'data_coding':0,
                     'sm_default_msg_id':0,
-                    'sm_length':1,
+                    'sm_length':12,
                     'short_message':'أبن الشرموطة',
                 },
             },
