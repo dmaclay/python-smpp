@@ -87,7 +87,7 @@ class PduTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def assertDictEquals(self, dictionary1, dictionary2, depth=[]):
+    def assertDictEquals(self, dictionary1, dictionary2, depth=[], full_scan=False):
         """
         Recursive dictionary comparison, will fail if any keys and values
         in the two dictionaries don't match. Displays the key chain / depth 
@@ -106,14 +106,16 @@ class PduTestCase(unittest.TestCase):
             if isinstance(value, collections.Mapping):
                 # go recursive
                 depth.append(key)
-                self.assertDictEquals(value, dictionary2[key], depth)
+                self.assertDictEquals(value, dictionary2[key], depth, full_scan)
             else:
-                self.failUnlessEqual(value, dictionary2[key], 
-                    "Dictionary values do not match for key '%s' " \
-                    "(%s vs %s) at depth: %s.\nDictionary 1: %s\n" \
-                    "Dictionary 2: %s\n" % (
-                        key, value, dictionary2[key], ".".join(depth),
-                        dictionary1, dictionary2))
+                if full_scan:
+                else:
+                    self.failUnlessEqual(value, dictionary2[key], 
+                        "Dictionary values do not match for key '%s' " \
+                        "(%s vs %s) at depth: %s.\nDictionary 1: %s\n" \
+                        "Dictionary 2: %s\n" % (
+                            key, value, dictionary2[key], ".".join(depth),
+                            dictionary1, dictionary2))
     
     def test_pack_unpack_pdu_objects(self):
         print ''
