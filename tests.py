@@ -185,14 +185,14 @@ class PduTestCase(unittest.TestCase):
             },
         }
         start = datetime.now()
-        for x in range(2000):
+        for x in range(1000):
             x += 1
             submit_sm['header']['sequence_number'] = x
             sm = 'testing: x = '+str(x)+''
             submit_sm['body']['mandatory_parameters']['short_message'] = sm
             u = unpack_pdu(pack_pdu(submit_sm))
         delta = datetime.now() - start
-        print '... 2000 pack & unpacks in:', delta
+        print '... 1000 pack & unpacks in:', delta
         self.assertTrue(delta < timedelta(seconds=1))
 
     def test_pack_unpack_of_unicode(self):
@@ -202,7 +202,7 @@ class PduTestCase(unittest.TestCase):
         """
         submit_sm = {
             'header': {
-                'command_length': 0,
+                'command_length': 67,
                 'command_id': 'submit_sm',
                 'command_status': 'ESME_ROK',
                 'sequence_number': 0,
@@ -210,11 +210,11 @@ class PduTestCase(unittest.TestCase):
             'body': {
                 'mandatory_parameters': {
                     'service_type':'',
-                    'source_addr_ton':1,
-                    'source_addr_npi':1,
+                    'source_addr_ton':'international',
+                    'source_addr_npi':'unknown',
                     'source_addr':'',
-                    'dest_addr_ton':1,
-                    'dest_addr_npi':1,
+                    'dest_addr_ton':'international',
+                    'dest_addr_npi':'unknown',
                     'destination_addr':'',
                     'esm_class':0,
                     'protocol_id':0,
@@ -225,8 +225,8 @@ class PduTestCase(unittest.TestCase):
                     'replace_if_present_flag':0,
                     'data_coding':0,
                     'sm_default_msg_id':0,
-                    'sm_length':12,
-                    'short_message':'أبن الشرموطة',
+                    'sm_length':34,
+                    'short_message':'Vumi says: أبن الشرموطة',
                 },
             },
         }
@@ -234,6 +234,8 @@ class PduTestCase(unittest.TestCase):
             hex_to_named(submit_sm),
             unpack_pdu(pack_pdu(submit_sm))
         )
+        print "UNICODE ROUNDTRIP RESULT:", repr(unpack_pdu(pack_pdu(submit_sm))), "\n\n"
+
 
 class PduBuilderTestCase(unittest.TestCase):
 
