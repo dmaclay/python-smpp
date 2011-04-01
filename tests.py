@@ -226,7 +226,8 @@ class PduTestCase(unittest.TestCase):
                     'data_coding':0,
                     'sm_default_msg_id':0,
                     'sm_length':34,
-                    'short_message':'Vumi says: أبن الشرموطة',
+                    #'short_message':'Vumi says: أبن الشرموطة',
+                    'short_message':u'\u0623\u0628\u0646 \u0627\u0644\u0634\u0631\u0645\u0648\u0637\u0629',
                 },
             },
         }
@@ -234,7 +235,13 @@ class PduTestCase(unittest.TestCase):
             hex_to_named(submit_sm),
             unpack_pdu(pack_pdu(submit_sm))
         )
+        print "UNICODE ROUNDTRIP INPUT:", repr(submit_sm), "\n"
         print "UNICODE ROUNDTRIP RESULT:", repr(unpack_pdu(pack_pdu(submit_sm))), "\n\n"
+        print "UNICODE ROUNDTRIP INPUT:", submit_sm, "\n"
+        print "UNICODE ROUNDTRIP RESULT:", unpack_pdu(pack_pdu(submit_sm)), "\n\n"
+        print submit_sm['body']['mandatory_parameters']['short_message']
+        print unpack_pdu(pack_pdu(submit_sm))['body']['mandatory_parameters']['short_message']
+        print u'\u0623\u0628\u0646 \u0627\u0644\u0634\u0631\u0645\u0648\u0637\u0629'
 
 
 class PduBuilderTestCase(unittest.TestCase):
