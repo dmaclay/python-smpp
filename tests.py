@@ -226,8 +226,7 @@ class PduTestCase(unittest.TestCase):
                     'data_coding':0,
                     'sm_default_msg_id':0,
                     'sm_length':34,
-                    #'short_message':'Vumi says: أبن الشرموطة',
-                    'short_message':u'\u0623\u0628\u0646 \u0627\u0644\u0634\u0631\u0645\u0648\u0637\u0629',
+                    'short_message':u'Vumi says: أبن الشرموطة'.encode('utf-8'),
                 },
             },
         }
@@ -235,14 +234,46 @@ class PduTestCase(unittest.TestCase):
             hex_to_named(submit_sm),
             unpack_pdu(pack_pdu(submit_sm))
         )
-        print "UNICODE ROUNDTRIP INPUT:", repr(submit_sm), "\n"
-        print "UNICODE ROUNDTRIP RESULT:", repr(unpack_pdu(pack_pdu(submit_sm))), "\n\n"
-        print "UNICODE ROUNDTRIP INPUT:", submit_sm, "\n"
-        print "UNICODE ROUNDTRIP RESULT:", unpack_pdu(pack_pdu(submit_sm)), "\n\n"
-        print submit_sm['body']['mandatory_parameters']['short_message']
-        print unpack_pdu(pack_pdu(submit_sm))['body']['mandatory_parameters']['short_message']
-        print u'\u0623\u0628\u0646 \u0627\u0644\u0634\u0631\u0645\u0648\u0637\u0629'
 
+    def test_pack_unpack_of_ascii_and_unicode_8_16_32(self):
+        """
+        SMPP module should be able to pack & unpack unicode characters
+        without a problem
+        """
+        submit_sm = {
+            'header': {
+                'command_length': 65,
+                'command_id': 'submit_sm',
+                'command_status': 'ESME_ROK',
+                'sequence_number': 0,
+            },
+            'body': {
+                'mandatory_parameters': {
+                    'service_type':'',
+                    'source_addr_ton':'international',
+                    'source_addr_npi':'unknown',
+                    'source_addr':'',
+                    'dest_addr_ton':'international',
+                    'dest_addr_npi':'unknown',
+                    'destination_addr':'',
+                    'esm_class':0,
+                    'protocol_id':0,
+                    'priority_flag':0,
+                    'schedule_delivery_time':'',
+                    'validity_period':'',
+                    'registered_delivery':0,
+                    'replace_if_present_flag':0,
+                    'data_coding':0,
+                    'sm_default_msg_id':0,
+                    'sm_length':32,
+                    'short_message':u'a \xf0\x20\u0373\u0020\u0433\u0020\u0533\u0020\u05f3\u0020\u0633\u0020\u13a3\u0020\u16a3 \U0001f090'.encode('utf-8'),
+                },
+            },
+        }
+        self.assertDictEquals(
+            hex_to_named(submit_sm),
+            unpack_pdu(pack_pdu(submit_sm))
+        )
 
 class PduBuilderTestCase(unittest.TestCase):
 
