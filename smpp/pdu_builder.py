@@ -89,6 +89,43 @@ class BindTransceiver(Bind):
         super(BindTransceiver, self).__init__('bind_transceiver', sequence_number, **kwargs)
 
 
+class BindResp(PDU):
+    def __init__(self,
+            command_id,
+            sequence_number,
+            system_id = '',
+            **kwargs):
+        super(BindResp, self).__init__(
+                command_id,
+                'ESME_ROK',
+                sequence_number,
+                )
+        self.obj['body'] = {}
+        self.obj['body']['mandatory_parameters'] = {}
+        self.obj['body']['mandatory_parameters']['system_id'] = system_id
+
+
+class BindTransmitterResp(BindResp):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
+        super(BindTransmitterResp, self).__init__('bind_transmitter_resp', sequence_number, **kwargs)
+
+
+class BindReceiverResp(BindResp):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
+        super(BindReceiverResp, self).__init__('bind_receiver_resp', sequence_number, **kwargs)
+
+
+class BindTransceiverResp(BindResp):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
+        super(BindTransceiverResp, self).__init__('bind_transceiver_resp', sequence_number, **kwargs)
+
+
 class Unbind(PDU):
     def __init__(self,
             sequence_number,
