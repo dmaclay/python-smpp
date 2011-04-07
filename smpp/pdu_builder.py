@@ -256,6 +256,7 @@ class SubmitSM(SM2):
 class SubmitSMResp(PDU):
     def __init__(self,
             sequence_number,
+            message_id,
             command_status = 'ESME_ROK',
             **kwargs):
         super(SubmitSMResp, self).__init__(
@@ -265,7 +266,7 @@ class SubmitSMResp(PDU):
                 **kwargs)
         self.obj['body'] = {}
         self.obj['body']['mandatory_parameters'] = {}
-        self.obj['body']['mandatory_parameters']['message_id'] = ''
+        self.obj['body']['mandatory_parameters']['message_id'] = message_id
 
 
 class DeliverSM(SM2):
