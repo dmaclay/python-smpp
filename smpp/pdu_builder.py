@@ -286,6 +286,17 @@ class EnquireLink(PDU):
                 **kwargs)
 
 
+class EnquireLinkResp(PDU):
+    def __init__(self,
+            sequence_number,
+            **kwargs):
+        super(EnquireLinkResp, self).__init__(
+                'enquire_link_resp',
+                'ESME_ROK',
+                sequence_number,
+                **kwargs)
+
+
 class QuerySM(PDU):
     def __init__(self,
             sequence_number,
