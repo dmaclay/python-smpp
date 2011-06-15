@@ -30,6 +30,12 @@ class PDU(object):
     def set_sar_msg_ref_num(self, value):
         self.__add_optional_parameter('sar_msg_ref_num', value)
 
+    def set_sar_segment_seqnum(self, value):
+        self.__add_optional_parameter('sar_segment_seqnum', value)
+
+    def set_sar_total_segments(self, value):
+        self.__add_optional_parameter('sar_total_segments', value)
+
 
     def get_obj(self):
         return self.obj
