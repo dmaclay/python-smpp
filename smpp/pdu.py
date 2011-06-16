@@ -1016,7 +1016,7 @@ def encode_optional_parameter(tag, value):
     return ''.join(optional_hex_array)
 
 
-def encode_param_type(param, type, min=0, max=None, map=None):
+def encode_param_type(param, type, min=1, max=None, map=None):
     if param == None:
         hex = None
     elif map != None:
