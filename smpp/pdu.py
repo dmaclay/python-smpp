@@ -1016,7 +1016,7 @@ def encode_optional_parameter(tag, value):
     return ''.join(optional_hex_array)
 
 
-def encode_param_type(param, type, min=1, max=None, map=None):
+def encode_param_type(param, type, min=0, max=None, map=None):
     if param == None:
         hex = None
     elif map != None:
@@ -1026,7 +1026,6 @@ def encode_param_type(param, type, min=1, max=None, map=None):
             hex = map.get(param, ('%0'+str(min*2)+'x') % 0)
     elif type == 'integer':
         hex = ('%0'+str(min*2)+'x') % int(param)
-        print "HEX: ",hex
     elif type == 'string':
         hex = param.encode('hex') + '00'
     elif type == 'xstring':
@@ -1037,11 +1036,7 @@ def encode_param_type(param, type, min=1, max=None, map=None):
         hex = param
     else:
         hex = None
-    #if hex == None:
-        #hex = ''
-        #if min > 0:
-            #hex = ('%0'+str(min*2)+'x') % 0
-    #print type, min, max, repr(param), hex, map
+    print type, min, max, repr(param), hex, map
     return hex
 
 
