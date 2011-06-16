@@ -1026,6 +1026,7 @@ def encode_param_type(param, type, min=0, max=None, map=None):
             hex = map.get(param, ('%0'+str(min*2)+'x') % 0)
     elif type == 'integer':
         hex = ('%0'+str(min*2)+'x') % int(param)
+        print "HEX: ",hex
     elif type == 'string':
         hex = param.encode('hex') + '00'
     elif type == 'xstring':

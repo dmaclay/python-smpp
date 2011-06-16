@@ -5,8 +5,8 @@ from smpp.pdu_builder import *
 
 tlv = DeliverSM(1, short_message='the first message part')
 tlv.set_sar_msg_ref_num(65017)
-tlv.set_sar_total_segments(22)
-tlv.set_sar_segment_seqnum(21)
+tlv.set_sar_total_segments(2)
+tlv.set_sar_segment_seqnum(1)
 sar = DeliverSM(1, short_message='\x00\x03\xff\x02\x01the first message part')
 csm = DeliverSM(1, short_message='\x05\x00\x03\xff\x02\x01the first message part')
 csm16 = DeliverSM(1, short_message='\x06\x00\x04\xff\xff\x02\x01the first message part')
@@ -69,6 +69,8 @@ def detect_multipart(pdu):
 
 
 print '\n', detect_multipart(unpack_pdu(tlv.get_bin()))
+
+quit()
 print '\n', detect_multipart(unpack_pdu(sar.get_bin()))
 print '\n', detect_multipart(unpack_pdu(csm.get_bin()))
 print '\n', detect_multipart(unpack_pdu(csm16.get_bin()))
