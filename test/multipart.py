@@ -69,8 +69,6 @@ def detect_multipart(pdu):
 
 
 print '\n', detect_multipart(unpack_pdu(tlv.get_bin()))
-
-quit()
 print '\n', detect_multipart(unpack_pdu(sar.get_bin()))
 print '\n', detect_multipart(unpack_pdu(csm.get_bin()))
 print '\n', detect_multipart(unpack_pdu(csm16.get_bin()))
