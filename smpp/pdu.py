@@ -1036,10 +1036,10 @@ def encode_param_type(param, type, min=0, max=None, map=None):
         hex = param
     else:
         hex = None
-    #if hex == None:
-        #hex = ''
-        #if min > 0:
-            #hex = ('%0'+str(min*2)+'x') % 0
+    if hex:
+        if len(hex) % 2:
+            # pad odd length hex strings
+            hex = '0' + hex
     #print type, min, max, repr(param), hex, map
     return hex
 
