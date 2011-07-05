@@ -67,8 +67,8 @@ def detect_multipart(pdu):
 
 class MultipartMessage:
 
-    def __init__(self, array={}):
-        self.array = array
+    def __init__(self, array=None):
+        self.array = array or {}
 
     def add_pdu(self, pdu):
         part = detect_multipart(pdu)
