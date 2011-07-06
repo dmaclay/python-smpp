@@ -65,6 +65,15 @@ def detect_multipart(pdu):
     return None
 
 
+def multipart_key(multipart, delimiter='_'):
+        key_list = []
+        key_list.append(str(multipart.get('from_msisdn')))
+        key_list.append(str(multipart.get('to_msisdn')))
+        key_list.append(str(multipart.get('reference_number')))
+        key_list.append(str(multipart.get('total_number')))
+        return delimiter.join(key_list)
+
+
 class MultipartMessage:
 
     def __init__(self, array=None):
@@ -98,12 +107,7 @@ class MultipartMessage:
     def get_key(self, delimiter = '_'):
         items = self.array.items()
         if len(items):
-            key_list = []
-            key_list.append(str(items[0][1].get('from_msisdn')))
-            key_list.append(str(items[0][1].get('to_msisdn')))
-            key_list.append(str(items[0][1].get('reference_number')))
-            key_list.append(str(items[0][1].get('total_number')))
-            return delimiter.join(key_list)
+            return multipart_key(items[0][1], delimiter)
         return None
 
     def get_array(self):
