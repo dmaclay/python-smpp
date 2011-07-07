@@ -79,7 +79,7 @@ class MultipartMessage:
     def __init__(self, array=None):
         self.array = {}
         for k,v in (array or {}).items():
-            self.array.update(int(k), v)
+            self.array.update({int(k),v})
 
     def add_pdu(self, pdu):
         part = detect_multipart(pdu)
