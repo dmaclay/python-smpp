@@ -5,7 +5,7 @@ An SMPP version 3.4 library written in Python, suitable for use in Twisted_.
 
 To get started with development::
 
-    $ virtualenv --no-site-packges ve/
+    $ virtualenv --no-site-packages ve/
     $ source ve/bin/activate
     (ve)$ pip install -r requirements.pip
     (ve)$ python
