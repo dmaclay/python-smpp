@@ -24,6 +24,10 @@ def detect_multipart(pdu):
     except:
         pass
 
+    # all other multipart types will fail on short_message == None
+    if short_message == None:
+        return None
+
     if (short_message[0:1] == '\x00'
     and short_message[1:2] == '\x03'
     and len(short_message) >= 5):

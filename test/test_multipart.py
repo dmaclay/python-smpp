@@ -25,12 +25,13 @@ class MultipartTestCase(unittest.TestCase):
         csm = DeliverSM(1, short_message='\x05\x00\x03\xff\x02\x01the first message part')
         csm16 = DeliverSM(1, short_message='\x06\x00\x04\xff\xff\x02\x01the first message part')
         non_multi = DeliverSM(1, short_message='whatever')
+        none_short_message = DeliverSM(1, short_message=None)
 
         self.assertEquals(detect_multipart(unpack_pdu(tlv.get_bin()))['multipart_type'], 'TLV')
         self.assertEquals(detect_multipart(unpack_pdu(sar.get_bin()))['multipart_type'], 'SAR')
         self.assertEquals(detect_multipart(unpack_pdu(csm.get_bin()))['multipart_type'], 'CSM')
         self.assertEquals(detect_multipart(unpack_pdu(csm16.get_bin()))['multipart_type'], 'CSM16')
-        self.assertEquals(detect_multipart(unpack_pdu(non_multi.get_bin())), None)
+        self.assertEquals(detect_multipart(unpack_pdu(none_short_message.get_bin())), None)
 
 
     def test_ordering(self):
