@@ -185,7 +185,7 @@ class PduTestCase(unittest.TestCase):
             },
         }
         start = datetime.now()
-        for x in range(1000):
+        for x in range(500):
             x += 1
             submit_sm['header']['sequence_number'] = x
             sm = 'testing: x = '+str(x)+''
