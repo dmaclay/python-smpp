@@ -101,12 +101,13 @@ class BindTransceiver(Bind):
 class BindResp(PDU):
     def __init__(self,
             command_id,
+            command_status,
             sequence_number,
             system_id = '',
             **kwargs):
         super(BindResp, self).__init__(
                 command_id,
-                'ESME_ROK',
+                command_status,
                 sequence_number,
                 )
         self.obj['body'] = {}
@@ -117,22 +118,25 @@ class BindResp(PDU):
 class BindTransmitterResp(BindResp):
     def __init__(self,
             sequence_number,
+            command_status="ESME_ROK",
             **kwargs):
-        super(BindTransmitterResp, self).__init__('bind_transmitter_resp', sequence_number, **kwargs)
+        super(BindTransmitterResp, self).__init__('bind_transmitter_resp', command_status, sequence_number, **kwargs)
 
 
 class BindReceiverResp(BindResp):
     def __init__(self,
             sequence_number,
+            command_status="ESME_ROK",
             **kwargs):
-        super(BindReceiverResp, self).__init__('bind_receiver_resp', sequence_number, **kwargs)
+        super(BindReceiverResp, self).__init__('bind_receiver_resp', command_status, sequence_number, **kwargs)
 
 
 class BindTransceiverResp(BindResp):
     def __init__(self,
             sequence_number,
+            command_status="ESME_ROK",
             **kwargs):
-        super(BindTransceiverResp, self).__init__('bind_transceiver_resp', sequence_number, **kwargs)
+        super(BindTransceiverResp, self).__init__('bind_transceiver_resp', command_status, sequence_number, **kwargs)
 
 
 class Unbind(PDU):
