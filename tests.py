@@ -152,7 +152,7 @@ class PduTestCase(unittest.TestCase):
     def test_pack_unpack_performance(self):
         print ''
         """
-        Pack & unpack 2000 submit_sm PDUs in under 1 second
+        Pack & unpack 500 submit_sm PDUs in under 1 second
         """
         submit_sm = {
             'header': {
@@ -192,7 +192,7 @@ class PduTestCase(unittest.TestCase):
             submit_sm['body']['mandatory_parameters']['short_message'] = sm
             u = unpack_pdu(pack_pdu(submit_sm))
         delta = datetime.now() - start
-        print '... 1000 pack & unpacks in:', delta
+        print '... 500 pack & unpacks in:', delta
         self.assertTrue(delta < timedelta(seconds=1))
 
     def test_pack_unpack_of_unicode(self):
