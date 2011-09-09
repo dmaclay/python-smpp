@@ -302,7 +302,7 @@ class DeliverSMResp(PDU):
                 **kwargs)
         self.obj['body'] = {}
         self.obj['body']['mandatory_parameters'] = {}
-        self.obj['body']['mandatory_parameters']['message_id'] = message_id
+        self.obj['body']['mandatory_parameters']['message_id'] = ''
 
 
 class EnquireLink(PDU):
